@@ -1,0 +1,16 @@
+{
+    "name": "bisix21/php-lessons-pro",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/",
+            "Controllers\\": "src/Controllers/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Fenix-25",
+            "email": "serqdrago@gmail.com"
+        }
+    ],
+    "require": {}
+}
