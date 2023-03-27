@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use App\Controllers\LoggerInterface;
 use InvalidArgumentException;
 
 class UrlShortener implements IUrlEncoder
@@ -9,9 +10,11 @@ class UrlShortener implements IUrlEncoder
 	private array $urls;
 	private string $fileName;
 	private int $length;
+	private LoggerInterface $logger;
 
-	public function __construct($fileName)
+	public function __construct($fileName, LoggerInterface $logger)
 	{
+		$this->logger = $logger;
 		$this->fileName = $fileName;
 		$this->urls = $this->loadUrlsFromFile();
 	}
@@ -48,6 +51,7 @@ class UrlShortener implements IUrlEncoder
 
 	public function decode(string $code): ?string
 	{
+		$this->logger->log('info', 'Loaded URLs from file.');
 		return $this->urls[$code] ?? null;
 	}
 
@@ -59,7 +63,7 @@ class UrlShortener implements IUrlEncoder
 		$code = $this->getCodeFromUrl($url);
 		$this->urls[$code] = $url;
 		$this->saveUrlsToFile();
-
+		$this->logger->log('info', 'Saved URLs to file.');
 		return substr(base64_encode(pack('H*', $code)), 0, $this->length);
 	}
 
