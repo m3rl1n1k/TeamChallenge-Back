@@ -4,7 +4,7 @@ namespace Controllers;
 
 use InvalidArgumentException;
 
-interface IUrlEncoder
+interface IUrlEncoder extends IUrlDecoder
 {
 
 	/**
