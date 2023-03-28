@@ -3,3 +3,4 @@ public
 .idea
 storage
 docker/logs
+.gitignore

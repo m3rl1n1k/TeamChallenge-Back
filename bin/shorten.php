@@ -1,15 +1,27 @@
 <?php
 
 require_once __DIR__ . "/../vendor/autoload.php";
+
 use Controllers\UrlShortener;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 $filePath = __DIR__ . "/../storage/urls.json";
 
-$short = new UrlShortener($filePath);
-$short->setLength(10);
+$logFile = __DIR__ . "/../storage/log.log";
 
-$codeShort = $short->encode("https://google.com/page-1");
-$url = $short->decode("3a8ba2c470");
-echo PHP_EOL;
-echo $url;
-echo PHP_EOL;
+$logger = new Logger('url-shortener');
+$logger->pushHandler(new StreamHandler("$logFile"));
+
+try {
+	$short = new UrlShortener($filePath, $logger);
+	$short->setLength(10);
+	$codeShort = $short->encode("https://2.32");
+	$url = $short->decode("3bcc318a12");
+	echo PHP_EOL;
+	echo $url;
+	echo PHP_EOL;
+} catch (Exception $e) {
+	$logger->log('error', $e->getMessage());
+}
+
