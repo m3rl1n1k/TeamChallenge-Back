@@ -12,14 +12,13 @@ class WorkWithFileController
 	protected Logger $logger;
 
 
-	protected function loadUrlsFromFile(): array
+	protected function loadUrlsFromFile(): void
 	{
 		if (file_exists($this->filePath)) {
 			$data = file_get_contents($this->filePath);
 			$this->urls = json_decode($data, true) ?? [];
 		}
 		$this->logger->log('info', 'Loaded URLs from file.');
-		return $this->urls;
 	}
 
 	protected function saveUrlsToFile(): void
