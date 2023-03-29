@@ -37,7 +37,7 @@ class UrlShortener extends WwF implements IUrlEncoder
 		$code = $this->getCodeFromUrl($url);
 		$this->urls[$code] = $url;
 		$this->saveUrlsToFile();
-			//створюєму фнкальний id за допомогою хешу вхідних даних
+			//створюєму унікальний id за допомогою хешу вхідних даних
 		return substr( base64_encode(pack('H*', $code)), 0, $this->length);
 	}
 
