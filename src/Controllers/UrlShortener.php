@@ -4,29 +4,28 @@ namespace Controllers;
 
 use App\Controllers\LoggerInterface;
 use App\Controllers\Validation;
-use App\Controllers\WorkWithFileController as WwF;
+use App\Controllers\WorkWithFile;
 use InvalidArgumentException;
 use Monolog\Logger;
 
-class UrlShortener extends WwF implements IUrlEncoder
+class UrlShortener implements IUrlEncoder, IUrlDecoder
 {
 	protected string $filePath;
-	protected array $urls = [];
+	protected array $urls;
 	protected int $length;
 	protected Logger $logger;
+	protected WorkWithFile $wwf;
 
 	public function __construct($filePath, LoggerInterface $logger)
 	{
 		$this->logger = $logger;
+		$this->wwf = new WorkWithFile($filePath);
 		$this->filePath = $filePath;
-		$this->loadUrlsFromFile();
+		$this->logger->log('info', 'Loaded URLs from file.');
+		$this->urls = $this->wwf->loadUrlsFromFile();
+
 	}
 
-	protected function getCodeFromUrl(string $url): string
-	{
-		//перетворюємо в двійкову систему
-		return substr(md5($url), 0, $this->length);
-	}
 	public function encode(string $url): string
 	{
 		if (!(new Validation())->isValidUrl($url)) {
@@ -36,9 +35,16 @@ class UrlShortener extends WwF implements IUrlEncoder
 		$this->logger->log('info', 'Valid URL');
 		$code = $this->getCodeFromUrl($url);
 		$this->urls[$code] = $url;
-		$this->saveUrlsToFile();
-			//створюєму унікальний id за допомогою хешу вхідних даних
-		return substr( base64_encode(pack('H*', $code)), 0, $this->length);
+		$this->wwf->saveUrlsToFile($this->urls);
+		$this->logger->log('info', 'Saved URLs to file.');
+		//створюєму унікальний id за допомогою хешу вхідних даних
+		return substr(base64_encode(pack('H*', $code)), 0, $this->length);
+	}
+
+	protected function getCodeFromUrl(string $url): string
+	{
+		//перетворюємо в двійкову систему
+		return substr(md5($url), 0, $this->length);
 	}
 
 	public function decode(string $code): string

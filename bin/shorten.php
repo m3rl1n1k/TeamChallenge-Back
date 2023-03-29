@@ -16,12 +16,12 @@ $logger->pushHandler(new StreamHandler("$logFile"));
 try {
 	$short = new UrlShortener($filePath, $logger);
 	$short->setLength(10);
-	$codeShort = $short->encode("https://2.32");
-	$url = $short->decode("3bcc318a12");
+	$codeShort = $short->encode("https://m6.com");
+	$url = $short->decode("d7b6228dcf");
 	echo PHP_EOL;
 	echo $url;
 	echo PHP_EOL;
-} catch (Exception $e) {
-	$logger->log('error', $e->getMessage());
+} catch (InvalidArgumentException $e) {
+	echo $e->getMessage();
 }
 
