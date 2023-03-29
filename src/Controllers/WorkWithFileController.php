@@ -17,8 +17,8 @@ class WorkWithFileController
 		if (file_exists($this->filePath)) {
 			$data = file_get_contents($this->filePath);
 			$this->urls = json_decode($data, true) ?? [];
+			$this->logger->log('info', 'Loaded URLs from file.');
 		}
-		$this->logger->log('info', 'Loaded URLs from file.');
 	}
 
 	protected function saveUrlsToFile(): void

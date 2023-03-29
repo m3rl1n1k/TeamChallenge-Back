@@ -19,7 +19,7 @@ class UrlShortener extends WwF implements IUrlEncoder
 	{
 		$this->logger = $logger;
 		$this->filePath = $filePath;
-		$this->urls = $this->loadUrlsFromFile();
+		$this->loadUrlsFromFile();
 	}
 
 	protected function getCodeFromUrl(string $url): string
