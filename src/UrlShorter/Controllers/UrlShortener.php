@@ -2,9 +2,9 @@
 
 namespace Controllers;
 
-use App\Controllers\LoggerInterface;
 use App\Controllers\Validation;
-use App\Controllers\WorkWithFile;
+use App\Interface\IUrlDecoder;
+use App\Interface\IUrlEncoder;
 use InvalidArgumentException;
 use Monolog\Logger;
 
@@ -16,7 +16,7 @@ class UrlShortener implements IUrlEncoder, IUrlDecoder
 	protected Logger $logger;
 	protected WorkWithFile $wwf;
 
-	public function __construct($filePath, LoggerInterface $logger)
+	public function __construct($filePath, Logger $logger)
 	{
 		$this->logger = $logger;
 		$this->wwf = new WorkWithFile($filePath);

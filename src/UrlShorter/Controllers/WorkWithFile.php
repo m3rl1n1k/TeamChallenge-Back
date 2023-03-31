@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace Controllers;
 
 class WorkWithFile
 {
 	private string $filePath;
-	private array $urls;
 
 	public function __construct($filePath)
 	{
@@ -16,7 +15,7 @@ class WorkWithFile
 	{
 		if (file_exists($this->filePath)) {
 			$data = file_get_contents($this->filePath);
-			return $this->urls = json_decode($data, true) ?? [];
+			return $urls = json_decode($data, true) ?? [];
 		}
 		return [];
 	}

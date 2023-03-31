@@ -1,18 +1,21 @@
 {
-    "name": "bisix21/php-lessons-pro",
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/",
-            "Controllers\\": "src/Controllers/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Fenix-25",
-            "email": "serqdrago@gmail.com"
-        }
-    ],
-    "require": {
-        "monolog/monolog": "3.*"
+  "name": "bisix21/php-lessons-pro",
+  "autoload": {
+    "psr-4": {
+      "Controllers\\": "src/UrlShorter/Controllers/",
+      "NewV\\": "src/newV/Controllers/",
+      "NewV\\Interface\\": "src/newV/Interface/"
     }
+  },
+  "authors": [
+    {
+      "name": "Fenix-25",
+      "email": "serqdrago@gmail.com"
+    }
+  ],
+  "require": {
+    "monolog/monolog": "3.*",
+    "ext-http": "*",
+    "larapack/dd": "1.*"
+  }
 }
