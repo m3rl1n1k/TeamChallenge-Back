@@ -2,9 +2,7 @@
   "name": "bisix21/php-lessons-pro",
   "autoload": {
     "psr-4": {
-      "Controllers\\": "src/UrlShorter/Controllers/",
-      "NewV\\": "src/newV/Controllers/",
-      "NewV\\Interface\\": "src/newV/Interface/"
+      "Controllers\\": "src/UrlShorter/Controllers/"
     }
   },
   "authors": [
