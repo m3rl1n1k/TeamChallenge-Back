@@ -2,17 +2,17 @@
 
 namespace NewV;
 
+use Config\Config;
 use NewV\Interface\IUrlEncoder;
+
 
 class Encode implements IUrlEncoder
 {
-
 	/**
 	 * @inheritDoc
 	 */
 	public function encode(string $url): string
 	{
-		//select type for gen
-		return md5(sha1($url));
+		 return substr(md5(mt_rand()), 0, Config::LENGTH);
 	}
 }

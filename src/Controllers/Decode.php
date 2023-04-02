@@ -2,16 +2,16 @@
 
 namespace NewV;
 
+
+
 use NewV\Interface\IUrlDecoder;
 
 class Decode implements IUrlDecoder
 {
-	protected string $code;
 	protected array $urls;
 
-	public function __construct($code, $urls)
+	public function __construct($urls)
 	{
-		$this->code = $code;
 		$this->urls = $urls;
 	}
 

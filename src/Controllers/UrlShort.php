@@ -10,13 +10,17 @@ class UrlShort
 {
 	protected string $filePath, $link, $code;
 	protected array $urls;
-	protected int $length;
 	protected LoggerInterface $logger;
+	private Encode $encode;
+	private Decode $decode;
 
 	public function __construct($filePath, LoggerInterface $logger)
 	{
 		$this->filePath = $filePath;
 		$this->logger = $logger;
+		$this->urls = (new Files($this->filePath))->readFile();;
+		$this->encode = new Encode();
+		$this->decode = new Decode($this->urls);
 	}
 
 	/**
@@ -31,42 +35,24 @@ class UrlShort
 	}
 
 	/**
-	 * @param int $length
-	 */
-	public function setLength(int $length): void
-	{
-		$this->logger->info('Set length of code', ['length' => $length]);
-		$this->length = $length;
-	}
-
-	/**
 	 * @param string $link
 	 * @return UrlShort
 	 */
 	public function setLink(string $link): static
 	{
 		$this->logger->info('Set link for encode', ['link' => $link]);
-		$this->link = $link;
-		if (!(new Validator($this->link))->link()) {
+		if (!(new Validator($link))->link()) {
 			$msg = "Invalid Url";
-			$this->logger->error($msg, ['url' => $this->link]);
+			$this->logger->error($msg, ['url' => $link]);
 			throw new InvalidArgumentException($msg);
 		}
+		$this->link = $link;
 		return $this;
 	}
 
 	public function encode(): void
 	{
-		$this->urls = (new Files($this->filePath))->readFile();
-
-		$this->logger->info('Encode url', ['url' => $this->link]);
-
-		$code = (new Encode())->encode($this->link);
-		$code = substr($code, 0, $this->length);
-		$this->urls[$code] = $this->link;
-
-		$this->logger->info('Save urls to file', ['file' => $this->filePath]);
-
+		$this->urls[$this->encode->encode($this->link)] = $this->link;
 		(new Files($this->filePath))->saveToFile($this->urls);
 	}
 
@@ -88,7 +74,7 @@ class UrlShort
 	public function decode(): void
 	{
 		$this->logger->info('Decode code', ['code' => $this->code]);
-		$res = (new Decode($this->code, $this->urls))->decode($this->code);
+		$res = $this->decode->decode($this->code);
 		new Divider('=', 60);
 		Divider::printString("Your code: {$this->code} equal: $res");
 	}
