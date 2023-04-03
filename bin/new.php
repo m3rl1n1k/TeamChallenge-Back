@@ -20,7 +20,7 @@ $logger->pushHandler(new StreamHandler($files->getPathLogs(), Level::Info));
 try {
 	$short = new UrlShort($files, $logger);
 	$short->setLength(10);
-	$short->setLink("https://google.com/search/moah")->individual()->encode();
+	$short->setLink("https://google.com/search")->individual()->encode();
 	$short->setCode("5957c7bc5f")->decode();
 	$short->showUrls();
 } catch (InvalidArgumentException $exception) {

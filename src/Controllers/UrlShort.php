@@ -99,10 +99,10 @@ class UrlShort
 	{
 		$res = $this->validator->issetInDb($this->link, $this->urls);
 		if ($res) {
-		$msg = "Url is isset, his short-code is: " . $res;
-		$this->logger->error($msg);
-		throw new InvalidArgumentException($msg);
-	}
+			$msg = "Url is isset, his short-code is: " . $res;
+			$this->logger->error($msg);
+			throw new InvalidArgumentException($msg);
+		}
 		return $this;
 	}
 }
