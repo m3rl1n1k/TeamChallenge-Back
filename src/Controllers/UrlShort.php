@@ -62,11 +62,12 @@ class UrlShort
 		return $this;
 	}
 
-	public function encode(): void
+	public function encode(): static
 	{
 		$code = substr($this->encode->encode($this->link), 0, $this->length);
 		$this->urls[$code] = $this->link;
 		$this->file->saveToFile($this->urls);
+		return $this;
 	}
 
 	public function showUrls(): void
@@ -80,7 +81,7 @@ class UrlShort
 	 */
 	public function getUrls(): array
 	{
-		$this->logger->info('Get Urls', ['urls'=>$this->urls]);
+		$this->logger->info('Get Urls', ['urls' => $this->urls]);
 		return $this->urls;
 	}
 
@@ -90,5 +91,10 @@ class UrlShort
 		$res = $this->decode->decode($this->code);
 		new Divider('=', 60);
 		Divider::printString("Your code: {$this->code} equal: $res");
+	}
+
+	public function individual(): void
+	{
+
 	}
 }
