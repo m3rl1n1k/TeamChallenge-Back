@@ -16,6 +16,7 @@ class UrlShort
 	protected int $length;
 	private Encode $encode;
 	private Decode $decode;
+	private Validator $validator;
 
 	public function __construct(FilesInterface $file, LoggerInterface $logger)
 	{
@@ -24,6 +25,7 @@ class UrlShort
 		$this->urls = $this->file->readFile();
 		$this->encode = new Encode();
 		$this->decode = new Decode($this->urls);
+		$this->validator = new Validator();
 	}
 
 	/**
@@ -31,7 +33,7 @@ class UrlShort
 	 */
 	public function setLength(int $length): void
 	{
-		$this->logger->info('Set length for code', ['length' => $length]);
+		$this->logger->info("Set length for code", ['length' => $length]);
 		$this->length = $length;
 	}
 
@@ -41,7 +43,7 @@ class UrlShort
 	 */
 	public function setCode(string $code): static
 	{
-		$this->logger->info('Set code for decode', ['code' => $code]);
+		$this->logger->info("Set code for decode", ['code' => $code]);
 		$this->code = $code;
 		return $this;
 	}
@@ -52,8 +54,8 @@ class UrlShort
 	 */
 	public function setLink(string $link): static
 	{
-		$this->logger->info('Set link for encode', ['link' => $link]);
-		if (!(new Validator($link))->link()) {
+		$this->logger->info("Set link for encode", ['link' => $link]);
+		if (!$this->validator->link($link)) {
 			$msg = "Invalid Url";
 			$this->logger->error($msg, ['url' => $link]);
 			throw new InvalidArgumentException($msg);
@@ -62,12 +64,12 @@ class UrlShort
 		return $this;
 	}
 
-	public function encode(): static
+	public function encode(): void
 	{
 		$code = substr($this->encode->encode($this->link), 0, $this->length);
 		$this->urls[$code] = $this->link;
 		$this->file->saveToFile($this->urls);
-		return $this;
+
 	}
 
 	public function showUrls(): void
@@ -81,20 +83,26 @@ class UrlShort
 	 */
 	public function getUrls(): array
 	{
-		$this->logger->info('Get Urls', ['urls' => $this->urls]);
+		$this->logger->info("Get Urls", ['urls' => $this->urls]);
 		return $this->urls;
 	}
 
 	public function decode(): void
 	{
-		$this->logger->info('Decode code', ['code' => $this->code]);
+		$this->logger->info("Decode code", ['code' => $this->code]);
 		$res = $this->decode->decode($this->code);
 		new Divider('=', 60);
 		Divider::printString("Your code: {$this->code} equal: $res");
 	}
 
-	public function individual(): void
+	public function individual(): static
 	{
-
+		$res = $this->validator->issetInDb($this->link, $this->urls);
+		if ($res) {
+		$msg = "Url is isset, his short-code is: " . $res;
+		$this->logger->error($msg);
+		throw new InvalidArgumentException($msg);
+	}
+		return $this;
 	}
 }

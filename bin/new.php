@@ -20,8 +20,8 @@ $logger->pushHandler(new StreamHandler($files->getPathLogs(), Level::Info));
 try {
 	$short = new UrlShort($files, $logger);
 	$short->setLength(10);
-	$short->setLink("https://google.com")->encode()->individual();
-	$short->setCode("6953b7ae23")->decode();
+	$short->setLink("https://google.com/search/moah")->individual()->encode();
+	$short->setCode("5957c7bc5f")->decode();
 	$short->showUrls();
 } catch (InvalidArgumentException $exception) {
 	new Divider('=', 19);
