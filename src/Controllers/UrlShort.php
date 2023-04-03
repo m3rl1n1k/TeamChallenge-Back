@@ -3,24 +3,36 @@
 namespace NewV;
 
 use InvalidArgumentException;
+use NewV\Interface\FilesInterface;
 use Psr\Log\LoggerInterface;
 
 
 class UrlShort
 {
-	protected string $filePath, $link, $code;
+	protected string $link, $code;
 	protected array $urls;
+	protected FilesInterface $file;
 	protected LoggerInterface $logger;
+	protected int $length;
 	private Encode $encode;
 	private Decode $decode;
 
-	public function __construct($filePath, LoggerInterface $logger)
+	public function __construct(FilesInterface $file, LoggerInterface $logger)
 	{
-		$this->filePath = $filePath;
+		$this->file = $file;
 		$this->logger = $logger;
-		$this->urls = (new Files($this->filePath))->readFile();;
+		$this->urls = $this->file->readFile();
 		$this->encode = new Encode();
 		$this->decode = new Decode($this->urls);
+	}
+
+	/**
+	 * @param int $length
+	 */
+	public function setLength(int $length): void
+	{
+		$this->logger->info('Set length for code', ['length' => $length]);
+		$this->length = $length;
 	}
 
 	/**
@@ -52,8 +64,9 @@ class UrlShort
 
 	public function encode(): void
 	{
-		$this->urls[$this->encode->encode($this->link)] = $this->link;
-		(new Files($this->filePath))->saveToFile($this->urls);
+		$code = substr($this->encode->encode($this->link), 0, $this->length);
+		$this->urls[$code] = $this->link;
+		$this->file->saveToFile($this->urls);
 	}
 
 	public function showUrls(): void
@@ -67,7 +80,7 @@ class UrlShort
 	 */
 	public function getUrls(): array
 	{
-		$this->logger->info('Get Urls');
+		$this->logger->info('Get Urls', ['urls'=>$this->urls]);
 		return $this->urls;
 	}
 

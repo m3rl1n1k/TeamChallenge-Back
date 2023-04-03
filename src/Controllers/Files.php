@@ -7,21 +7,40 @@ use NewV\Interface\FilesInterface;
 
 class Files implements FilesInterface
 {
-	protected string $filePath;
-	protected array $dataArray;
+	protected string $pathUrls;
+	protected string $pathLogs;
 
-	public function __construct($path)
+	/**
+	 * @return string
+	 */
+	public function getPathLogs(): string
 	{
-		$this->filePath = $path;
+		return $this->pathLogs;
+	}
+
+	/**
+	 * @param string $pathLogs
+	 */
+	public function setPathLogs(string $pathLogs): void
+	{
+		$this->pathLogs = $pathLogs;
+	}
+	protected array $dataArray;
+	/**
+	 * @param string $pathUrls
+	 */
+	public function setPathUrls(string $pathUrls): void
+	{
+		$this->pathUrls = $pathUrls;
 	}
 
 	public function readFile(): array
 	{
-		if (!file_exists($this->filePath)) {
-			file_put_contents($this->filePath, '');
+		if (!file_exists($this->pathUrls)) {
+			file_put_contents($this->pathUrls, '');
 			throw new InvalidArgumentException('File don\'t exist, rerun code');
 		}
-		$data = file_get_contents($this->filePath);
+		$data = file_get_contents($this->pathUrls);
 		return $this->dataArray = json_decode($data, true) ?? [];
 	}
 
@@ -29,7 +48,7 @@ class Files implements FilesInterface
 	{
 		if (!empty($data)) {
 			$data = json_encode($data, JSON_PRETTY_PRINT);
-			file_put_contents($this->filePath, $data);
+			file_put_contents($this->pathUrls, $data);
 		}
 
 	}

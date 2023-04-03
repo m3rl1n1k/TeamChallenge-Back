@@ -2,7 +2,6 @@
 
 namespace NewV;
 
-use Config\Config;
 use NewV\Interface\IUrlEncoder;
 
 
@@ -13,6 +12,6 @@ class Encode implements IUrlEncoder
 	 */
 	public function encode(string $url): string
 	{
-		 return substr(md5(mt_rand()), 0, Config::LENGTH);
+		 return md5(mt_rand());
 	}
 }

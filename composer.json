@@ -3,8 +3,7 @@
   "autoload": {
     "psr-4": {
       "NewV\\": "src/Controllers/",
-      "NewV\\Interface\\": "src/Interface/",
-      "Config\\": "src/Config/"
+      "NewV\\Interface\\": "src/Interface/"
     }
   },
   "authors": [
