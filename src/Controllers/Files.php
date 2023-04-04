@@ -8,30 +8,11 @@ use NewV\Interface\FilesInterface;
 class Files implements FilesInterface
 {
 	protected string $pathUrls;
-	protected string $pathLogs;
-
-	/**
-	 * @return string
-	 */
-	public function getPathLogs(): string
-	{
-		return $this->pathLogs;
-	}
-
-	/**
-	 * @param string $pathLogs
-	 */
-	public function setPathLogs(string $pathLogs): void
-	{
-		$this->pathLogs = $pathLogs;
-	}
 	protected array $dataArray;
-	/**
-	 * @param string $pathUrls
-	 */
-	public function setPathUrls(string $pathUrls): void
+
+	public function __construct($path)
 	{
-		$this->pathUrls = $pathUrls;
+		$this->pathUrls = $path;
 	}
 
 	public function readFile(): array

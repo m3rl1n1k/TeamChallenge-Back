@@ -11,21 +11,16 @@ class UrlShort
 {
 	protected string $link, $code;
 	protected array $urls;
-	protected FilesInterface $file;
-	protected LoggerInterface $logger;
 	protected int $length;
-	private Encode $encode;
-	private Decode $decode;
-	private Validator $validator;
 
-	public function __construct(FilesInterface $file, LoggerInterface $logger)
+	public function __construct(
+		protected FilesInterface $file,
+		protected LoggerInterface $logger,
+		protected Validator $validator)
 	{
-		$this->file = $file;
-		$this->logger = $logger;
+
 		$this->urls = $this->file->readFile();
-		$this->encode = new Encode();
-		$this->decode = new Decode($this->urls);
-		$this->validator = new Validator();
+
 	}
 
 	/**
@@ -64,9 +59,9 @@ class UrlShort
 		return $this;
 	}
 
-	public function encode(): void
+	public function encode(Encode $encode): void
 	{
-		$code = substr($this->encode->encode($this->link), 0, $this->length);
+		$code = substr($encode->encode($this->link), 0, $this->length);
 		$this->urls[$code] = $this->link;
 		$this->file->saveToFile($this->urls);
 
@@ -87,10 +82,10 @@ class UrlShort
 		return $this->urls;
 	}
 
-	public function decode(): void
+	public function decode(Decode $decode): void
 	{
 		$this->logger->info("Decode code", ['code' => $this->code]);
-		$res = $this->decode->decode($this->code);
+		$res = $decode->decode($this->code);
 		new Divider('=', 60);
 		Divider::printString("Your code: {$this->code} equal: $res");
 	}
