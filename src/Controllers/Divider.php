@@ -4,8 +4,8 @@ namespace NewV;
 
 class Divider
 {
-	protected static string $symbol;
-	protected static int $length;
+	protected static string $symbol = "=";
+	protected static int $length = 60;
 
 	public function __construct($symbol, $length)
 	{

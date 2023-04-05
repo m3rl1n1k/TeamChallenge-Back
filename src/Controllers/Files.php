@@ -8,11 +8,19 @@ use NewV\Interface\FilesInterface;
 class Files implements FilesInterface
 {
 	protected string $pathUrls;
+
+	/**
+	 * @param string $pathUrls
+	 */
+	public function setPathUrls(string $pathUrls): void
+	{
+		$this->pathUrls = $pathUrls;
+	}
 	protected array $dataArray;
 
-	public function __construct($path)
+	public function __construct()
 	{
-		$this->pathUrls = $path;
+		$this->pathUrls = CONFIG['Urls'];
 	}
 
 	public function readFile(): array
@@ -29,7 +37,7 @@ class Files implements FilesInterface
 	{
 		if (!empty($data)) {
 			$data = json_encode($data, JSON_PRETTY_PRINT);
-			file_put_contents($this->pathUrls, $data);
+			file_put_contents($this->pathUrls, $data );
 		}
 
 	}

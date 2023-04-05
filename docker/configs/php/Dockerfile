@@ -13,7 +13,7 @@ RUN pecl install xdebug \
 
 ENV TERM xterm-256color
 
-RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+RUN php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 
-WORKDIR /srv/src/php_lessons_pro
+WORKDIR /srv/src/php_pro
 CMD [ "php-fpm"]

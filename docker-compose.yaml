@@ -1,7 +1,7 @@
 version: "3" #версія протоколу
 services:
   php:
-    container_name: php_lessons_pro #назва контейнеру
+    container_name: php_pro #назва контейнеру
     build:
       context: ./ #точка входу (папка php-lessons-pro)
       dockerfile: "docker/configs/php/Dockerfile" #налаштування для php
@@ -9,7 +9,7 @@ services:
       XDEBUG_CONFIG: "remote_host={{yourIP}}"
       PHP_IDE_CONFIG: "serverName=docker"
     volumes:
-      - ./:/srv/src/php_lessons_pro #(точка входу):(робоча директорія в серидині контейнера)/синхронізує папки в обидва бокивщслук
+      - ./:/srv/src/php_pro #(точка входу):(робоча директорія в серидині контейнера)/синхронізує папки в обидва бокивщслук
 #  nginx:
 #    container_name: server_lessons_pro
 #    image: nginx:latest

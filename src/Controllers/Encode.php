@@ -12,6 +12,11 @@ class Encode implements IUrlEncoder
 	 */
 	public function encode(string $url): string
 	{
-		 return md5(mt_rand());
+		 return substr( md5($url), 0 , CONFIG['Length']);
+	}
+
+	public function encodeAny(): string
+	{
+		return substr(md5(mt_rand()), 0 , CONFIG['Length']);
 	}
 }
