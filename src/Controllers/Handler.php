@@ -2,7 +2,7 @@
 
 namespace NewV;
 
-class UrlHandler
+class Handler
 {
 	public function __construct(
 		protected Validator $validator,
