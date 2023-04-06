@@ -25,5 +25,3 @@ try {
 	Divider::printString($e->getMessage());
 }
 
-//вивід повідомлення
-// якщо url не обов*язковий вивести тільки decode()
