@@ -14,9 +14,4 @@ class Encode implements IUrlEncoder
 	{
 		 return substr( md5($url), 0 , CONFIG['Length']);
 	}
-
-	public function encodeAny(): string
-	{
-		return substr(md5(mt_rand()), 0 , CONFIG['Length']);
-	}
 }

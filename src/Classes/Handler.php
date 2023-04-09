@@ -30,12 +30,4 @@ class Handler
 	{
 		return $this->files->readFile();
 	}
-
-	public function saveAny(string $code, $link): void
-	{
-		$urls = $this->getUrls();
-		$urls[$code] = $link;
-		$this->files->setPathUrls(CONFIG['Urls']);
-		$this->files->saveToFile($urls);
-	}
 }
