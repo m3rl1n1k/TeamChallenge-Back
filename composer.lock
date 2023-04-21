@@ -4,8 +4,42 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8b839c86d7f46b29a117bebca28a4585",
+    "content-hash": "0d4837b959b3a7b32cffa0ec0723e7a9",
     "packages": [
+        {
+            "name": "diggphp/psr11",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/diggphp/psr11.git",
+                "reference": "ef2a32e45ffe30348ed49188ea2eec8d02e7d0e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/diggphp/psr11/zipball/ef2a32e45ffe30348ed49188ea2eec8d02e7d0e3",
+                "reference": "ef2a32e45ffe30348ed49188ea2eec8d02e7d0e3",
+                "shasum": ""
+            },
+            "require": {
+                "psr/container": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DiggPHP\\Psr11\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "description": "php psr11",
+            "support": {
+                "issues": "https://github.com/diggphp/psr11/issues",
+                "source": "https://github.com/diggphp/psr11/tree/1.0.0"
+            },
+            "time": "2022-04-26T08:17:37+00:00"
+        },
         {
             "name": "larapack/dd",
             "version": "1.1",
@@ -146,6 +180,59 @@
                 }
             ],
             "time": "2023-02-06T13:46:10+00:00"
+        },
+        {
+            "name": "psr/container",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/container.git",
+                "reference": "c71ecc56dfe541dbd90c5360474fbc405f8d5963"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/c71ecc56dfe541dbd90c5360474fbc405f8d5963",
+                "reference": "c71ecc56dfe541dbd90c5360474fbc405f8d5963",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "homepage": "https://github.com/php-fig/container",
+            "keywords": [
+                "PSR-11",
+                "container",
+                "container-interface",
+                "container-interop",
+                "psr"
+            ],
+            "support": {
+                "issues": "https://github.com/php-fig/container/issues",
+                "source": "https://github.com/php-fig/container/tree/2.0.2"
+            },
+            "time": "2021-11-05T16:47:00+00:00"
         },
         {
             "name": "psr/log",

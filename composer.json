@@ -3,7 +3,8 @@
   "autoload": {
     "psr-4": {
       "NewV\\": "src/Classes/",
-      "NewV\\Interface\\": "src/Interface/"
+      "NewV\\Interface\\": "src/Interface/",
+      "DI\\": "src/Core/DI/"
     }
   },
   "authors": [
@@ -15,6 +16,7 @@
   "require": {
     "monolog/monolog": "3.*",
     "ext-http": "*",
-    "larapack/dd": "1.*"
+    "larapack/dd": "1.*",
+    "diggphp/psr11": "*"
   }
 }
