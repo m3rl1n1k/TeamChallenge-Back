@@ -24,22 +24,44 @@ class Container implements ContainerInterface
 		return self::$instance;
 	}
 
-	public function get(string $id): mixed
+	public function get($id)
 	{
-		if ($this->has($id)) {
-			return $this->resolve($id);
-		} else {
-			throw new NotFoundException("Dependency $id not found ");
+		if (!$this->has($id)) {
+			throw new NotFoundException("Dependency {$id} not found");
 		}
+
+		$dependency = $this->dependencies[$id];
+
+		if (is_callable($dependency)) {
+			$dependency = $dependency($this);
+		}
+
+		return $dependency;
 	}
 
-	public function has(string $id): bool
+	public function has($id): bool
 	{
-		return isset($this->dependencies[$id]);
+		return array_key_exists($id, $this->dependencies);
 	}
 
+
+	/**
+	 * @throws NotFoundException
+	 */
 	private function resolve(string $id)
 	{
-		return call_user_func($this->dependencies[$id], $this);
+		if (!isset($this->dependencies[$id])) {
+			throw new NotFoundException("Dependency $id not found ");
+		}
+
+		$dependency = $this->dependencies[$id];
+
+		if (is_callable($dependency)) {
+			$resolvedDependency = $dependency($this);
+			$this->dependencies[$id] = $resolvedDependency;
+			return $resolvedDependency;
+		}
+
+		return $dependency;
 	}
 }

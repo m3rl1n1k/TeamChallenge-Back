@@ -32,6 +32,7 @@ return [
 		return $log;
 	},
 	StreamHandler::class => function () {
+	//не знаю покищо як позбутися такого запису :(
 		$log = Config::instance()->get("config")["Logs"];
 		return new StreamHandler($log);
 	},
