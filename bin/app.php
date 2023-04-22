@@ -2,11 +2,14 @@
 
 use DI\Container;
 use NewV\App;
+use NewV\Config;
 use NewV\Divider;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-$services = require_once __DIR__ . "/../config/services.php";
+const ROOT = __DIR__ . "/../";
+require_once ROOT . "src/bootstrap.php";
+$services = Config::instance()->get("services");
 try {
 	Container::instance($services);
 	$di = Container::instance()->get(App::class);

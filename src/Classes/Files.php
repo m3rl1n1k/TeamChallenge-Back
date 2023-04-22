@@ -18,9 +18,9 @@ class Files implements FilesInterface
 	}
 	protected array $dataArray;
 
-	public function __construct()
+	public function __construct($pathUrls)
 	{
-		$this->pathUrls = CONFIG['Urls'];
+		$this->pathUrls = $pathUrls;
 	}
 
 	public function readFile(): array
