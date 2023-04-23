@@ -19,9 +19,8 @@ return [
 			$container->get(Logger::class),
 		);
 	},
-	Encode::class => function () {
-		$length = Config::instance()->get("config")["Length"];
-		return new Encode($length);
+	Encode::class => function ($container) {
+		return new Encode($container->get(Config::class)->get("config")["Length"]);
 	},
 	Decode::class => function () {
 		return new Decode();
@@ -31,10 +30,8 @@ return [
 		$log->pushHandler($container->get(StreamHandler::class));
 		return $log;
 	},
-	StreamHandler::class => function () {
-	//не знаю покищо як позбутися такого запису :(
-		$log = Config::instance()->get("config")["Logs"];
-		return new StreamHandler($log);
+	StreamHandler::class => function ($container) {
+		return new StreamHandler($container->get(Config::class)->get("config")["Logs"]);
 	},
 	Handler::class => function ($container) {
 		return new Handler(
@@ -45,8 +42,10 @@ return [
 	Validator::class => function () {
 		return new Validator();
 	},
-	Files::class => function () {
-		$urls = Config::instance()->get('config')["Urls"];
-		return new Files($urls);
+	Files::class => function ($container) {
+		return new Files($container->get(Config::class)->get("config")["Urls"]);
 	},
+	Config::class => function () {
+		return Config::instance();
+	}
 ];

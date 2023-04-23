@@ -7,16 +7,15 @@ use Psr\Container\ContainerInterface;
 
 class Container implements ContainerInterface
 {
-
 	private static ?Container $instance = null;
-	protected array $dependencies = [];
+	private array $dependencies;
 
 	private function __construct($dependencies = [])
 	{
 		$this->dependencies = $dependencies;
 	}
 
-	public static function instance($dependencies = []): Container
+	public static function getInstance($dependencies = []): self
 	{
 		if (null === self::$instance) {
 			self::$instance = new self($dependencies);
@@ -33,7 +32,7 @@ class Container implements ContainerInterface
 		$dependency = $this->dependencies[$id];
 
 		if (is_callable($dependency)) {
-			$dependency = $dependency($this);
+			return $dependency($this);
 		}
 
 		return $dependency;
