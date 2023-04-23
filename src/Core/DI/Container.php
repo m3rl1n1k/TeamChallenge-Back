@@ -43,25 +43,4 @@ class Container implements ContainerInterface
 	{
 		return array_key_exists($id, $this->dependencies);
 	}
-
-
-	/**
-	 * @throws NotFoundException
-	 */
-	private function resolve(string $id)
-	{
-		if (!isset($this->dependencies[$id])) {
-			throw new NotFoundException("Dependency $id not found ");
-		}
-
-		$dependency = $this->dependencies[$id];
-
-		if (is_callable($dependency)) {
-			$resolvedDependency = $dependency($this);
-			$this->dependencies[$id] = $resolvedDependency;
-			return $resolvedDependency;
-		}
-
-		return $dependency;
-	}
 }
