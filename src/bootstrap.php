@@ -1,6 +1,6 @@
 <?php
 
-use NewV\Config;
+use DI\Config;
 
 require_once ROOT . "vendor/autoload.php";
 

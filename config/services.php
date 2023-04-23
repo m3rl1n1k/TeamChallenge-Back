@@ -1,9 +1,9 @@
 <?php
 
+use DI\Config;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use NewV\App;
-use NewV\Config;
 use NewV\Decode;
 use NewV\Encode;
 use NewV\Files;

@@ -1,8 +1,8 @@
 <?php
 
+use DI\Config;
 use DI\Container;
 use NewV\App;
-use NewV\Config;
 use NewV\Divider;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;

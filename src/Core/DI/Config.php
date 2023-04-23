@@ -1,6 +1,6 @@
 <?php
 
-namespace NewV;
+namespace DI;
 class Config
 {
 	private static ?Config $instance = null;
