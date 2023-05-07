@@ -1,6 +1,6 @@
 <?php
 
-namespace NewV;
+namespace Classes;
 
 class Divider
 {

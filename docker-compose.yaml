@@ -10,12 +10,14 @@ services:
       PHP_IDE_CONFIG: "serverName=docker"
     volumes:
       - ./:/srv/src/php_pro #(точка входу):(робоча директорія в серидині контейнера)/синхронізує папки в обидва бокивщслук
-#  nginx:
-#    container_name: server_lessons_pro
-#    image: nginx:latest
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    volumes:
-#      - ./docker/configs/nginx/hosts:/etc/nginx/conf.d
-#  #      - ./docker/logs/nginx:/var/log/nginx
+  db_mysql:
+    image: mysql:latest
+    container_name: php_pro_mysql
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_CONNECTION: db_mysql
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_USER: Bisix21
+      MYSQL_DATABASE: php_pro
+      MYSQL_PASSWORD: password

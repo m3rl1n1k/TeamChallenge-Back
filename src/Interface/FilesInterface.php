@@ -1,6 +1,6 @@
 <?php
 
-namespace NewV\Interface;
+namespace Interface;
 
 use InvalidArgumentException;
 

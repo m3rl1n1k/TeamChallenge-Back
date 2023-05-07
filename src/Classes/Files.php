@@ -1,9 +1,9 @@
 <?php
 
-namespace NewV;
+namespace Classes;
 
 use InvalidArgumentException;
-use NewV\Interface\FilesInterface;
+use Interface\FilesInterface;
 
 class Files implements FilesInterface
 {

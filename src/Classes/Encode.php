@@ -1,8 +1,8 @@
 <?php
 
-namespace NewV;
+namespace Classes;
 
-use NewV\Interface\IUrlEncoder;
+use Interface\IUrlEncoder;
 
 
 class Encode implements IUrlEncoder

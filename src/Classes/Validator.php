@@ -1,6 +1,6 @@
 <?php
 
-namespace NewV;
+namespace Classes;
 
 use InvalidArgumentException;
 
@@ -17,12 +17,12 @@ class Validator
 		return $res;
 	}
 
-	public function issetInDb($value, $array): void
+	public function issetIn($value, $array): bool
 	{
-		$res = array_search($value, $array);
-		if ($res) {
-			throw new InvalidArgumentException("You have same record: $res => $value");
+		if (array_search($value, $array)){
+			return false;
 		}
+		return true;
 	}
 
 }

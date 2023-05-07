@@ -1,8 +1,9 @@
 <?php
 
-namespace NewV;
+namespace Classes;
 
-use NewV\Interface\IUrlDecoder;
+use http\Exception\InvalidArgumentException;
+use Interface\IUrlDecoder;
 
 class Decode implements IUrlDecoder
 {
@@ -10,6 +11,7 @@ class Decode implements IUrlDecoder
 
 	/**
 	 * @param array $urls
+	 * @return Decode
 	 */
 	public function setUrls(array $urls): static
 	{
@@ -19,6 +21,9 @@ class Decode implements IUrlDecoder
 
 	public function decode(string $code): string
 	{
+		if (!$this->urls[$code]){
+			throw new InvalidArgumentException(" Undefined code $code");
+		}
 		return $this->urls[$code];
 	}
 }

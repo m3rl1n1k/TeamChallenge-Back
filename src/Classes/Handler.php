@@ -1,12 +1,16 @@
 <?php
 
-namespace NewV;
+namespace Classes;
+
+use InvalidArgumentException;
+use Models\UrlShort;
 
 class Handler
 {
 	public function __construct(
 		protected Validator $validator,
 		protected Files     $files,
+		protected DB  $record,
 	)
 	{
 		//
@@ -19,11 +23,12 @@ class Handler
 
 	public function save(string $code, $link): void
 	{
-		$urls = $this->getUrls();
-		$this->validator->issetInDb($link, $urls);
-		$urls[$code] = $link;
-		$this->files->setPathUrls(CONFIG['Urls']);
-		$this->files->saveToFile($urls);
+		$urls = $this->record->getRecord();
+		$res = $this->validator->issetIn($link, $urls);
+		if ($res)
+			$this->record->saveToDb($code, $link);
+		else
+			throw new InvalidArgumentException("You have same record: $code => $link");
 	}
 
 	public function getUrls(): array

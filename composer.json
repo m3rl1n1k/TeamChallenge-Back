@@ -2,9 +2,11 @@
   "name": "bisix21/php-lessons-pro",
   "autoload": {
     "psr-4": {
-      "NewV\\": "src/Classes/",
-      "NewV\\Interface\\": "src/Interface/",
-      "DI\\": "src/Core/DI/"
+      "Classes\\":"src/Classes/",
+      "Interface\\":"src/Interface/",
+      "DI\\":"src/Core/DI/",
+      "ORM\\":"src/ORM/",
+      "Models\\":"src/Models/"
     }
   },
   "authors": [
@@ -17,6 +19,7 @@
     "monolog/monolog": "3.*",
     "ext-http": "*",
     "larapack/dd": "1.*",
-    "diggphp/psr11": "*"
+    "diggphp/psr11": "*",
+    "illuminate/database": "*"
   }
 }

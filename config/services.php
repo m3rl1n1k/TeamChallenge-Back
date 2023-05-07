@@ -1,14 +1,17 @@
 <?php
 
+use Classes\App;
+use Classes\DB;
+use Classes\Decode;
+use Classes\Encode;
+use Classes\Files;
+use Classes\Handler;
+use Classes\Validator;
 use DI\Config;
+use Models\UrlShort;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use NewV\App;
-use NewV\Decode;
-use NewV\Encode;
-use NewV\Files;
-use NewV\Handler;
-use NewV\Validator;
+use ORM\ActiveRecord;
 
 return [
 	App::class => function ($container) {
@@ -17,6 +20,7 @@ return [
 			$container->get(Encode::class),
 			$container->get(Decode::class),
 			$container->get(Logger::class),
+			$container->get(ActiveRecord::class),
 		);
 	},
 	Encode::class => function ($container) {
@@ -36,7 +40,8 @@ return [
 	Handler::class => function ($container) {
 		return new Handler(
 			$container->get(Validator::class),
-			$container->get(Files::class)
+			$container->get(Files::class),
+			$container->get(DB::class)
 		);
 	},
 	Validator::class => function () {
@@ -47,5 +52,15 @@ return [
 	},
 	Config::class => function () {
 		return Config::instance();
+	},
+	ActiveRecord::class => function ($container) {
+		$configDbConnection = $container->get(Config::class)->get("config")['db_connection'];
+		return new ActiveRecord($configDbConnection);
+	},
+	UrlShort::class => function () {
+		return new UrlShort();
+	},
+	DB::class => function ($container) {
+		return new DB($container->get(UrlShort::class));
 	}
 ];

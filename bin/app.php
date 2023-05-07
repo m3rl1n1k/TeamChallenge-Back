@@ -2,8 +2,8 @@
 
 use DI\Config;
 use DI\Container;
-use NewV\App;
-use NewV\Divider;
+use Classes\App;
+use Classes\Divider;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -13,7 +13,7 @@ $services = Config::instance()->get("services");
 try {
 	Container::getInstance($services);
 	$di = Container::getInstance()->get(App::class);
-	$di->handle("https://github.com/Bisix21/php-lessons-p/", "54ac4c9efe");
+	$di->handle("https://google.com/", "008ec4453f");
 } catch (NotFoundExceptionInterface|ContainerExceptionInterface $e) {
 	Divider::printString($e->getMessage());
 } catch (InvalidArgumentException $argumentException) {
