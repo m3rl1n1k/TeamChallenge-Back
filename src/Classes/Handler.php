@@ -10,7 +10,7 @@ class Handler
 	public function __construct(
 		protected Validator $validator,
 		protected Files     $files,
-		protected DB  $record,
+		protected Url       $record,
 	)
 	{
 		//

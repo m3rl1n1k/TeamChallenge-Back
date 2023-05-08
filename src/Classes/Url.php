@@ -4,13 +4,14 @@ namespace Classes;
 
 use Models\UrlShort;
 
-class DB
+class Url
 {
 	public function __construct(protected UrlShort $short)
 	{
 	}
 
-	public  function saveToDb($code, $link){
+	public  function saveToDb($code, $link): void
+	{
 		$this->short->url =$link;
 		$this->short->code = $code;
 		$this->short->save();

@@ -1,7 +1,7 @@
 <?php
 
 use Classes\App;
-use Classes\DB;
+use Classes\Url;
 use Classes\Decode;
 use Classes\Encode;
 use Classes\Files;
@@ -41,7 +41,7 @@ return [
 		return new Handler(
 			$container->get(Validator::class),
 			$container->get(Files::class),
-			$container->get(DB::class)
+			$container->get(Url::class)
 		);
 	},
 	Validator::class => function () {
@@ -60,7 +60,7 @@ return [
 	UrlShort::class => function () {
 		return new UrlShort();
 	},
-	DB::class => function ($container) {
-		return new DB($container->get(UrlShort::class));
+	Url::class => function ($container) {
+		return new Url($container->get(UrlShort::class));
 	}
 ];
