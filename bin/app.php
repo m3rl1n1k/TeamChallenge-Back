@@ -2,9 +2,9 @@
 
 
 use Bisix21\src\Classes\Divider;
-use Bisix21\src\Classes\Handler;
 use Bisix21\src\Core\Config;
 use Bisix21\src\Core\DI\Container;
+use Bisix21\src\Core\Handler;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 

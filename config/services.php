@@ -1,9 +1,9 @@
 <?php
 
-use Bisix21\src\Classes\Handler;
 use Bisix21\src\Core\Command;
 use Bisix21\src\Core\Config;
 use Bisix21\src\Core\Converter;
+use Bisix21\src\Core\Handler;
 use Bisix21\src\Models\UrlShort;
 use Bisix21\src\ORM\ActiveRecord;
 use Bisix21\src\Repository\DB;

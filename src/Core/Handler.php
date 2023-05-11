@@ -1,9 +1,6 @@
 <?php
 
-namespace Bisix21\src\Classes;
-
-use Bisix21\src\Core\Command;
-use Bisix21\src\Core\Converter;
+namespace Bisix21\src\Core;
 
 class Handler
 {
