@@ -1,5 +1,7 @@
 <?php
 
+use Bisix21\src\Commands\DecodeCommand;
+use Bisix21\src\Commands\EncodeCommand;
 use Bisix21\src\Core\Command;
 use Bisix21\src\Core\Config;
 use Bisix21\src\Core\Converter;
@@ -8,8 +10,6 @@ use Bisix21\src\Models\UrlShort;
 use Bisix21\src\ORM\ActiveRecord;
 use Bisix21\src\Repository\DB;
 use Bisix21\src\Repository\Files;
-use Bisix21\src\UrlShort\CommandsUrl\DecodeCommand;
-use Bisix21\src\UrlShort\CommandsUrl\EncodeCommand;
 use Bisix21\src\UrlShort\Decode;
 use Bisix21\src\UrlShort\Encode;
 use Bisix21\src\UrlShort\Validator;
@@ -20,7 +20,8 @@ return [
 	Handler::class => function ($container) {
 		return new Handler(
 			$container->get(Converter::class),
-			$container->get(Command::class)
+			$container->get(Command::class),
+			$container->get(ActiveRecord::class)
 		);
 	},
 	Converter::class => function () {

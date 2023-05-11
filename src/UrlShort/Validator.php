@@ -19,6 +19,10 @@ class Validator
 
 	public function issetIn($value, $array): bool
 	{
+		if (empty($array))
+		{
+			exit();
+		}
 		if (array_search($value, $array)){
 			return false;
 		}

@@ -3,7 +3,6 @@
 namespace Bisix21\src\ORM;
 
 use Illuminate\Database\Capsule\Manager;
-use Illuminate\Database\Schema\Blueprint;
 
 class ActiveRecord
 {
@@ -20,16 +19,5 @@ class ActiveRecord
 		$manager->addConnection($this->configDbConnection);
 		$manager->setAsGlobal();
 		$manager->bootEloquent();
-		$this->createDefaultTable();
-	}
-
-	protected function createDefaultTable(): void
-	{
-		Manager::schema()->create('urls_shorts', function (Blueprint $table) {
-			$table->bigIncrements('id');
-			$table->string('code');
-			$table->string('link');
-			$table->timestamps();
-		});
 	}
 }

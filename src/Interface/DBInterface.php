@@ -11,7 +11,7 @@ interface DBInterface
 	 * @throws InvalidArgumentException
 	 * @return array
 	 */
-	public function read():array;
+	public function read():array|null;
 
 	/**
 	 * @array $data

@@ -3,5 +3,5 @@ public
 .idea
 storage
 docker/logs
-.gitignore
 dz.sql
+.gitignore

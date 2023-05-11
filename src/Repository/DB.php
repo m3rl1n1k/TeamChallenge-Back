@@ -13,13 +13,16 @@ class DB implements DBInterface
 
 	public function saveToDb($data): void
 	{
-		$this->short->link = $data['url'];
+
 		$this->short->code = $data['code'];
+		$this->short->link = $data['url'];
+
 		$this->short->save();
 	}
 
-	public function read(): array
+	public function read(): array|null
 	{
+		$urlsNew = [];
 		$urls = $this->short::all();
 		foreach ($urls as $url) {
 			$urlsNew[$url->code] = $url->link;
