@@ -11,10 +11,10 @@ class ActiveRecord
 		public array $configDbConnection,
 	)
 	{
-		$this->db();
+		$this->connectToDB();
 	}
 
-	public function db(): void
+	public function connectToDB(): void
 	{
 		$manager = new Manager();
 		$manager->addConnection($this->configDbConnection);
@@ -28,7 +28,7 @@ class ActiveRecord
 		Manager::schema()->create('urls_shorts', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('code');
-			$table->string('url');
+			$table->string('link');
 			$table->timestamps();
 		});
 	}

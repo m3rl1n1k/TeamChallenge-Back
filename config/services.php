@@ -30,6 +30,19 @@ return [
 		return new Encode(
 			$container->get(Config::class)->get("config")["Length"]);
 	},
+	Command::class => function ($container) {
+		return new Command(
+			$container->get(Config::class)->get('commands')
+		);
+	},
+	EncodeCommand::class => function ($container) {
+		return new EncodeCommand(
+			$container->get(Encode::class),
+			$container->get(Converter::class),
+			$container->get(DB::class),
+			$container->get(Validator::class)
+		);
+	},
 	Logger::class => function ($container) {
 		$log = new Logger("log");
 		$log->pushHandler($container->get(StreamHandler::class));
@@ -60,22 +73,10 @@ return [
 	DB::class => function ($container) {
 		return new DB($container->get(UrlShort::class));
 	},
-	Command::class => function($container){
-		return new Command(
-			$container->get(Config::class)->get('commands')
-		);
-	},
-	EncodeCommand::class=>function($container){
-		return new EncodeCommand(
-			$container->get(Encode::class),
-			$container->get(Converter::class),
-			$container->get(DB::class),
-			$container->get(Validator::class)
-		);
-	},
-	DecodeCommand::class=>function($container){
+	DecodeCommand::class => function ($container) {
 		return new DecodeCommand(
-			$container->get(Encode::class),
+			$container->get(Decode::class),
+			$container->get(DB::class),
 			$container->get(Converter::class)
 		);
 	},

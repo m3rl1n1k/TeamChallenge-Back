@@ -22,7 +22,7 @@ class DB implements DBInterface
 	{
 		$urls = $this->short::all();
 		foreach ($urls as $url) {
-			$urlsNew[$url->code] = $url->url;
+			$urlsNew[$url->code] = $url->link;
 		}
 		return $urlsNew;
 	}

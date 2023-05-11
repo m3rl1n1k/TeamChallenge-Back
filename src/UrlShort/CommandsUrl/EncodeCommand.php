@@ -29,13 +29,14 @@ class EncodeCommand implements CommandInterface
 
 		{
 			$urls = $this->record->read();
+			$this->validator->link($link);
 			$res = $this->validator->issetIn($link, $urls);
 			if ($res) {
 				$res = [
 					'code' => $code,
 					'url' => $link,
 				];
-//				$this->record->saveToDb($res);
+				$this->record->saveToDb($res);
 			} else
 				throw new InvalidArgumentException("You have same record: $code => $link");
 		}
