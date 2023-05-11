@@ -1,6 +1,6 @@
 <?php
 
-namespace Classes;
+namespace  Bisix21\src\Classes;
 
 class Divider
 {

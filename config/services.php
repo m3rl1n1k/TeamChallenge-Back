@@ -1,48 +1,45 @@
 <?php
 
-use Classes\App;
-use Classes\Url;
-use Classes\Decode;
-use Classes\Encode;
-use Classes\Files;
-use Classes\Handler;
-use Classes\Validator;
-use DI\Config;
-use Models\UrlShort;
+use Bisix21\src\Classes\Handler;
+use Bisix21\src\Core\Command;
+use Bisix21\src\Core\Config;
+use Bisix21\src\Core\Converter;
+use Bisix21\src\Models\UrlShort;
+use Bisix21\src\ORM\ActiveRecord;
+use Bisix21\src\Repository\DB;
+use Bisix21\src\Repository\Files;
+use Bisix21\src\UrlShort\CommandsUrl\DecodeCommand;
+use Bisix21\src\UrlShort\CommandsUrl\EncodeCommand;
+use Bisix21\src\UrlShort\Decode;
+use Bisix21\src\UrlShort\Encode;
+use Bisix21\src\UrlShort\Validator;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use ORM\ActiveRecord;
 
 return [
-	App::class => function ($container) {
-		return new  App(
-			$container->get(Handler::class),
-			$container->get(Encode::class),
-			$container->get(Decode::class),
-			$container->get(Logger::class),
-			$container->get(ActiveRecord::class),
+	Handler::class => function ($container) {
+		return new Handler(
+			$container->get(Converter::class),
+			$container->get(Command::class)
 		);
 	},
-	Encode::class => function ($container) {
-		return new Encode($container->get(Config::class)->get("config")["Length"]);
+	Converter::class => function () {
+		return new Converter();
 	},
-	Decode::class => function () {
-		return new Decode();
+	Encode::class => function ($container) {
+		return new Encode(
+			$container->get(Config::class)->get("config")["Length"]);
 	},
 	Logger::class => function ($container) {
 		$log = new Logger("log");
 		$log->pushHandler($container->get(StreamHandler::class));
 		return $log;
 	},
+	Decode::class => function () {
+		return new Decode();
+	},
 	StreamHandler::class => function ($container) {
 		return new StreamHandler($container->get(Config::class)->get("config")["Logs"]);
-	},
-	Handler::class => function ($container) {
-		return new Handler(
-			$container->get(Validator::class),
-			$container->get(Files::class),
-			$container->get(Url::class)
-		);
 	},
 	Validator::class => function () {
 		return new Validator();
@@ -60,7 +57,26 @@ return [
 	UrlShort::class => function () {
 		return new UrlShort();
 	},
-	Url::class => function ($container) {
-		return new Url($container->get(UrlShort::class));
-	}
+	DB::class => function ($container) {
+		return new DB($container->get(UrlShort::class));
+	},
+	Command::class => function($container){
+		return new Command(
+			$container->get(Config::class)->get('commands')
+		);
+	},
+	EncodeCommand::class=>function($container){
+		return new EncodeCommand(
+			$container->get(Encode::class),
+			$container->get(Converter::class),
+			$container->get(DB::class),
+			$container->get(Validator::class)
+		);
+	},
+	DecodeCommand::class=>function($container){
+		return new DecodeCommand(
+			$container->get(Encode::class),
+			$container->get(Converter::class)
+		);
+	},
 ];

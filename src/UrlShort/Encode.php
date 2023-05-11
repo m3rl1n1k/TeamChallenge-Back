@@ -1,8 +1,8 @@
 <?php
 
-namespace Classes;
+namespace Bisix21\src\UrlShort;
 
-use Interface\IUrlEncoder;
+use Bisix21\src\Interface\IUrlEncoder;
 
 
 class Encode implements IUrlEncoder

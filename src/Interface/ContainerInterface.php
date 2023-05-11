@@ -1,6 +1,6 @@
 <?php
 
-namespace Interface;
+namespace  Bisix21\src\Interface;
 
 interface ContainerInterface
 {

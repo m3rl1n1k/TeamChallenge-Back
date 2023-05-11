@@ -1,29 +1,19 @@
 <?php
 
-namespace Classes;
+namespace  Bisix21\src\Repository;
 
+use Bisix21\src\Interface\DBInterface;
 use InvalidArgumentException;
-use Interface\FilesInterface;
 
-class Files implements FilesInterface
+class Files implements DBInterface
 {
-	protected string $pathUrls;
-
-	/**
-	 * @param string $pathUrls
-	 */
-	public function setPathUrls(string $pathUrls): void
-	{
-		$this->pathUrls = $pathUrls;
-	}
 	protected array $dataArray;
 
-	public function __construct($pathUrls)
+	public function __construct(	protected string$pathUrls)
 	{
-		$this->pathUrls = $pathUrls;
 	}
 
-	public function readFile(): array
+	public function read(): array
 	{
 		if (!file_exists($this->pathUrls)) {
 			file_put_contents($this->pathUrls, '');
@@ -33,7 +23,7 @@ class Files implements FilesInterface
 		return $this->dataArray = json_decode($data, true) ?? [];
 	}
 
-	public function saveToFile($data): void
+	public function saveToDB($data): void
 	{
 		if (!empty($data)) {
 			$data = json_encode($data, JSON_PRETTY_PRINT);

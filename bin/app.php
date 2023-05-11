@@ -1,19 +1,25 @@
 <?php
 
-use DI\Config;
-use DI\Container;
-use Classes\App;
-use Classes\Divider;
+
+use Bisix21\src\Classes\Divider;
+use Bisix21\src\Classes\Handler;
+use Bisix21\src\Core\Config;
+use Bisix21\src\Core\DI\Container;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 const ROOT = __DIR__ . "/../";
 require_once ROOT . "src/bootstrap.php";
 $services = Config::instance()->get("services");
+
+
+/**
+ * @var Handler $handle
+ */
 try {
 	Container::getInstance($services);
-	$di = Container::getInstance()->get(App::class);
-	$di->handle("https://google.com/", "008ec4453f");
+	$handle = Container::getInstance()->get(Handler::class);
+	$handle->handle();
 } catch (NotFoundExceptionInterface|ContainerExceptionInterface $e) {
 	Divider::printString($e->getMessage());
 } catch (InvalidArgumentException $argumentException) {

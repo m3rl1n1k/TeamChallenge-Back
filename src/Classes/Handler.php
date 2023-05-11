@@ -1,38 +1,24 @@
 <?php
 
-namespace Classes;
+namespace Bisix21\src\Classes;
 
-use InvalidArgumentException;
-use Models\UrlShort;
+use Bisix21\src\Core\Command;
+use Bisix21\src\Core\Converter;
 
 class Handler
 {
+	protected string $givenCommand;
+
 	public function __construct(
-		protected Validator $validator,
-		protected Files     $files,
-		protected Url       $record,
+		protected Converter $converter,
+		protected Command   $command
 	)
 	{
-		//
 	}
 
-	public function validate($link): void
+	public function handle(): void
 	{
-		$this->validator->link($link);
-	}
-
-	public function save(string $code, $link): void
-	{
-		$urls = $this->record->getRecord();
-		$res = $this->validator->issetIn($link, $urls);
-		if ($res)
-			$this->record->saveToDb($code, $link);
-		else
-			throw new InvalidArgumentException("You have same record: $code => $link");
-	}
-
-	public function getUrls(): array
-	{
-		return $this->files->readFile();
+		$this->givenCommand = $this->converter->commandCall();
+		$this->command->run($this->givenCommand);
 	}
 }

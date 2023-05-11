@@ -1,6 +1,6 @@
 <?php
 
-namespace DI;
+namespace Bisix21\src\Core\DI;
 
 use DiggPHP\Psr11\NotFoundException;
 use Psr\Container\ContainerInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace DI;
+namespace Bisix21\src\Core;
 class Config
 {
 	private static ?Config $instance = null;

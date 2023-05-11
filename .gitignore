@@ -4,3 +4,4 @@ public
 storage
 docker/logs
 .gitignore
+dz.sql

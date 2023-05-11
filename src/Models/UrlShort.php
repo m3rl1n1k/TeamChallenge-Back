@@ -1,6 +1,6 @@
 <?php
 
-namespace Models;
+namespace  Bisix21\src\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

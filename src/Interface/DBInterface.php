@@ -1,22 +1,22 @@
 <?php
 
-namespace Interface;
+namespace  Bisix21\src\Interface;
 
 use InvalidArgumentException;
 
-interface FilesInterface
+interface DBInterface
 {
 
 	/**
 	 * @throws InvalidArgumentException
 	 * @return array
 	 */
-	public function readFile():array;
+	public function read():array;
 
 	/**
 	 * @array $data
 	 * @throws InvalidArgumentException
 	 */
-	public function saveToFile(array $data):void;
+	public function saveToDB(array $data):void;
 
 }

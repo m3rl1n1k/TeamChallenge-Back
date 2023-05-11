@@ -2,11 +2,7 @@
   "name": "bisix21/php-lessons-pro",
   "autoload": {
     "psr-4": {
-      "Classes\\":"src/Classes/",
-      "Interface\\":"src/Interface/",
-      "DI\\":"src/Core/DI/",
-      "ORM\\":"src/ORM/",
-      "Models\\":"src/Models/"
+      "Bisix21\\src\\": "src/"
     }
   },
   "authors": [

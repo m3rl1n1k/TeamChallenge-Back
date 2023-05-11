@@ -1,9 +1,10 @@
 <?php
 
-namespace Classes;
+namespace Bisix21\src\UrlShort;
 
+use Bisix21\src\Interface\IUrlDecoder;
 use http\Exception\InvalidArgumentException;
-use Interface\IUrlDecoder;
+
 
 class Decode implements IUrlDecoder
 {
