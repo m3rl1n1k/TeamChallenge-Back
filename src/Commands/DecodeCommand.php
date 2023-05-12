@@ -8,11 +8,11 @@ use Bisix21\src\Interface\CommandInterface;
 use Bisix21\src\Repository\DB;
 use Bisix21\src\UrlShort\Decode;
 
-class DecodeCommand implements CommandInterface
+class DecodeCommand extends Command implements CommandInterface
 {
 	public function __construct(
 		protected Decode    $decoder,
-		protected DB        $short,
+		protected DB        $record,
 		protected Converter $arguments,
 	)
 	{
@@ -20,9 +20,8 @@ class DecodeCommand implements CommandInterface
 
 	public function runAction(): void
 	{
-		$code = $this->arguments->getArguments()[0];
-		$urls = $this->short->read();
-		$res = $this->decoder->setUrls($urls)->decode($code);
+		$urls = $this->record->read();
+		$res = $this->decoder->setUrls($this->getAllUrls())->decode($this->getArgument());
 		Divider::printString($res);
 	}
 }

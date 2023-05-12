@@ -10,7 +10,7 @@ use Bisix21\src\UrlShort\Encode;
 use Bisix21\src\UrlShort\Validator;
 use InvalidArgumentException;
 
-class EncodeCommand implements CommandInterface
+class EncodeCommand extends Command implements CommandInterface
 {
 
 	public function __construct(
@@ -27,11 +27,6 @@ class EncodeCommand implements CommandInterface
 		$this->validator->link($this->getArgument());
 		$this->emptyUrls();
 		$this->issetUrlInDB();
-	}
-
-	protected function getArgument()
-	{
-		return $this->arguments->getArguments()[0];
 	}
 
 	protected function emptyUrls()
@@ -55,13 +50,7 @@ class EncodeCommand implements CommandInterface
 	{
 		return $this->encode->encode($this->getArgument());
 	}
-
-	protected function getAllUrls(): ?array
-	{
-		return $this->record->read();
-	}
-
-	protected function issetUrlInDB()
+		protected function issetUrlInDB()
 	{
 		$res = $this->validator->issetIn($this->getArgument(), $this->getAllUrls());
 		if ($res) {
