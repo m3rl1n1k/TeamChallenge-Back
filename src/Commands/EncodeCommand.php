@@ -24,28 +24,51 @@ class EncodeCommand implements CommandInterface
 
 	public function runAction(): void
 	{
-		$link = $this->arguments->getArguments()[0];
-		$code = $this->encode->encode($link);
-		$urls = $this->record->read();
-		$this->validator->link($link);
-		if (empty($urls)) {
-			$res = [
-				'code' => $code,
-				'url' => $link,
-			];
+		$this->validator->link($this->getArgument());
+		$this->emptyUrls();
+		$this->issetUrlInDB();
+	}
+
+	protected function getArgument()
+	{
+		return $this->arguments->getArguments()[0];
+	}
+
+	protected function emptyUrls()
+	{
+		$res = $this->createArr($this->encodeUrl(), $this->getArgument());
+		if (empty($this->getAllUrls())) {
 			$this->record->saveToDb($res);
-			Divider::printString($res['code'] . "=>" . $res['url']);
 		}
-		$res = $this->validator->issetIn($link, $urls);
+		Divider::printString($res['code'] . " => " . $res['url']);
+	}
+
+	protected function createArr(string $code, string $link): array
+	{
+		return [
+			'code' => $code,
+			'url' => $link,
+		];
+	}
+
+	protected function encodeUrl(): string
+	{
+		return $this->encode->encode($this->getArgument());
+	}
+
+	protected function getAllUrls(): ?array
+	{
+		return $this->record->read();
+	}
+
+	protected function issetUrlInDB()
+	{
+		$res = $this->validator->issetIn($this->getArgument(), $this->getAllUrls());
 		if ($res) {
-			$res = [
-				'code' => $code,
-				'url' => $link,
-			];
+			$res = $this->createArr($this->encodeUrl(), $this->getArgument());
 			$this->record->saveToDb($res);
 		} else {
-			throw new InvalidArgumentException("You have same record: $code => $link");
+			throw new InvalidArgumentException("You have same record: {$this->encodeUrl()} => {$this->getArgument()}");
 		}
-		Divider::printString($res['code'] . "=>" . $res['url']);
 	}
 }
