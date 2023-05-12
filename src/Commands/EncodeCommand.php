@@ -4,13 +4,12 @@ namespace Bisix21\src\Commands;
 
 use Bisix21\src\Classes\Divider;
 use Bisix21\src\Core\Converter;
-use Bisix21\src\Interface\CommandInterface;
 use Bisix21\src\Repository\DB;
 use Bisix21\src\UrlShort\Encode;
 use Bisix21\src\UrlShort\Validator;
 use InvalidArgumentException;
 
-class EncodeCommand extends Command implements CommandInterface
+class EncodeCommand extends Command
 {
 
 	public function __construct(

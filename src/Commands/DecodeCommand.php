@@ -4,11 +4,10 @@ namespace Bisix21\src\Commands;
 
 use Bisix21\src\Classes\Divider;
 use Bisix21\src\Core\Converter;
-use Bisix21\src\Interface\CommandInterface;
 use Bisix21\src\Repository\DB;
 use Bisix21\src\UrlShort\Decode;
 
-class DecodeCommand extends Command implements CommandInterface
+class DecodeCommand extends Command
 {
 	public function __construct(
 		protected Decode    $decoder,
