@@ -1,6 +1,6 @@
 <?php
 
-namespace  Bisix21\src\Repository;
+namespace Bisix21\src\Repository;
 
 use Bisix21\src\Interface\DBInterface;
 use InvalidArgumentException;
@@ -9,7 +9,9 @@ class Files implements DBInterface
 {
 	protected array $dataArray;
 
-	public function __construct(	protected string$pathUrls)
+	public function __construct(
+		protected string $pathUrls
+	)
 	{
 	}
 
@@ -25,9 +27,10 @@ class Files implements DBInterface
 
 	public function saveToDB($data): void
 	{
+		dd($data);
 		if (!empty($data)) {
 			$data = json_encode($data, JSON_PRETTY_PRINT);
-			file_put_contents($this->pathUrls, $data );
+			file_put_contents($this->pathUrls, $data);
 		}
 
 	}

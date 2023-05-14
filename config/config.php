@@ -1,9 +1,9 @@
 <?php
 
 return [
-	'Urls' => __DIR__ . "/../storage/urlNew.json",
-	'Logs' => __DIR__ . "/../storage/newLogger.log",
-	'Length' => 10,
+	'urls' => ROOT . "storage/urlNew.json",
+	'logs' => ROOT . "storage/newLogger.log",
+	'length' => 10,
 	'db_connection' => [
 		'driver' => 'mysql',
 		'host' => 'db_mysql',

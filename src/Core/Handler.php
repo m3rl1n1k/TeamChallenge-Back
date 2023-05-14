@@ -3,6 +3,7 @@
 namespace Bisix21\src\Core;
 
 use Bisix21\src\ORM\ActiveRecord;
+use Psr\Log\LoggerInterface;
 
 class Handler
 {
@@ -11,7 +12,7 @@ class Handler
 	public function __construct(
 		protected Converter $converter,
 		protected Command   $command,
-		protected ActiveRecord $connect
+		protected ActiveRecord $connect,
 	)
 	{
 	}

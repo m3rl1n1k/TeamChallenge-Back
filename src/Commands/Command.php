@@ -2,9 +2,7 @@
 
 namespace Bisix21\src\Commands;
 
-use Bisix21\src\Interface\CommandInterface;
-
-abstract class Command implements CommandInterface
+abstract class Command
 {
 	protected function getArgument()
 	{

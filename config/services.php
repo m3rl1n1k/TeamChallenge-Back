@@ -21,7 +21,8 @@ return [
 		return new Handler(
 			$container->get(Converter::class),
 			$container->get(Command::class),
-			$container->get(ActiveRecord::class)
+			$container->get(ActiveRecord::class),
+			$container->get(Logger::class)
 		);
 	},
 	Converter::class => function () {
@@ -29,7 +30,7 @@ return [
 	},
 	Encode::class => function ($container) {
 		return new Encode(
-			$container->get(Config::class)->get("config")["Length"]);
+			$container->get(Config::class)->get("config.length"));
 	},
 	Command::class => function ($container) {
 		return new Command(
@@ -40,7 +41,7 @@ return [
 		return new EncodeCommand(
 			$container->get(Encode::class),
 			$container->get(Converter::class),
-			$container->get(DB::class),
+			$container->get(Files::class),
 			$container->get(Validator::class)
 		);
 	},
@@ -53,19 +54,19 @@ return [
 		return new Decode();
 	},
 	StreamHandler::class => function ($container) {
-		return new StreamHandler($container->get(Config::class)->get("config")["Logs"]);
+		return new StreamHandler($container->get(Config::class)->get("config.logs"));
 	},
 	Validator::class => function () {
 		return new Validator();
 	},
 	Files::class => function ($container) {
-		return new Files($container->get(Config::class)->get("config")["Urls"]);
+		return new Files($container->get(Config::class)->get("config.urls"));
 	},
 	Config::class => function () {
 		return Config::instance();
 	},
 	ActiveRecord::class => function ($container) {
-		$configDbConnection = $container->get(Config::class)->get("config")['db_connection'];
+		$configDbConnection = $container->get(Config::class)->get('config.db_connection');
 		return new ActiveRecord($configDbConnection);
 	},
 	UrlShort::class => function () {
