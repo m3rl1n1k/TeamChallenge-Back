@@ -41,7 +41,7 @@ return [
 		return new EncodeCommand(
 			$container->get(Encode::class),
 			$container->get(Converter::class),
-			$container->get(Files::class),
+			$container->get(DB::class),
 			$container->get(Validator::class)
 		);
 	},
