@@ -2,22 +2,33 @@
 
 namespace Bisix21\src\Core;
 
+use http\Encoding\Stream\Inflate;
+
 class Converter
 {
-	public function commandCall(): string
+	public function __construct(
+		protected Validator $validator
+	)
 	{
-		return $this->prepareCommand()[0];
 	}
 
-	protected function prepareCommand(): array
+	public function commandCall(): string
+	{
+		return $this->prepareCommand();
+	}
+
+	protected function prepareCommand(): string
 	{
 		global $argv;
-		return array_slice($argv, 1);
+		$arr = array_slice($argv, 1);
+		$this->validator->validateCommand($arr[0] ?? "");
+		return $arr[0]; //отримуємо команду
 	}
 
 	public function getArguments(): array
 	{
-		return array_slice($this->prepareCommand(), 1);
+		global $argv;
+		return array_slice($argv, 2); // отримуємо аргументи (сайт або код)
 	}
 
 }

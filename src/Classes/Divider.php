@@ -1,6 +1,6 @@
 <?php
 
-namespace  Bisix21\src\Classes;
+namespace Bisix21\src\Classes;
 
 class Divider
 {
@@ -29,13 +29,26 @@ class Divider
 		echo "\n";
 	}
 
-	public static function printArray(array $data): void
+	public static function printArray(array $data, $key = true): void
 	{
+		if (!$key) {
+			self::noKey($data);
+			exit();
+		}
 		self::divider();
 		foreach ($data as $key => $value) {
 			echo $key . " => " . $value . "\n";
 		}
 		self::divider();
 		echo "\n";
+	}
+
+	protected static function noKey($data):void
+	{
+		self::divider();
+		foreach ($data as $value) {
+			echo $value . "\n";
+		}
+		self::divider();
 	}
 }

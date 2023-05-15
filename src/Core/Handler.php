@@ -3,7 +3,6 @@
 namespace Bisix21\src\Core;
 
 use Bisix21\src\ORM\ActiveRecord;
-use Psr\Log\LoggerInterface;
 
 class Handler
 {

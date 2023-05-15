@@ -1,18 +1,19 @@
 <?php
 
 use Bisix21\src\Commands\DecodeCommand;
+use Bisix21\src\Commands\DefaultCommands;
 use Bisix21\src\Commands\EncodeCommand;
 use Bisix21\src\Core\Command;
 use Bisix21\src\Core\Config;
 use Bisix21\src\Core\Converter;
 use Bisix21\src\Core\Handler;
+use Bisix21\src\Core\Validator;
 use Bisix21\src\Models\UrlShort;
 use Bisix21\src\ORM\ActiveRecord;
 use Bisix21\src\Repository\DB;
 use Bisix21\src\Repository\Files;
 use Bisix21\src\UrlShort\Decode;
 use Bisix21\src\UrlShort\Encode;
-use Bisix21\src\UrlShort\Validator;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -24,8 +25,10 @@ return [
 			$container->get(ActiveRecord::class),
 		);
 	},
-	Converter::class => function () {
-		return new Converter();
+	Converter::class => function ($container) {
+		return new Converter(
+			$container->get(Validator::class)
+		);
 	},
 	Encode::class => function ($container) {
 		return new Encode(
@@ -33,7 +36,7 @@ return [
 	},
 	Command::class => function ($container) {
 		return new Command(
-			$container->get(Config::class)->get('commands')
+			$container->get(Validator::class)
 		);
 	},
 	EncodeCommand::class => function ($container) {
@@ -62,8 +65,10 @@ return [
 	StreamHandler::class => function ($container) {
 		return new StreamHandler($container->get(Config::class)->get("config.logs"));
 	},
-	Validator::class => function () {
-		return new Validator();
+	Validator::class => function ($container) {
+		return new Validator(
+			$container->get(Config::class)->get('commands')
+		);
 	},
 	Files::class => function ($container) {
 		return new Files($container->get(Config::class)->get("config.urls"));
@@ -81,4 +86,9 @@ return [
 	DB::class => function ($container) {
 		return new DB($container->get(UrlShort::class));
 	},
+	DefaultCommands::class => function ($container){
+	return new DefaultCommands(
+		$container->get(Validator::class)
+	);
+	}
 ];

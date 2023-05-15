@@ -8,15 +8,15 @@ use Bisix21\src\Core\DI\Container;
 class Command
 {
 	public function __construct(
-		protected array $allCommands,
+		protected Validator $validator
 	)
 	{
 	}
 
 	public function run($givenCommand): void
 	{
-		foreach ($this->allCommands as $key => $command) {
-			if ($givenCommand === $key) {
+		foreach ($this->validator->allowedCommands() as $key => $command) {
+			if ($givenCommand === $key ) {
 				Container::getInstance()->get($command)->runAction();
 			}
 		}
