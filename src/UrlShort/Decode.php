@@ -3,7 +3,7 @@
 namespace Bisix21\src\UrlShort;
 
 use Bisix21\src\Interface\IUrlDecoder;
-use http\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 
 
 class Decode implements IUrlDecoder
@@ -22,7 +22,7 @@ class Decode implements IUrlDecoder
 
 	public function decode(string $code): string
 	{
-		if (!$this->urls[$code]){
+		if (!isset($this->urls[$code])){
 			throw new InvalidArgumentException(" Undefined code $code");
 		}
 		return $this->urls[$code];

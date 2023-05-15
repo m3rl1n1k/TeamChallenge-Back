@@ -27,11 +27,10 @@ class Files implements DBInterface
 
 	public function saveToDB($data): void
 	{
-		dd($data);
+		$this->dataArray[$data['code']] =  $data['url'];
 		if (!empty($data)) {
-			$data = json_encode($data, JSON_PRETTY_PRINT);
+			$data = json_encode($this->dataArray, JSON_PRETTY_PRINT);
 			file_put_contents($this->pathUrls, $data);
 		}
-
 	}
 }

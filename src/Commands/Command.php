@@ -9,7 +9,7 @@ abstract class Command
 		return $this->arguments->getArguments()[0];
 	}
 
-	protected function getAllUrls(): ?array
+	protected function getAllUrls():array
 	{
 		return $this->record->read();
 	}

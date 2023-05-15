@@ -24,6 +24,6 @@ try {
 	Divider::printString($e->getMessage() . $e->getFile());
 	$monolog->error($e->getMessage() . $e->getFile());
 } catch (InvalidArgumentException $argumentException) {
-	Divider::printString($argumentException->getMessage() . $argumentException->getFile());
+	Divider::printString($argumentException->getMessage());
 	$monolog->error($argumentException->getMessage() . $argumentException->getFile());
 }

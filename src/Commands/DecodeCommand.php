@@ -6,13 +6,19 @@ use Bisix21\src\Classes\Divider;
 use Bisix21\src\Core\Converter;
 use Bisix21\src\Interface\CommandInterface;
 use Bisix21\src\Repository\DB;
+use Bisix21\src\Repository\Files;
 use Bisix21\src\UrlShort\Decode;
 
 class DecodeCommand extends Command implements CommandInterface
 {
+	/**
+	 * @param Decode $decoder
+	 * @param DB|Files $record
+	 * @param Converter $arguments
+	 */
 	public function __construct(
 		protected Decode    $decoder,
-		protected DB        $record,
+		protected DB|Files  $record,
 		protected Converter $arguments,
 	)
 	{
@@ -20,7 +26,6 @@ class DecodeCommand extends Command implements CommandInterface
 
 	public function runAction(): void
 	{
-		$urls = $this->record->read();
 		$res = $this->decoder->setUrls($this->getAllUrls())->decode($this->getArgument());
 		Divider::printString($res);
 	}

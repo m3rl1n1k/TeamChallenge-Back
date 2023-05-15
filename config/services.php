@@ -22,7 +22,6 @@ return [
 			$container->get(Converter::class),
 			$container->get(Command::class),
 			$container->get(ActiveRecord::class),
-			$container->get(Logger::class)
 		);
 	},
 	Converter::class => function () {
@@ -43,6 +42,13 @@ return [
 			$container->get(Converter::class),
 			$container->get(DB::class),
 			$container->get(Validator::class)
+		);
+	},
+	DecodeCommand::class => function ($container) {
+		return new DecodeCommand(
+			$container->get(Decode::class),
+			$container->get(DB::class),
+			$container->get(Converter::class)
 		);
 	},
 	Logger::class => function ($container) {
@@ -74,12 +80,5 @@ return [
 	},
 	DB::class => function ($container) {
 		return new DB($container->get(UrlShort::class));
-	},
-	DecodeCommand::class => function ($container) {
-		return new DecodeCommand(
-			$container->get(Decode::class),
-			$container->get(DB::class),
-			$container->get(Converter::class)
-		);
 	},
 ];
