@@ -1,6 +1,5 @@
-vendor
-.idea
-storage
-docker/logs
-dz.sql
+/vendor/
+/.idea/
+/storage/
+/docker/logs
 .gitignore
