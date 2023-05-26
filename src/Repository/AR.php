@@ -6,7 +6,7 @@ use Bisix21\src\Interface\DBInterface;
 use Bisix21\src\Models\UrlShort;
 use InvalidArgumentException;
 
-class DB implements DBInterface
+class AR implements DBInterface
 {
 	public function __construct(protected UrlShort $short)
 	{

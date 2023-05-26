@@ -17,7 +17,7 @@ class EncodeCommand  implements CommandInterface
 	public function __construct(
 		protected Encode    $encode,
 		protected Converter $arguments,
-		protected DB|Files  $record,
+		protected AR|Files  $record,
 		protected Validator $validator
 	)
 	{
