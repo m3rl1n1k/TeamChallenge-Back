@@ -20,8 +20,11 @@ class DB implements DBInterface
 		$this->short->save();
 	}
 
-	public function read(string $code): string|null
+	public function read( $code): string|null
 	{
+		if (is_array($code)) {
+			throw new InvalidArgumentException("Undefined code");
+		}
 		$res = $this->short->getUrlByCode($code);
 		if (!$res) {
 			throw new InvalidArgumentException(" Undefined code: $code");

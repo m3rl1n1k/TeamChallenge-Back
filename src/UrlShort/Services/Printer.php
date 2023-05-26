@@ -5,7 +5,7 @@ namespace Bisix21\src\UrlShort\Services;
 class Printer
 {
 	protected static string $symbol = "=";
-	protected static int $length = 60;
+	protected static int $length = 0;
 
 	public function __construct($symbol, $length)
 	{
@@ -65,6 +65,11 @@ class Printer
 		foreach ($data as $value) {
 			echo $value . "\n";
 		}
+	}
+
+	public static function nextLine(): void
+	{
+		echo "<br>";
 	}
 
 	public static function nextLine(): void

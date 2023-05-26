@@ -19,6 +19,7 @@ class Converter
 	public function commandCall(): string
 	{
 		global $argv;
+		$this->command = "help";
 		if (!empty($argv)) {
 			$this->command = $this->prepareCommand($argv);
 		}
@@ -56,6 +57,7 @@ class Converter
 		if (is_array($dataForArguments)) {
 			if (!empty($dataForArguments)) {
 				$dataForArguments = array_slice($dataForArguments, 1); // отримуємо аргументи (сайт або код)
+				$dataForArguments = array_values($dataForArguments)[0];
 			}
 		}
 		return $dataForArguments;
