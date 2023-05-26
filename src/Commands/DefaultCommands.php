@@ -16,14 +16,11 @@ class DefaultCommands implements CommandInterface
 
 	public function runAction(): void
 	{
-		Divider::printString(
-			"<br> for start: <br> after {$_SERVER['HTTP_HOST']} write: <br>
+		Divider::printString("<br> for start: <br> after {$_SERVER['HTTP_HOST']} write: <br>
  						?command=encode&url=https://laravel.com <br>
  						or for decode <br>
  						?command=decode&code=f88faf1230 <br>
-					where <b>encode</b> is command and can change from list down:
-			"
-		);
+					where <b>encode</b> is command and can change from list down:");
 		Divider::nextLine();
 		Divider::printArray(array_keys($this->validator->allowedCommands()), false);
 	}

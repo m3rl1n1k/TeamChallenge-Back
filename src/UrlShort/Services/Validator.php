@@ -39,7 +39,7 @@ class Validator
 		}
 		return $this->status;
 	}
-
+// TODO: перенести метод issetCode() в модель Short
 	public function issetCode(string $code): bool
 	{
 		$res = true;

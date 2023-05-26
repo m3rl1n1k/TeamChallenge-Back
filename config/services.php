@@ -7,7 +7,6 @@ use Bisix21\src\Commands\EncodeCommand;
 use Bisix21\src\Core\Command;
 use Bisix21\src\Core\Config;
 use Bisix21\src\Core\Converter;
-use Bisix21\src\Core\GetConverter;
 use Bisix21\src\Core\Handler;
 use Bisix21\src\Core\Validator;
 use Bisix21\src\Models\UrlShort;
@@ -101,9 +100,4 @@ return [
 	GetRequest::class => function () {
 		return new GetRequest();
 	},
-	GetConverter::class => function ($container) {
-		return new GetConverter(
-			$container->get(GetRequest::class),
-		);
-	}
 ];

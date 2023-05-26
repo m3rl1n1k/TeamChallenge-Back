@@ -4,7 +4,6 @@ namespace Bisix21\src\Commands;
 
 use Bisix21\src\Classes\Divider;
 use Bisix21\src\Core\Converter;
-use Bisix21\src\Core\GetConverter;
 use Bisix21\src\Core\Validator;
 use Bisix21\src\Interface\CommandInterface;
 use Bisix21\src\Repository\DB;
@@ -17,7 +16,7 @@ class EncodeCommand  implements CommandInterface
 
 	public function __construct(
 		protected Encode    $encode,
-		protected GetConverter|Converter $arguments,
+		protected Converter $arguments,
 		protected DB|Files  $record,
 		protected Validator $validator
 	)
@@ -32,7 +31,7 @@ class EncodeCommand  implements CommandInterface
 		//записує в бд
 		$this->saveAndPrint();
 	}
-
+// TODO: перенести метод issetCodeInDB($this->encodeUrl()) в модель Short
 	protected function issetCodeInDB()
 	{
 		$res = $this->validator->issetCode($this->encodeUrl());
