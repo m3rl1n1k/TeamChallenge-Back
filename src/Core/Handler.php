@@ -11,7 +11,7 @@ class Handler
 	protected string $givenCommand;
 
 	public function __construct(
-		protected GetConverter $converter,
+		protected GetConverter|Converter $converter,
 		protected Command   $command,
 		protected ActiveRecord $connect,
 	)

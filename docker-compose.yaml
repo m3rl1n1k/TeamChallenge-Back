@@ -13,8 +13,6 @@ services:
       - ./:/srv/src/
     links:
       - php
-    networks:
-      - app-network
 
   php:
     build:
@@ -28,8 +26,6 @@ services:
       - 9000
     links:
       - db_mysql
-    networks:
-      - app-network
 
   db_mysql:
     image: mysql:latest
@@ -42,9 +38,7 @@ services:
       MYSQL_USER: Bisix21
       MYSQL_DATABASE: php_pro
       MYSQL_PASSWORD: password
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
+#
+#networks:
+#  app-network:
+#    driver: bridge

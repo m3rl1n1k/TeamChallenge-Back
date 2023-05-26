@@ -22,7 +22,7 @@ use Monolog\Logger;
 return [
 	Handler::class => function ($container) {
 		return new Handler(
-			$container->get(GetConverter::class),
+			$container->get(Converter::class),
 			$container->get(Command::class),
 			$container->get(ActiveRecord::class),
 		);
@@ -30,6 +30,7 @@ return [
 	Converter::class => function ($container) {
 		return new Converter(
 			$container->get(Validator::class),
+			$container->get(GetRequest::class)
 		);
 	},
 	Encode::class => function ($container) {
@@ -44,7 +45,7 @@ return [
 	EncodeCommand::class => function ($container) {
 		return new EncodeCommand(
 			$container->get(Encode::class),
-			$container->get(GetConverter::class),
+			$container->get(Converter::class),
 			$container->get(DB::class),
 			$container->get(Validator::class)
 		);
@@ -53,7 +54,7 @@ return [
 		return new DecodeCommand(
 			$container->get(Decode::class),
 			$container->get(DB::class),
-			$container->get(GetConverter::class),
+			$container->get(Converter::class),
 			$container->get(Validator::class)
 		);
 	},
@@ -102,8 +103,7 @@ return [
 	},
 	GetConverter::class => function ($container) {
 		return new GetConverter(
-			$container->get(Validator::class),
-			$container->get(GetRequest::class)
+			$container->get(GetRequest::class),
 		);
 	}
 ];

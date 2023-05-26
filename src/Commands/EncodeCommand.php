@@ -12,12 +12,12 @@ use Bisix21\src\Repository\Files;
 use Bisix21\src\UrlShort\Encode;
 use InvalidArgumentException;
 
-class EncodeCommand extends Command implements CommandInterface
+class EncodeCommand  implements CommandInterface
 {
 
 	public function __construct(
 		protected Encode    $encode,
-		protected GetConverter $arguments,
+		protected GetConverter|Converter $arguments,
 		protected DB|Files  $record,
 		protected Validator $validator
 	)
@@ -27,7 +27,7 @@ class EncodeCommand extends Command implements CommandInterface
 	public function runAction(): void
 	{
 		//валідує лінк
-		$this->validator->link($this->getArgument("url"));
+		$this->validator->link($this->arguments->getArguments());
 		$this->issetCodeInDB();
 		//записує в бд
 		$this->saveAndPrint();
@@ -37,18 +37,18 @@ class EncodeCommand extends Command implements CommandInterface
 	{
 		$res = $this->validator->issetCode($this->encodeUrl());
 		if (!$res) {
-			throw new InvalidArgumentException("You have same record: {$this->encodeUrl()} => {$this->getArgument("url")}");
+			throw new InvalidArgumentException("You have same record: {$this->encodeUrl()} => {$this->arguments->getArguments()}");
 		}
 	}
 
 	protected function encodeUrl(): string
 	{
-		return $this->encode->encode($this->getArgument("url"));
+		return $this->encode->encode($this->arguments->getArguments());
 	}
 
 	protected function saveAndPrint()
 	{
-		$codeShort = $this->createArr($this->encodeUrl(), $this->getArgument("url"));
+		$codeShort = $this->createArr($this->encodeUrl(), $this->arguments->getArguments());
 		$this->record->saveToDb($codeShort);
 		Divider::printString($codeShort['code'] . " => " . $codeShort['url']);
 	}

@@ -20,6 +20,9 @@ class Validator
 	{
 		// прротокол + доменна назва . домен : порт(якщо існує)/ назва каталогу
 		$pattern = '/^https?:\/\/[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})(:[0-9]{1,5})?(\/.*)?$/i';
+		if (is_array($link)){
+			$link = $link['url'];
+		}
 		$this->isEmpty($link);
 		$res = preg_match($pattern, $link);
 		if (!$res) {
@@ -32,7 +35,7 @@ class Validator
 	{
 		if (empty($value)) {
 			$this->status = false;
-			throw new InvalidArgumentException("Invalid argument: $value");
+			throw new InvalidArgumentException("Invalid argument!");
 		}
 		return $this->status;
 	}
