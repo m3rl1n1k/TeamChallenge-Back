@@ -1,9 +1,10 @@
 <?php
 
+use Bisix21\src\Classes\Divider;
+use Bisix21\src\Classes\GetRequest;
 use Bisix21\src\Core\Config;
 use Bisix21\src\Core\DI\Container;
 use Bisix21\src\Core\Handler;
-use Bisix21\src\UrlShort\Services\Printer;
 use Monolog\Logger;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -21,9 +22,9 @@ try {
 	/** @var Handler $handle */
 	$handle->handle();
 } catch (NotFoundExceptionInterface|ContainerExceptionInterface $e) {
-	Printer::printString($e->getMessage() . $e->getFile());
+	Divider::printString($e->getMessage() . $e->getFile());
 	$monolog->error($e->getMessage() . $e->getFile());
 } catch (InvalidArgumentException $argumentException) {
-	Printer::printStringWithDivider($argumentException->getMessage());
+	Divider::printString($argumentException->getMessage());
 	$monolog->info($argumentException->getMessage());
 }

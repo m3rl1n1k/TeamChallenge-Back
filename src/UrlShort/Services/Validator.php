@@ -1,8 +1,8 @@
 <?php
 
-namespace Bisix21\src\UrlShort\Services;
+namespace Bisix21\src\Core;
 
-use Bisix21\src\UrlShort\ORM\Models\UrlShort;
+use Bisix21\src\Models\UrlShort;
 use InvalidArgumentException;
 
 class Validator
@@ -20,9 +20,6 @@ class Validator
 	{
 		// прротокол + доменна назва . домен : порт(якщо існує)/ назва каталогу
 		$pattern = '/^https?:\/\/[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})(:[0-9]{1,5})?(\/.*)?$/i';
-		if (is_array($link)){
-			$link = $link['url'];
-		}
 		$this->isEmpty($link);
 		$res = preg_match($pattern, $link);
 		if (!$res) {
@@ -35,11 +32,22 @@ class Validator
 	{
 		if (empty($value)) {
 			$this->status = false;
-			throw new InvalidArgumentException("Invalid argument!");
+			throw new InvalidArgumentException("Invalid argument: $value");
 		}
 		return $this->status;
 	}
-	public function validateCommand($command): string
+
+	public function issetCode(string $code): bool
+	{
+		$res = true;
+		$codeInDB = $this->short->getUrlByCode($code);
+		if (isset($codeInDB->code) && $code == $codeInDB->code) {
+			$res = false;
+		};
+		return $res;
+	}
+
+	public function validateCommand($command): void
 	{
 		if ($command == null) {
 			$this->invalidArgument();
@@ -47,7 +55,6 @@ class Validator
 		if (array_keys($this->allowedCommands(), $command)) {
 			$this->invalidArgument();
 		}
-		return $command;
 	}
 
 	protected function invalidArgument()
