@@ -22,15 +22,14 @@ class Converter
 		return array_slice($argv, 2); // отримуємо аргументи (сайт або код)
 	}
 
-	protected function prepareCommand(): string
+	protected function prepareCommand($dataArrayOrStringForArguments): string
 	{
-		global $argv;
-		$res = "";
-		if (!empty($argv)) {
+if (is_array(dataArrayOrStringForArguments)){
+		if (!empty($dataArrayOrStringForArguments)) {
 			$arr = array_slice($argv, 1);
-			$this->validator->validateCommand($arr[0] ?? "");
+			$this->validator->validateCommand(arr[0] ?? "");
 			$res = $arr[0];
-		}
+		}}
 		return $res; //отримуємо команду}
 	}
 
