@@ -1,7 +1,7 @@
 # php-lessons-pro
 Bisix21 | Serhii
 
-# code for table
+# code for table (eloquent)
 
 create table urls_shorts
 (
@@ -12,6 +12,3 @@ url        text         not null,
 created_at timestamp    null,
 updated_at timestamp    null
 );
-
-# templates
-http://localhost:8080/?command=encode&url=https://laravel.com

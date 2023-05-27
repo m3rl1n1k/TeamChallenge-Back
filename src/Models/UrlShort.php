@@ -16,4 +16,14 @@ class UrlShort extends Model
 		}
 		return $res;
 	}
+
+	public function issetCode(string $code): bool
+	{
+		$res = true;
+		$codeInDB = $this->getUrlByCode($code);
+		if (isset($codeInDB->code) && $code == $codeInDB->code) {
+			$res = false;
+		};
+		return $res;
+	}
 }

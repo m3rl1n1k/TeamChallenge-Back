@@ -55,7 +55,7 @@ return [
 	},
 	Decode::class => function ($container) {
 		return new Decode(
-			$container->get(UrlShort::class)
+			$container->get(DataMapper::class)->getEM()
 		);
 	},
 	//command

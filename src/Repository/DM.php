@@ -26,6 +26,11 @@ class DM implements DBInterface
 	 */
 	public function saveToDb($data): void
 	{
+		$shortRep = $this->entityManager->getRepository(Short::class);
+		if (!$shortRep->issetCode($data['code'])) {
+			throw new InvalidArgumentException("You have same record: {$data['code']} => {$data['url']}");
+		}
+//		dd($shortRep->issetCode($data['code']));
 		$this->short->setCode($data['code']);
 		$this->short->setUrl($data['url']);
 		$this->entityManager->persist($this->short);

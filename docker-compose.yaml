@@ -21,7 +21,7 @@ services:
     container_name: php_pro_php
     restart: always
     volumes:
-      - ./:/srv/src/
+      - ./:/srv/src
     expose:
       - 9000
     links:
@@ -38,7 +38,3 @@ services:
       MYSQL_USER: Bisix21
       MYSQL_DATABASE: php_pro
       MYSQL_PASSWORD: password
-#
-#networks:
-#  app-network:
-#    driver: bridge

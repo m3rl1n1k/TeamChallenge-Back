@@ -6,7 +6,8 @@ use Bisix21\src\Classes\Divider;
 use Bisix21\src\Core\Converter;
 use Bisix21\src\Core\Validator;
 use Bisix21\src\Interface\CommandInterface;
-use Bisix21\src\Repository\DB;
+use Bisix21\src\Repository\AR;
+use Bisix21\src\Repository\DM;
 use Bisix21\src\Repository\Files;
 use Bisix21\src\UrlShort\Encode;
 use InvalidArgumentException;
@@ -17,7 +18,7 @@ class EncodeCommand  implements CommandInterface
 	public function __construct(
 		protected Encode    $encode,
 		protected Converter $arguments,
-		protected AR|Files  $record,
+		protected DM|AR|Files  $record,
 		protected Validator $validator
 	)
 	{
@@ -27,17 +28,8 @@ class EncodeCommand  implements CommandInterface
 	{
 		//валідує лінк
 		$this->validator->link($this->arguments->getArguments());
-		$this->issetCodeInDB();
 		//записує в бд
 		$this->saveAndPrint();
-	}
-// TODO: перенести метод issetCodeInDB($this->encodeUrl()) в модель Short
-	protected function issetCodeInDB()
-	{
-		$res = $this->validator->issetCode($this->encodeUrl());
-		if (!$res) {
-			throw new InvalidArgumentException("You have same record: {$this->encodeUrl()} => {$this->arguments->getArguments()}");
-		}
 	}
 
 	protected function encodeUrl(): string

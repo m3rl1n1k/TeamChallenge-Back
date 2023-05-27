@@ -20,7 +20,7 @@ class DefaultCommands implements CommandInterface
  						?command=encode&url=https://laravel.com <br>
  						or for decode <br>
  						?command=decode&code=f88faf1230 <br>
-					where <b>encode</b> is command and can change from list down:");
+					where <b>encode</b> is command and can change from list down (help is default): ");
 		Divider::nextLine();
 		Divider::printArray(array_keys($this->validator->allowedCommands()), false);
 	}

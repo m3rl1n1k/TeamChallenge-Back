@@ -39,17 +39,6 @@ class Validator
 		}
 		return $this->status;
 	}
-// TODO: перенести метод issetCode() в модель Short
-	public function issetCode(string $code): bool
-	{
-		$res = true;
-		$codeInDB = $this->short->getUrlByCode($code);
-		if (isset($codeInDB->code) && $code == $codeInDB->code) {
-			$res = false;
-		};
-		return $res;
-	}
-
 	public function validateCommand($command): void
 	{
 		if ($command == null) {

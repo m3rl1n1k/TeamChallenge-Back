@@ -25,4 +25,14 @@ class ShortRepository extends EntityRepository implements ObjectRepository
 	{
 		return Short::class;
 	}
+
+	public function issetCode(string $code): bool
+	{
+		$res = true;
+		$codeInDB = $this->getUrlByCode($code);
+		if (isset($codeInDB) && $code == $codeInDB->getCode()) {
+			$res = false;
+		};
+		return $res;
+	}
 }

@@ -14,13 +14,15 @@ class AR implements DBInterface
 
 	public function saveToDb($data): void
 	{
-
+		if (!$this->short->issetCode($data['code'])) {
+			throw new InvalidArgumentException("You have same record: {$data['code']} => {$data['url']}");
+		}
 		$this->short->code = $data['code'];
 		$this->short->url = $data['url'];
 		$this->short->save();
 	}
 
-	public function read( $code): string|null
+	public function read($code): string|null
 	{
 		if (is_array($code)) {
 			throw new InvalidArgumentException("Undefined code");
