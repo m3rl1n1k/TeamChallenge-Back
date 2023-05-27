@@ -2,7 +2,7 @@
 
 namespace Bisix21\src\Core;
 
-use Bisix21\src\Models\UrlShort;
+use Bisix21\src\UrlShort\Models\UrlShort;
 use InvalidArgumentException;
 
 class Validator

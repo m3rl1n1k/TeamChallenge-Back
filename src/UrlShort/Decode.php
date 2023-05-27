@@ -2,9 +2,9 @@
 
 namespace Bisix21\src\UrlShort;
 
-use Bisix21\src\Entity\Short;
-use Bisix21\src\Interface\IUrlDecoder;
-use Bisix21\src\Models\UrlShort;
+use Bisix21\src\UrlShort\Entity\Short;
+use Bisix21\src\UrlShort\Interface\IUrlDecoder;
+use Bisix21\src\UrlShort\Models\UrlShort;
 use Doctrine\ORM\EntityManager;
 
 

@@ -25,12 +25,4 @@ services:
       MYSQL_USER: Bisix21
       MYSQL_DATABASE: php_pro
       MYSQL_PASSWORD: password
-  nginx:
-    image: nginx:latest
-    container_name: php_pro_nginx
-    volumes:
-      - ./:/srv/src/php_pro_2
-      - ./docker/configs/nginx:/etc/nginx/nginx.conf
-      - ./logs/nginx:/var/log/nginx
-    links:
-      - php
+

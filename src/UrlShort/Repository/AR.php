@@ -2,8 +2,8 @@
 
 namespace Bisix21\src\UrlShort\Repository;
 
-use Bisix21\src\UrlShort\Interface\DBInterface;
-use Bisix21\src\UrlShort\ORM\Models\UrlShort;
+use Bisix21\src\Interface\DBInterface;
+use Bisix21\src\UrlShort\Models\UrlShort;
 use InvalidArgumentException;
 
 class AR implements DBInterface

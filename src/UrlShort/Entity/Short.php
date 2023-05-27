@@ -1,8 +1,8 @@
 <?php
 
-namespace Bisix21\src\Entity;
+namespace Bisix21\src\UrlShort\Entity;
 
-use Bisix21\src\Entity\Repository\ShortRepository;
+use Bisix21\src\UrlShort\Entity\Repository\ShortRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
