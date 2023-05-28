@@ -12,7 +12,7 @@ class UrlShort extends Model
 	{
 		$res = UrlShort::query()->where("code", '=', $code)->first();
 		if ($res !== null) {
-			$res = json_decode($res);
+			$res = $res->toArray();
 		}
 		return $res;
 	}

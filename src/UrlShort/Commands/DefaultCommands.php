@@ -16,7 +16,7 @@ class DefaultCommands implements CommandInterface
 
 	public function runAction(): void
 	{
-		$this->commandWEB();
+		$this->commandCLI();
 	}
 
 	protected function commandCLI()

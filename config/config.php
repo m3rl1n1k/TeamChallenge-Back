@@ -24,7 +24,7 @@ return [
 			],
 			'dev_mode' => true,
 			"entity_path" => [
-				ROOT . "src/Entity"
+				ROOT . "src/UrlShort/ORM/Entity"
 			]
 		]
 	],

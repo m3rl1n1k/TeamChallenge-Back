@@ -72,8 +72,4 @@ class Printer
 		echo "<br>";
 	}
 
-	public static function nextLine(): void
-	{
-		echo "<br>";
-	}
 }

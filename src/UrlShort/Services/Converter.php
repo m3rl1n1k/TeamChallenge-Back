@@ -2,15 +2,14 @@
 
 namespace Bisix21\src\UrlShort\Services;
 
-
 class Converter
 {
 	protected string $command;
 	protected string|array $arguments;
 
 	public function __construct(
-		protected Validator  $validator,
-		protected Request $getRequest
+		protected Validator $validator,
+		protected Request   $request
 	)
 	{
 	}
@@ -24,7 +23,7 @@ class Converter
 			$this->command = $this->prepareCommand($argv);
 		}
 		if (!empty($_GET)) {
-			$this->command = $this->prepareCommand($this->getRequest->getDataFromGetRequest()['command']);
+			$this->command = $this->prepareCommand($this->request->getDataFromGetRequest()['command']);
 		}
 		return $this->command;
 	}
@@ -32,9 +31,9 @@ class Converter
 	protected function prepareCommand($dataForCommand): array|string
 	{
 		if (!empty($dataForCommand)) {
-			$dataForCommand = $this->validator->validateCommand($dataForCommand[0]);
+			$dataForCommand = $this->validator->validateCommand($dataForCommand);
 		}
-		return $dataForCommand; //отримуємо команду}
+		return $dataForCommand; //отримуємо команду
 	}
 
 	public function getArguments()
@@ -45,7 +44,7 @@ class Converter
 			$arguments = $this->prepareArgument($argv);
 		}
 		if (!empty($_GET)) {
-			$arguments = $this->prepareArgument($this->getRequest->getDataFromGetRequest());
+			$arguments = $this->prepareArgument($this->request->getDataFromGetRequest());
 		}
 		return $arguments;
 

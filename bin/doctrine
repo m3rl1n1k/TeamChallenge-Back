@@ -1,9 +1,9 @@
 <?php
 
-use Bisix21\src\Classes\Divider;
 use Bisix21\src\Core\Config;
 use Bisix21\src\Core\DI\Container;
-use Bisix21\src\ORM\DataMapper;
+use Bisix21\src\UrlShort\ORM\DataMapper;
+use Bisix21\src\UrlShort\Services\Printer;
 use Doctrine\DBAL\Exception as Exception;
 use Doctrine\ORM\Exception\MissingMappingDriverImplementation as missDriverAlias;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
@@ -26,7 +26,7 @@ try {
 		new SingleManagerProvider($mapper->getEM())
 	);
 } catch (NotFoundExceptionInterface|ContainerExceptionInterface $e) {
-	Divider::printString($e->getMessage());
+	Printer::printString($e->getMessage());
 } catch (Exception|missDriverAlias $e) {
-	Divider::printString($e->getMessage());
+	Printer::printString($e->getMessage());
 }

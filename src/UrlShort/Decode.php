@@ -14,6 +14,6 @@ class Decode implements IUrlDecoder
 
 	public function decode(string $code): string
 	{
-		return  "decode";
+		return  "decode $code ";
 	}
 }

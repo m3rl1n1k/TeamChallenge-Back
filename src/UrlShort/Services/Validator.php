@@ -47,6 +47,9 @@ class Validator
 		if (array_keys($this->allowedCommands(), $command)) {
 			$this->invalidArgument();
 		}
+		if (is_array($command)){
+			$command = $command[0];
+		}
 		return $command;
 	}
 
