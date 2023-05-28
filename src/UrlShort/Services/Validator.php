@@ -1,8 +1,8 @@
 <?php
 
-namespace Bisix21\src\Core;
+namespace Bisix21\src\UrlShort\Services;
 
-use Bisix21\src\UrlShort\Models\UrlShort;
+use Bisix21\src\UrlShort\ORM\Models\UrlShort;
 use InvalidArgumentException;
 
 class Validator
@@ -39,7 +39,7 @@ class Validator
 		}
 		return $this->status;
 	}
-	public function validateCommand($command): void
+	public function validateCommand($command): string
 	{
 		if ($command == null) {
 			$this->invalidArgument();
@@ -47,6 +47,7 @@ class Validator
 		if (array_keys($this->allowedCommands(), $command)) {
 			$this->invalidArgument();
 		}
+		return $command;
 	}
 
 	protected function invalidArgument()
