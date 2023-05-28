@@ -1,14 +1,17 @@
 <?php
 
-namespace Bisix21\src\Core;
+namespace Bisix21\src\UrlShort\Services;
 
+use Bisix21\src\UrlShort\ORM\Models\UrlShort;
 use InvalidArgumentException;
 
 class Validator
 {
+	protected bool $status = true;
 
 	public function __construct(
-		protected array $allCommands
+		protected array    $allCommands,
+		protected UrlShort $short
 	)
 	{
 	}
@@ -17,31 +20,26 @@ class Validator
 	{
 		// прротокол + доменна назва . домен : порт(якщо існує)/ назва каталогу
 		$pattern = '/^https?:\/\/[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})(:[0-9]{1,5})?(\/.*)?$/i';
+		if (is_array($link)){
+			$link = $link['url'];
+		}
 		$this->isEmpty($link);
 		$res = preg_match($pattern, $link);
 		if (!$res) {
-			throw new InvalidArgumentException('Invalid url');
+			throw new InvalidArgumentException("Invalid url: $link");
 		}
 		return $res;
 	}
 
-	protected function isEmpty($value): void
+	public function isEmpty($value): bool
 	{
 		if (empty($value)) {
-			throw new InvalidArgumentException('Invalid argument');
+			$this->status = false;
+			throw new InvalidArgumentException("Invalid argument!");
 		}
+		return $this->status;
 	}
-
-	public function issetIn($value, $array): bool
-	{
-		$this->isEmpty($array);
-		if (array_search($value, $array)) {
-			return false;
-		}
-		return true;
-	}
-
-	public function validateCommand($command): void
+	public function validateCommand($command): string
 	{
 		if ($command == null) {
 			$this->invalidArgument();
@@ -49,6 +47,7 @@ class Validator
 		if (array_keys($this->allowedCommands(), $command)) {
 			$this->invalidArgument();
 		}
+		return $command;
 	}
 
 	protected function invalidArgument()

@@ -2,29 +2,18 @@
 
 namespace Bisix21\src\UrlShort;
 
-use Bisix21\src\Interface\IUrlDecoder;
-use InvalidArgumentException;
+use Bisix21\src\UrlShort\Interface\IUrlDecoder;
 
 
 class Decode implements IUrlDecoder
 {
-	protected array $urls;
-
-	/**
-	 * @param array $urls
-	 * @return Decode
-	 */
-	public function setUrls(array $urls): static
+	public function __construct(
+	)
 	{
-		$this->urls = $urls;
-		return $this;
 	}
 
 	public function decode(string $code): string
 	{
-		if (!isset($this->urls[$code])){
-			throw new InvalidArgumentException(" Undefined code $code");
-		}
-		return $this->urls[$code];
+		return  "decode";
 	}
 }

@@ -2,8 +2,8 @@
 
 namespace Bisix21\src\UrlShort;
 
-use Bisix21\src\Interface\IUrlEncoder;
 
+use Bisix21\src\UrlShort\Interface\IUrlEncoder;
 
 class Encode implements IUrlEncoder
 {
@@ -20,6 +20,6 @@ class Encode implements IUrlEncoder
 	 */
 	public function encode(string $url): string
 	{
-		 return substr( md5($url), 0 , $this->length);
+
 	}
 }

@@ -1,8 +1,8 @@
 <?php
 
-use Bisix21\src\Commands\DecodeCommand;
-use Bisix21\src\Commands\DefaultCommands;
-use Bisix21\src\Commands\EncodeCommand;
+use Bisix21\src\UrlShort\Commands\DecodeCommand;
+use Bisix21\src\UrlShort\Commands\DefaultCommands;
+use Bisix21\src\UrlShort\Commands\EncodeCommand;
 
 return [
 	'allowed:encode' => EncodeCommand::class,

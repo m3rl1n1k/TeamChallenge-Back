@@ -1,6 +1,6 @@
 <?php
 
-namespace Bisix21\src\Repository;
+namespace Bisix21\src\UrlShort\Repository;
 
 use Bisix21\src\Interface\DBInterface;
 use InvalidArgumentException;
@@ -15,7 +15,7 @@ class Files implements DBInterface
 	{
 	}
 
-	public function read(): array
+	public function read(string $code): string|null
 	{
 		if (!file_exists($this->pathUrls)) {
 			file_put_contents($this->pathUrls, '');
