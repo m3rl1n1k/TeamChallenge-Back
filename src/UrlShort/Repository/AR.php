@@ -2,7 +2,7 @@
 
 namespace Bisix21\src\UrlShort\Repository;
 
-use Bisix21\src\Interface\DBInterface;
+use Bisix21\src\UrlShort\Interface\DBInterface;
 use Bisix21\src\UrlShort\ORM\Models\UrlShort;
 use InvalidArgumentException;
 

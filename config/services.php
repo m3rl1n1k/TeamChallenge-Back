@@ -1,22 +1,23 @@
 <?php
 
-use Bisix21\src\Core\Command;
 use Bisix21\src\Core\Config;
 use Bisix21\src\Core\Handler;
 use Bisix21\src\UrlShort\Commands\DecodeCommand;
 use Bisix21\src\UrlShort\Commands\DefaultCommands;
 use Bisix21\src\UrlShort\Commands\EncodeCommand;
+use Bisix21\src\UrlShort\Controllers\FrontController;
 use Bisix21\src\UrlShort\Decode;
 use Bisix21\src\UrlShort\Encode;
-use Bisix21\src\UrlShort\Entity\Short;
 use Bisix21\src\UrlShort\ORM\ActiveRecord;
 use Bisix21\src\UrlShort\ORM\DataMapper;
+use Bisix21\src\UrlShort\ORM\Entity\Short;
 use Bisix21\src\UrlShort\ORM\Models\UrlShort;
 use Bisix21\src\UrlShort\Repository\AR;
 use Bisix21\src\UrlShort\Repository\DM;
 use Bisix21\src\UrlShort\Repository\Files;
+use Bisix21\src\UrlShort\Services\Command;
 use Bisix21\src\UrlShort\Services\Converter;
-use Bisix21\src\UrlShort\Services\GetRequest;
+use Bisix21\src\UrlShort\Services\Request;
 use Bisix21\src\UrlShort\Services\Validator;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -36,7 +37,7 @@ return [
 	Converter::class => function ($container) {
 		return new Converter(
 			$container->get(Validator::class),
-			$container->get(GetRequest::class)
+			$container->get(Request::class)
 		);
 	},
 	Validator::class => function ($container) {
@@ -45,8 +46,8 @@ return [
 			$container->get(UrlShort::class)
 		);
 	},
-	GetRequest::class => function () {
-		return new GetRequest();
+	Request::class => function () {
+		return new Request();
 	},
 	//functional
 	Encode::class => function ($container) {
@@ -73,14 +74,14 @@ return [
 		return new EncodeCommand(
 			$container->get(Encode::class),
 			$container->get(Converter::class),
-			$container->get(DM::class),
+			$container->get(AR::class),
 			$container->get(Validator::class)
 		);
 	},
 	DecodeCommand::class => function ($container) {
 		return new DecodeCommand(
 			$container->get(Decode::class),
-			$container->get(DM::class),
+			$container->get(AR::class),
 			$container->get(Converter::class),
 			$container->get(Validator::class)
 		);
@@ -125,4 +126,12 @@ return [
 	Short::class => function () {
 		return new Short();
 	},
+	//Controllers
+	FrontController::class=>function($container)
+	{
+		return new FrontController(
+			$container->get(Handler::class),
+			$container->get(Request::class)
+		);
+	}
 ];

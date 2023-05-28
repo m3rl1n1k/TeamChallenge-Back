@@ -10,7 +10,7 @@ class Converter
 
 	public function __construct(
 		protected Validator  $validator,
-		protected GetRequest $getRequest
+		protected Request $getRequest
 	)
 	{
 	}
@@ -19,8 +19,8 @@ class Converter
 	{
 		global $argv;
 		$this->command = "help";
-		$argv = array_slice($argv, 1);
 		if (!empty($argv)) {
+			$argv = array_slice($argv, 1);
 			$this->command = $this->prepareCommand($argv);
 		}
 		if (!empty($_GET)) {
@@ -39,18 +39,21 @@ class Converter
 
 	public function getArguments()
 	{
+		global $argv;
+		$arguments = "";
 		if (!empty($argv)) {
-			$this->arguments = $this->prepareArgument($argv);
+			$arguments = $this->prepareArgument($argv);
 		}
 		if (!empty($_GET)) {
-			$this->arguments = $this->prepareArgument($this->getRequest->getDataFromGetRequest());
+			$arguments = $this->prepareArgument($this->getRequest->getDataFromGetRequest());
 		}
-		return $this->arguments;
+		return $arguments;
 
 	}
 
 	protected function prepareArgument($dataForArguments)
 	{
+
 		if (is_array($dataForArguments)) {
 			if (!empty($dataForArguments)) {
 				$dataForArguments = array_slice($dataForArguments, 1); // отримуємо аргументи (сайт або код)
@@ -59,5 +62,4 @@ class Converter
 		}
 		return $dataForArguments;
 	}
-
 }
