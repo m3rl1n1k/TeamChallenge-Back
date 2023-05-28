@@ -1,8 +1,8 @@
 <?php
 
-namespace Bisix21\src\UrlShort\Entity\Repository;
+namespace Bisix21\src\UrlShort\ORM\Entity\Repository;
 
-use Bisix21\src\UrlShort\Entity\Short;
+use Bisix21\src\UrlShort\ORM\Entity\Short;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectRepository;
 

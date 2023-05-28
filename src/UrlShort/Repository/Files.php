@@ -2,7 +2,7 @@
 
 namespace Bisix21\src\UrlShort\Repository;
 
-use Bisix21\src\Interface\DBInterface;
+use Bisix21\src\UrlShort\Interface\DBInterface;
 use InvalidArgumentException;
 
 class Files implements DBInterface
