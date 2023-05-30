@@ -53,7 +53,7 @@ class Validator
 		return $command;
 	}
 
-	protected function invalidArgument()
+	protected function invalidCommandName()
 	{
 		throw new InvalidArgumentException("Not found command. Print help to see all commands");
 	}
