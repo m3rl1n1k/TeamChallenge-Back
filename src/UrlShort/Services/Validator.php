@@ -42,10 +42,10 @@ class Validator
 	public function validateCommand($command): string
 	{
 		if ($command == null) {
-			$this->invalidArgument();
+			$this->invalidCommandName();
 		}
 		if (array_keys($this->allowedCommands(), $command)) {
-			$this->invalidArgument();
+			$this->invalidCommandName();
 		}
 		if (is_array($command)){
 			$command = $command[0];
