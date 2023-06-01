@@ -13,7 +13,13 @@ class Files implements DBInterface
 		protected string $pathUrls
 	)
 	{
-		$this->dataArray  =$this->getData();
+		$this->dataArray = $this->getData();
+	}
+
+	protected function getData(): array
+	{
+		$data = file_get_contents($this->pathUrls);
+		return json_decode($data, true);
 	}
 
 	public function read(string $code): string|null
@@ -32,11 +38,5 @@ class Files implements DBInterface
 			$data = json_encode($this->dataArray, JSON_PRETTY_PRINT);
 			file_put_contents($this->pathUrls, $data);
 		}
-	}
-
-	protected function getData():array
-	{
-		$data = file_get_contents($this->pathUrls);
-		return json_decode($data, true);
 	}
 }
