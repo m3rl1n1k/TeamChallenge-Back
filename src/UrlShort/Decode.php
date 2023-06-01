@@ -32,4 +32,9 @@ class Decode implements IUrlDecoder
 		$res = $this->short->getUrlByCode($code);
 		return $res->url;
 	}
+	protected function decodeFromFile(string $code)
+	{
+		$res = $this->short->getUrlByCode($code);
+		return $res->url;
+	}
 }

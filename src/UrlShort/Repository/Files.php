@@ -13,6 +13,7 @@ class Files implements DBInterface
 		protected string $pathUrls
 	)
 	{
+		$this->dataArray  =$this->getData();
 	}
 
 	public function read(string $code): string|null
@@ -21,16 +22,21 @@ class Files implements DBInterface
 			file_put_contents($this->pathUrls, '');
 			throw new InvalidArgumentException('File don\'t exist, rerun code');
 		}
-		$data = file_get_contents($this->pathUrls);
-		return $this->dataArray = json_decode($data, true) ?? [];
+		return $this->dataArray[$code];
 	}
 
 	public function saveToDB($data): void
 	{
-		$this->dataArray[$data['code']] =  $data['url'];
+		$this->dataArray[$data['code']] = $data['url'];
 		if (!empty($data)) {
 			$data = json_encode($this->dataArray, JSON_PRETTY_PRINT);
 			file_put_contents($this->pathUrls, $data);
 		}
+	}
+
+	protected function getData():array
+	{
+		$data = file_get_contents($this->pathUrls);
+		return json_decode($data, true);
 	}
 }

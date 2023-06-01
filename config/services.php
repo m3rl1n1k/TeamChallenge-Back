@@ -74,14 +74,14 @@ return [
 		return new EncodeCommand(
 			$container->get(Encode::class),
 			$container->get(Converter::class),
-			$container->get(DM::class),
+			$container->get(Files::class),
 			$container->get(Validator::class)
 		);
 	},
 	DecodeCommand::class => function ($container) {
 		return new DecodeCommand(
 			$container->get(Decode::class),
-			$container->get(DM::class),
+			$container->get(Files::class),
 			$container->get(Converter::class),
 			$container->get(Validator::class)
 		);
