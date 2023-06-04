@@ -18,8 +18,7 @@ class Files implements DBInterface
 
 	protected function getData(): array
 	{
-		$data = file_get_contents($this->pathUrls);
-		return json_decode($data, true);
+		return json_decode(file_get_contents($this->pathUrls), true);
 	}
 
 	public function read(string $code): string|null
@@ -33,10 +32,18 @@ class Files implements DBInterface
 
 	public function saveToDB($data): void
 	{
+		if (array_search($data['url'], $this->dataArray)) {
+			throw new InvalidArgumentException("You have same record: {$data['code']} => {$data['url']}");
+		}
 		$this->dataArray[$data['code']] = $data['url'];
 		if (!empty($data)) {
-			$data = json_encode($this->dataArray, JSON_PRETTY_PRINT);
-			file_put_contents($this->pathUrls, $data);
+			file_put_contents(
+				$this->pathUrls,
+				json_encode(
+					$this->dataArray,
+					JSON_PRETTY_PRINT
+				)
+			);
 		}
 	}
 }

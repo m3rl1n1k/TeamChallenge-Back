@@ -56,7 +56,7 @@ return [
 	},
 	Decode::class => function ($container) {
 		return new Decode(
-			$container->get(DataMapper::class)->getEM()
+			$container->get(Files::class)
 		);
 	},
 	//command

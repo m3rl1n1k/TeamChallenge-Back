@@ -5,21 +5,27 @@ namespace Bisix21\src\UrlShort;
 use Bisix21\src\UrlShort\Entity\Short;
 use Bisix21\src\UrlShort\Interface\IUrlDecoder;
 use Bisix21\src\UrlShort\Models\UrlShort;
+use Bisix21\src\UrlShort\Repository\Files;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Exception\NotSupported;
 
 
 class Decode implements IUrlDecoder
 {
 	public function __construct(
-		protected EntityManager|UrlShort $short
+		protected EntityManager|UrlShort|Files $short,
 	)
 	{
 	}
 
 	public function decode(string $code): string
 	{
-		return $this->decodeFromDM($code);
+		return $this->decodeFromFile($code);
 	}
+
+	/**
+	 * @throws NotSupported
+	 */
 	protected function decodeFromDM(string $code)
 	{
 		$shortRep = $this->short->getRepository(Short::class);
@@ -34,7 +40,7 @@ class Decode implements IUrlDecoder
 	}
 	protected function decodeFromFile(string $code)
 	{
-		$res = $this->short->getUrlByCode($code);
-		return $res->url;
+
+		return $this->short->read($code);
 	}
 }
