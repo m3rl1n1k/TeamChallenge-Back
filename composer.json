@@ -2,23 +2,14 @@
   "name": "bisix21/php-lessons-pro",
   "authors": [
     {
-      "name": "Bisix21",
-      "email": "bisix21@gmail.com"
+      "name": "m3rl1n1k",
+      "email": "m3rl1n1k@gmail.com"
     }
   ],
   "require": {
-    "monolog/monolog": "3.*",
-    "ext-http": "*",
-    "larapack/dd": "1.*",
-    "diggphp/psr11": "*",
-    "illuminate/database": "*",
-    "doctrine/orm": "*",
-    "doctrine/dbal": "^3.2",
-    "symfony/cache": "*"
   },
   "autoload": {
     "psr-4": {
-      "Bisix21\\src\\": "src/"
     }
   }
 }

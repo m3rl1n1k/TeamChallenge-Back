@@ -1,15 +1,16 @@
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
-RUN apt-get -y update && apt-get -y install git vim
-RUN docker-php-ext-install pdo pdo_mysql
+RUN apt-get -y update && apt-get -y install git unzip vim rsync
 
-RUN pecl install xdebug \
-    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-        && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/xdebug.ini \
-        && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
-        && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini \
-        && echo "xdebug.discover_client_host=0" >> /usr/local/etc/php/conf.d/xdebug.ini \
-        && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini
+RUN apt-get install -y libicu-dev && docker-php-ext-configure intl
+
+RUN docker-php-ext-install pdo pdo_mysql intl
+
+RUN docker-php-ext-install opcache
+
+RUN pecl install apcu && docker-php-ext-enable apcu
+RUN pecl install xdebug && docker-php-ext-enable xdebug;
+COPY ./docker/configs/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 ENV TERM xterm-256color
 

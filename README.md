@@ -1,14 +1,6 @@
-# php-lessons-pro
-Bisix21 | Serhii
+# Clear Server Nginx
+m3rl1n1k | Serhii
 
-# code for table (eloquent)
+## Start on
+[http://localhost:8080](http://localhost:8080)
 
-create table urls_shorts
-(
-id         int auto_increment
-primary key,
-code       varchar(255) not null,
-url        text         not null,
-created_at timestamp    null,
-updated_at timestamp    null
-);
