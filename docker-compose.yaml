@@ -33,8 +33,8 @@ services:
     ports:
       - "13306:3306"
     environment:
-      MYSQL_CONNECTION: sql11.freemysqlhosting.net
-      MYSQL_ROOT_PASSWORD: sql11691868
-      MYSQL_USER: sql11691868
-      MYSQL_DATABASE: sql11691868
-      MYSQL_PASSWORD: tVGGtGP62E
+      MYSQL_CONNECTION: w
+      MYSQL_ROOT_PASSWORD: w
+      MYSQL_USER: w
+      MYSQL_DATABASE: w
+      MYSQL_PASSWORD: w
