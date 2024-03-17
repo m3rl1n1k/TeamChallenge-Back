@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\API;
 
 use App\Core\AbstractController;
 

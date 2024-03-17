@@ -1,6 +1,6 @@
 <?php
 
-use App\Controller\IndexController;
+use App\API\IndexController;
 use App\Core\Request;
 use App\Core\Route;
 
