@@ -7,9 +7,12 @@
     }
   ],
   "require": {
+    "diggphp/psr11": "^1.0",
+    "larapack/dd": "^1.1"
   },
   "autoload": {
     "psr-4": {
+      "App\\" : "src/"
     }
   }
 }
