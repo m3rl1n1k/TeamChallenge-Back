@@ -3,12 +3,15 @@
 namespace App\Core;
 
 
+use JetBrains\PhpStorm\NoReturn;
+
 class Route
 {
 	private array $urls;
 	
 	public function add(string $url, string $controller, string $method, $args = []): void
 	{
+		
 		$this->urls[$url] = [
 			'controller' => $controller,
 			'method' => $method,
@@ -28,8 +31,20 @@ class Route
 				break;
 			}
 		}
-		$controller = new $controller();
-		call_user_func_array([$controller, $method], $args);
+		if ($controller) {
+			if (!method_exists($controller, $method)) {
+				$this->printError("Method %s() Not Found!", $method);
+			}
+			$controller = new $controller();
+			call_user_func_array([$controller, $method], $args);
+		} else {
+			$this->printError("Page <b style='background: #eee'>%s</b> Not Found!", $urlIn);
+		}
 	}
 	
+	#[NoReturn] protected function printError($msg, $value): void
+	{
+		printf($msg, $value);
+		exit();
+	}
 }
