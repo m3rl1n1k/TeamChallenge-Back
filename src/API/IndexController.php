@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IndexController extends AbstractController
 {
-	public function index():Response
+	public function index($id):Response
 	{
 		$db = Config::instance()->get('database');
-		return $this->json($db);
+		return $this->json($id);
 	}
 }

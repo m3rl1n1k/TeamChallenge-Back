@@ -4,12 +4,12 @@ use App\API\IndexController;
 use App\Core\Request;
 use App\Core\Route;
 
-$request = Request::getUrl();
-
 $route = new Route();
-$route->add('/api/index', IndexController::class, 'index');
-$route->add('/test', IndexController::class, 'index');
 
-$route->route($request);
+$route->get('/', IndexController::class, 'index');
+$route->get('/test', IndexController::class, 'index');
+$route->get('/product/show/{id}', IndexController::class, 'index', ['id' => Request::getId()]);
+
+$route->route(Request::getUrl(), $_POST['_method'] ?? Request::getMethod());
 
 
