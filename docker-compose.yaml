@@ -24,17 +24,3 @@ services:
       - ./:/srv/src/
     expose:
       - 9003
-    links:
-      - db_mysql
-
-  db_mysql:
-    image: mysql:latest
-    container_name: php_pro_mysql
-    ports:
-      - "13306:3306"
-    environment:
-      MYSQL_CONNECTION: w
-      MYSQL_ROOT_PASSWORD: w
-      MYSQL_USER: w
-      MYSQL_DATABASE: w
-      MYSQL_PASSWORD: w

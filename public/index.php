@@ -8,6 +8,7 @@ use Psr\Container\NotFoundExceptionInterface;
 
 const ROOT = __DIR__ . "/../";
 require_once ROOT . 'src/bootstrap.php';
+require_once ROOT . 'src/route.php';
 try {
 	Container::getInstance()->get(Handler::class)->handle();
 } catch (Exception|ContainerExceptionInterface $e) {
