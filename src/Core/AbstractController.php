@@ -6,11 +6,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractController extends Response
 {
-	public function json($data, $format = 'json'): Response
+	public function json($data, $format = 'json'): Response|array
 	{
 		if ($format == 'json') {
 			$json = json_encode($data);
 			$this->headers($json);
+		}
+		if ($format == 'array'){
+			return json_decode($data, true);
 		}
 		return new Response();
 	}
