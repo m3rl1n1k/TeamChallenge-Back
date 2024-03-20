@@ -4,3 +4,4 @@ storage
 docker/logs
 dz.sql
 .gitignore
+/config/database.php
