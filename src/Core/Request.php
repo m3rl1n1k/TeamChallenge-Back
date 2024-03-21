@@ -21,11 +21,6 @@ class Request
 		return "";
 	}
 	
-	public function getDataFromGetRequest(): array
-	{
-		return $this->get;
-	}
-	
 	public function getRequestUrl(): string
 	{
 		return $this->convert($_SERVER['REQUEST_URI']);

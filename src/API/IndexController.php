@@ -10,7 +10,11 @@ class IndexController extends AbstractController
 {
 	public function index($id):Response
 	{
-		$db = Config::instance()->get('database');
 		return $this->json($id);
+	}
+	public function test():Response
+	{
+		$db = Config::instance()->get('database');
+		return $this->json($db);
 	}
 }

@@ -3,11 +3,17 @@
 namespace App\Core;
 
 
+use App\Interface\RouteInterface;
 use JetBrains\PhpStorm\NoReturn;
 
-class Route
+class Route implements RouteInterface
 {
 	private array $urls;
+	private ?array $data = [];
+	
+	public function __construct()
+	{
+	}
 	
 	protected function add(string $uri, string $controller, string $action, string $method, $args = []): void
 	{
@@ -20,9 +26,10 @@ class Route
 		];
 	}
 	
-	public function get($uri, $controller, $action, $args = []): void
+	public function get($uri, $controller, $action, $args = []): Route
 	{
 		$this->add($uri, $controller, $action, "GET", $args);
+		return $this;
 	}
 	
 	public function post($uri, $controller, $action, $args = []): void
@@ -50,11 +57,12 @@ class Route
 	{
 		$controller = $action = $args = null;
 		foreach ($this->urls as $uri => $param) {
-			 $uri = str_replace('{id}', $param['args']['id'], $uri);
+			$id = $this->data[array_key_first($this->data)];
+			$uri = str_replace('{id}', $id, $uri);
 			if ($uriIn === $uri && strtoupper($methodIn) === $param['method']) {
 				$controller = $param['controller'];
 				$action = $param['action'];
-				$args = $param['args'];
+				$args = $this->data;
 				break;
 			}
 		}
@@ -73,5 +81,12 @@ class Route
 	{
 		printf($msg, $value);
 		exit();
+	}
+	
+	public function addArgs(string $key, mixed $getId): static
+	{
+		$this->data = [];
+		$this->data[$key] = $getId;
+		return $this;
 	}
 }
