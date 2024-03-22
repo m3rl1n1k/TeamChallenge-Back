@@ -62,7 +62,12 @@ class Route implements RouteInterface
 			if ($uriIn === $uri && strtoupper($methodIn) === $param['method']) {
 				$controller = $param['controller'];
 				$action = $param['action'];
-				$args = $this->data;
+				$args = [];
+            foreach ($this->data as $key => $value) {
+                if (strpos($uri, '{' . $key . '}') !== false) {
+                    $args[] = $value;
+                }
+            }
 				break;
 			}
 		}
