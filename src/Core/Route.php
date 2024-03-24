@@ -9,78 +9,75 @@ use JetBrains\PhpStorm\NoReturn;
 class Route implements RouteInterface
 {
 	private array $urls;
-	private ?array $data = [];
 	
-	public function __construct()
-	{
-	}
-	
-	protected function add(string $uri, string $controller, string $action, string $method, $args = []): void
+	protected function add(string $uri, string $controller, string $action, string $method): void
 	{
 		
 		$this->urls[$uri] = [
 			'controller' => $controller,
 			'action' => $action,
 			'method' => $method,
-			'args' => $args
 		];
 	}
 	
-	public function get($uri, $controller, $action, $args = []): Route
+	public function get($uri, $controller, $action): Route
 	{
-		$this->add($uri, $controller, $action, "GET", $args);
+		$this->add($uri, $controller, $action, "GET");
 		return $this;
 	}
 	
-	public function post($uri, $controller, $action, $args = []): void
+	public function post($uri, $controller, $action): void
 	{
-		$this->add($uri, $controller, $action, "POST", $args);
+		$this->add($uri, $controller, $action, "POST");
 	}
 	
-	public function put($uri, $controller, $action, $args = []): void
+	public function put($uri, $controller, $action): void
 	{
-		$this->add($uri, $controller, $action, "PUT", $args);
+		$this->add($uri, $controller, $action, "PUT");
 	}
 	
-	public function patch($uri, $controller, $action, $args = []): void
+	public function patch($uri, $controller, $action): void
 	{
-		$this->add($uri, $controller, $action, "PATCH", $args);
+		$this->add($uri, $controller, $action, "PATCH");
 	}
 	
-	public function delete($uri, $controller, $action, $args = []): void
+	public function delete($uri, $controller, $action): void
 	{
-		$this->add($uri, $controller, $action, "DELETE", $args);
+		$this->add($uri, $controller, $action, "DELETE");
 	}
 	
 	
 	public function route($uriIn, $methodIn): void
 	{
-		$controller = $action = $args = null;
+		$controller = $action = $arg = null;
 		foreach ($this->urls as $uri => $param) {
-			$id = $this->data[array_key_first($this->data)];
-			$uri = str_replace('{id}', $id, $uri);
+			$arg = $this->getArg($uri, $uriIn);
+			$uri = preg_match('/{[A-Za-z]+}/', $uri) ? $this->getArg($uri, $uriIn, true) :  $uri;
+			// Перевіряємо, чи співпадає URI та метод
 			if ($uriIn === $uri && strtoupper($methodIn) === $param['method']) {
 				$controller = $param['controller'];
 				$action = $param['action'];
-				$args = [];
-            foreach ($this->data as $key => $value) {
-                if (strpos($uri, '{' . $key . '}') !== false) {
-                    $args[] = $value;
-                }
-            }
 				break;
 			}
 		}
+		
+		// Викликаємо метод контролера з переданими аргументами
 		if ($controller) {
 			if (!method_exists($controller, $action)) {
 				$this->printError("Method %s() Not Found!", $action);
 			}
 			$controller = new $controller();
-			call_user_func_array([$controller, $action], $args);
+			if ($arg) {
+				call_user_func_array([$controller, $action], $arg);
+			} else {
+				call_user_func_array([$controller, $action], []);
+			}
+			
 		} else {
 			$this->printError("Page <b style='background: #eee'>%s</b> Not Found!", $uriIn);
 		}
 	}
+	
 	
 	#[NoReturn] protected function printError($msg, $value): void
 	{
@@ -88,10 +85,20 @@ class Route implements RouteInterface
 		exit();
 	}
 	
-	public function addArgs(string $key, mixed $getId): static
+	private function getArg(string $uri, string $uriIn, bool $replace = false): array|string
 	{
-		$this->data = [];
-		$this->data[$key] = $getId;
-		return $this;
+		$key = $id = null;
+		if (preg_match('/\/(\d+)$/', $uriIn, $matches)) {
+			$id = $matches[1];
+			//'/{[A-Za-z]+}/'
+			if (preg_match('/{[A-Za-z]+}/', $uri, $matches)) {
+				$key = trim($matches[0], '{}');
+			}
+		}
+		if ($replace) {
+			return str_replace($matches[0], $id, $uri);
+//			return  $uri;
+		}
+		return $id ? [$key => $id] : [];
 	}
 }

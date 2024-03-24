@@ -8,13 +8,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IndexController extends AbstractController
 {
-	public function index($id):Response
+	public function index(): Response
 	{
-		return $this->json($id);
+		return $this->json("Hello World!");
 	}
-	public function test():Response
+	
+	public function test($show): void
 	{
-		$db = Config::instance()->get('database');
-		return $this->json($db);
+		echo $show;
 	}
+	
 }

@@ -7,8 +7,7 @@ use App\Core\Route;
 $route = new Route();
 
 $route->get('/', IndexController::class, 'index');
-$route->get('/test', IndexController::class, 'test');
-$route->get('/product/show/{id}', IndexController::class, 'index')->addArgs('id', Request::getId());
+$route->get('/product/show/{show}', IndexController::class, 'test');
 
 $route->route(Request::getUrl(), $_POST['_method'] ?? Request::getMethod());
 
