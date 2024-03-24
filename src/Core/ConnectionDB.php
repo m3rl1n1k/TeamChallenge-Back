@@ -8,7 +8,7 @@ use PDO;
 class ConnectionDB
 {
 	
-	private static $dbInstance = null;
+	private static ?PDO $dbInstance = null;
 	
 	// Prevent from creating instance
 	private function __construct()
@@ -26,7 +26,7 @@ class ConnectionDB
 	{
 		
 		// Check if database is null
-		if (self::$dbInstance == null) {
+		if (self::$dbInstance === null) {
 			
 			// Create a new PDO connection
 			try {

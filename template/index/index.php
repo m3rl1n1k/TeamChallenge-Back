@@ -9,6 +9,6 @@
     <title>Document</title>
 </head>
 <body>
-
+<h2>Html template</h2>
 </body>
 </html>

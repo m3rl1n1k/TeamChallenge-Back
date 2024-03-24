@@ -9,6 +9,12 @@ use JetBrains\PhpStorm\NoReturn;
 class Route implements RouteInterface
 {
 	private array $urls;
+	private Request $request;
+	
+	public function __construct()
+	{
+		$this->request = new Request();
+	}
 	
 	protected function add(string $uri, string $controller, string $action, string $method): void
 	{
@@ -51,8 +57,8 @@ class Route implements RouteInterface
 	{
 		$controller = $action = $arg = null;
 		foreach ($this->urls as $uri => $param) {
-			$arg = $this->getArg($uri, $uriIn);
-			$uri = preg_match('/{[A-Za-z]+}/', $uri) ? $this->getArg($uri, $uriIn, true) :  $uri;
+			$arg = $this->request->getContent()?? $this->getArg($uri, $uriIn);
+			$uri = preg_match('/{[A-Za-z]+}/', $uri) ? $this->getArg($uri, $uriIn, true) : $uri;
 			// Перевіряємо, чи співпадає URI та метод
 			if ($uriIn === $uri && strtoupper($methodIn) === $param['method']) {
 				$controller = $param['controller'];

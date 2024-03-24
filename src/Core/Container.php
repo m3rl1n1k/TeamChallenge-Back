@@ -56,7 +56,7 @@ class Container implements ContainerInterface
 		// Получаем рефлектор конструктора класса, проверяем - есть ли конструктор
 		// Если конструктора нет - сразу возвращаем экземпляр класса
 		$constructReflector = $classReflector->getConstructor();
-		if (empty($constructReflector)) {
+		if ($constructReflector === null) {
 			return new $class;
 		}
 		
@@ -84,7 +84,7 @@ class Container implements ContainerInterface
 	{
 		$res = null;
 		if (empty($condition)) {
-			$res =  call_user_func($callback);
+			$res = $callback();
 		}
 		return $res;
 	}

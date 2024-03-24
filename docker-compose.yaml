@@ -24,3 +24,18 @@ services:
       - ./:/srv/src/
     expose:
       - 9003
+    links:
+      - mysql
+  mysql:
+    image: mysql
+    container_name: php_pro_mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "m3rl1n1k"
+      MYSQL_DATABASE: "m3rl1n1k"
+      MYSQL_USER: "m3rl1n1k"
+      MYSQL_PASSWORD: "m3rl1n1k"
+    volumes:
+      - ./docker/databases/mysql_dump:/docker-entrypoint-initdb.d
