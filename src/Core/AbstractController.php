@@ -2,7 +2,6 @@
 
 namespace App\Core;
 
-use JsonException;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractController extends Response
