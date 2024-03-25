@@ -5,3 +5,4 @@ docker/logs
 dz.sql
 .gitignore
 /config/database.php
+docker-compose.yaml

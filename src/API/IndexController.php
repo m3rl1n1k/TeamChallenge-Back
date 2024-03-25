@@ -3,7 +3,6 @@
 namespace App\API;
 
 use App\Core\AbstractController;
-use App\Core\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 class IndexController extends AbstractController
@@ -11,18 +10,20 @@ class IndexController extends AbstractController
 
 	public function index(): Response
 	{
-		$db = Config::instance()->get('database');
-		return $this->json($db);
+		return $this->json(
+			"Hello world!"
+		);
 	}
 	
 	public function test($show ): void
 	{
-		echo $show;
+		//get variable with name from {variable} from address show/{variable}
 	}
 	
 	public function new($request)
 	{
-	
+		//get content from request body $request
+		return$this->json($request);
 	}
 	
 }

@@ -35,12 +35,12 @@ class Request
 	{
 		return (new Request)->getRequestMethod();
 	}
-	public function getContent($raw = false)
+	public function getContent($raw = false): false|array|string
 	{
 		$content = file_get_contents('php://input');
 		if ($raw){
 			return  $content;
 		}
-		return ['request' => json_decode($content, true)];
+		return $content ? ['request' => json_decode($content, true)] : [];
 	}
 }
