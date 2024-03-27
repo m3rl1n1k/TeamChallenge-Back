@@ -1,0 +1,15 @@
+@base_url = http://localhost:8080/api
+
+### New product
+POST {{base_url}}/product/new
+Content-Type: application/json
+
+{
+  "key": "my-dev-value"
+}
+### Get product
+GET {{base_url}}/product/show/5
+
+###Test api
+GET {{base_url}}/api/index
+

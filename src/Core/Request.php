@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+
 class Request
 {
 	protected array $get;

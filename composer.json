@@ -10,7 +10,8 @@
     "diggphp/psr11": "^1.0",
     "larapack/dd": "^1.1",
     "symfony/http-kernel": "^7.0",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "league/climate": "^3.8"
   },
   "autoload": {
     "psr-4": {
