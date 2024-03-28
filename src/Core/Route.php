@@ -5,6 +5,8 @@ namespace App\Core;
 
 use App\Interface\RouteInterface;
 use BadMethodCallException;
+use DiggPHP\Psr11\NotFoundException;
+use Symfony\Component\HttpFoundation\Response;
 
 class Route implements RouteInterface
 {
@@ -62,26 +64,26 @@ class Route implements RouteInterface
             $arg = $this->getArg($uri, $uriIn);
 
             // отримуємо тіло запиту
-            $request = $this->request->getContent();
+            $request = $this->request->withName(array_key_first($arg) ?? "request")->getContent();
 
             // якщо тіло то передаєм агрумент в противному випадку передаєтья тіло
             $args = empty($request) ? $arg : $request;
 
-            // якщо урл має патерн {show} тоді створюєм масив зі значенням з переданого укрла ззовні [show => 6]
+            // якщо урл має патерн {show} тоді заміняєм його на значення яке передане в урлі
             $uri = preg_match('/{[A-Za-z]+}/', $uri) ? $this->getArg($uri, $uriIn, true) : $uri;
 
             // Перевіряємо, чи співпадає URI та метод
-            $method = strtoupper($methodIn) === $param['method'];
-            if ($uriIn === $uri && $method) {
+            if ($uriIn === $uri && strtoupper($methodIn) === $param['method']) {
                 $controller = $param['controller'];
                 $action = $param['action'];
                 break;
             }
         }
-        // Викликаємо метод контролера з переданими аргументами
+        //Перевірка наявності контролкера
         if (is_null($controller)) {
-            Helper::printError("Page %s Not Found!", $uriIn);
+            Helper::printError('Controller %s not found!', $controller);
         }
+        // Викликаємо метод контролера з переданими аргументами
         $this->callController($controller, $action, $args);
     }
 
@@ -96,7 +98,6 @@ class Route implements RouteInterface
                 $key = trim($matches[0], '{}');
             }
         }
-        //
         if ($replace) {
             return str_replace($matches[0], $id, $uri);
         }
@@ -114,5 +115,9 @@ class Route implements RouteInterface
         } else {
             call_user_func_array([$controller, $action], $args);
         }
+    }
+    public static function configRoute(): void
+    {
+        require_once ROOT . 'config/route.php';
     }
 }

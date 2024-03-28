@@ -1,15 +1,34 @@
-@base_url = http://localhost:8080/api
+@base_url = http://localhost:8080/api/v1
+
+
+###Get All products
+GET {{base_url}}/index
+
 
 ### New product
 POST {{base_url}}/product/new
 Content-Type: application/json
 
 {
-  "key": "my-dev-value"
+  "9474476": {
+    "name": "snickers",
+    "size": {
+      "40": true,
+      "41": true,
+      "42": false
+    },
+    "color": "purple",
+    "art": 9474476,
+    "brand": "nike",
+    "model": "Air max",
+    "price": 199,
+    "genre": "man",
+    "description": "Some description about product",
+    "image": "path to image"
+  }
 }
-### Get product
-GET {{base_url}}/product/show/5
+### Get single product
+GET {{base_url}}/product/show/9474475
+Content-Type: application/json
 
-###Test api
-GET {{base_url}}/api/index
 

@@ -5,8 +5,10 @@ namespace App\Core;
 
 class Request
 {
-	
-	public function getRequestUrl(): string
+
+    private string $name;
+
+    public function getRequestUrl(): string
 	{
 		return $this->convert($_SERVER['REQUEST_URI']);
 	}
@@ -36,6 +38,12 @@ class Request
 		if ($raw){
 			return  $content;
 		}
-		return $content ? ['request' => json_decode($content, true)] : [];
+		return $content ? [$this->name => json_decode($content, true)] : [];
 	}
+
+    public function withName(string $name): static
+    {
+        $this->name = $name;
+        return $this;
+    }
 }
