@@ -5,12 +5,6 @@ namespace App\Core;
 
 class Request
 {
-	protected array $get;
-	
-	public function __construct()
-	{
-		$this->get = $_GET;
-	}
 	
 	public function getRequestUrl(): string
 	{
