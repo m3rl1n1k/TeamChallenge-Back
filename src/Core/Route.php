@@ -14,7 +14,7 @@ class Route implements RouteInterface
     {
     }
 
-    protected function add(string $uri, string $controller, string $action, string $method): void
+    protected function add(string $uri, string $controller, string $action, string $method): Route
     {
 
         $this->urls[$uri] = [
@@ -22,31 +22,32 @@ class Route implements RouteInterface
             'action' => $action,
             'method' => $method,
         ];
+        return $this;
     }
 
-    public function get($uri, $controller, $action): void
+    public function get($uri, $controller, $action): Route
     {
-        $this->add($uri, $controller, $action, "GET");
+        return $this->add($uri, $controller, $action, "GET");
     }
 
-    public function post($uri, $controller, $action): void
+    public function post($uri, $controller, $action): Route
     {
-        $this->add($uri, $controller, $action, "POST");
+        return $this->add($uri, $controller, $action, "POST");
     }
 
-    public function put($uri, $controller, $action): void
+    public function put($uri, $controller, $action): Route
     {
-        $this->add($uri, $controller, $action, "PUT");
+        return $this->add($uri, $controller, $action, "PUT");
     }
 
-    public function patch($uri, $controller, $action): void
+    public function patch($uri, $controller, $action): Route
     {
-        $this->add($uri, $controller, $action, "PATCH");
+        return $this->add($uri, $controller, $action, "PATCH");
     }
 
-    public function delete($uri, $controller, $action): void
+    public function delete($uri, $controller, $action): Route
     {
-        $this->add($uri, $controller, $action, "DELETE");
+        return $this->add($uri, $controller, $action, "DELETE");
     }
 
 
@@ -117,5 +118,10 @@ class Route implements RouteInterface
     public static function configRoute(): void
     {
         require_once ROOT . 'config/route.php';
+    }
+
+    public function only($key)
+    {
+        echo($key);
     }
 }

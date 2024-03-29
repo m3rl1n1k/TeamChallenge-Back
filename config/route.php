@@ -8,7 +8,7 @@ use App\Core\Route;
 $route = Container::getInstance()->get(Route::class);
 
 $route->get('/', IndexController::class, 'index');
-$route->get('/api/v1/index', ProductController::class, 'index');
+$route->get('/api/v1/index', ProductController::class, 'index')->only('auth');
 $route->get('/api/v1/product/show/{show}', ProductController::class, 'show');
 $route->post('/api/v1/product/new', ProductController::class, 'new');
 
