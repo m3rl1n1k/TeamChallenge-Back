@@ -10,9 +10,7 @@ class Route implements RouteInterface
 {
     private array $urls;
 
-    public function __construct(
-        protected Request $request
-    )
+    public function __construct(protected Request $request)
     {
     }
 
