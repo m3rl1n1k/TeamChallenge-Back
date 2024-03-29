@@ -51,7 +51,7 @@ class Container implements ContainerInterface
 	 */
 	protected function prepare(string $class)
 	{
-		$classReflector = new \ReflectionClass($class);
+		$classReflector = new ReflectionClass($class);
 		
 		// Получаем рефлектор конструктора класса, проверяем - есть ли конструктор
 		// Если конструктора нет - сразу возвращаем экземпляр класса
@@ -78,14 +78,5 @@ class Container implements ContainerInterface
 		
 		// И возвращаем экземпляр класса со всеми зависимостями
 		return new $class(...$args);
-	}
-	
-	protected function isEmptyArgOrParam($condition, $callback)
-	{
-		$res = null;
-		if (empty($condition)) {
-			$res = $callback();
-		}
-		return $res;
 	}
 }

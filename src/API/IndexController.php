@@ -58,7 +58,7 @@ class IndexController extends AbstractController
     {
         //get content from request body $request
         $this->data[]=$request;
-        return $this->json($this->data);
+        return $this->json("Product successfully added!");
     }
 
 }

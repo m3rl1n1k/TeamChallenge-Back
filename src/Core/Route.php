@@ -5,17 +5,15 @@ namespace App\Core;
 
 use App\Interface\RouteInterface;
 use BadMethodCallException;
-use DiggPHP\Psr11\NotFoundException;
-use Symfony\Component\HttpFoundation\Response;
 
 class Route implements RouteInterface
 {
     private array $urls;
-    private Request $request;
 
-    public function __construct()
+    public function __construct(
+        protected Request $request
+    )
     {
-        $this->request = new Request();
     }
 
     protected function add(string $uri, string $controller, string $action, string $method): void
@@ -28,10 +26,9 @@ class Route implements RouteInterface
         ];
     }
 
-    public function get($uri, $controller, $action): Route
+    public function get($uri, $controller, $action): void
     {
         $this->add($uri, $controller, $action, "GET");
-        return $this;
     }
 
     public function post($uri, $controller, $action): void
@@ -55,9 +52,11 @@ class Route implements RouteInterface
     }
 
 
-    public function route($uriIn, $methodIn): void
+    public function route(): void
     {
         $controller = $action = $args = null;
+        $uriIn = $this->request->getUrl();
+        $methodIn = $this->request->getMethod();
 
         foreach ($this->urls as $uri => $param) {
             //отримуєм аргументи з адресного рядка
@@ -116,6 +115,7 @@ class Route implements RouteInterface
             call_user_func_array([$controller, $action], $args);
         }
     }
+
     public static function configRoute(): void
     {
         require_once ROOT . 'config/route.php';
