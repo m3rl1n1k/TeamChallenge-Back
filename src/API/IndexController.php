@@ -2,7 +2,7 @@
 
 namespace App\API;
 
-use App\Core\AbstractController;
+use App\Core\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 class IndexController extends AbstractController
@@ -11,5 +11,4 @@ class IndexController extends AbstractController
     {
         return $this->json('Use Documentation for API!');
     }
-
 }

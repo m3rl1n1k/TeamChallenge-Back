@@ -3,12 +3,19 @@
 namespace App\Core;
 
 
-use App\Interface\RouteInterface;
+use App\Core\Container\Container;
+use App\Core\Controller\Helper;
+use App\Core\Interface\RouteInterface;
 use BadMethodCallException;
+use Closure;
+use DiggPHP\Psr11\NotFoundException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use ReflectionException;
 
 class Route implements RouteInterface
 {
-    private array $urls;
+    private array $routes;
 
     public function __construct(protected Request $request)
     {
@@ -17,7 +24,7 @@ class Route implements RouteInterface
     protected function add(string $uri, string $controller, string $action, string $method): Route
     {
 
-        $this->urls[$uri] = [
+        $this->routes[$uri] = [
             'controller' => $controller,
             'action' => $action,
             'method' => $method,
@@ -57,7 +64,7 @@ class Route implements RouteInterface
         $uriIn = $this->request->getUrl();
         $methodIn = $this->request->getMethod();
 
-        foreach ($this->urls as $uri => $param) {
+        foreach ($this->routes as $uri => $param) {
             //отримуєм аргументи з адресного рядка
             $arg = $this->getArg($uri, $uriIn);
 
@@ -79,7 +86,7 @@ class Route implements RouteInterface
         }
         //Перевірка наявності контролкера
         if (is_null($controller)) {
-            Helper::printError('Controller %s not found!', $controller);
+            Helper::printError('Controller %s or route "%s" not found!', $controller, $uriIn);
         }
         // Викликаємо метод контролера з переданими аргументами
         $this->callController($controller, $action, $args);
@@ -102,12 +109,18 @@ class Route implements RouteInterface
         return $id ? [$key => $id] : [];
     }
 
+    /**
+     * @throws NotFoundExceptionInterface
+     * @throws ReflectionException
+     * @throws NotFoundException
+     * @throws ContainerExceptionInterface
+     */
     private function callController(string $controller, string $action, array|string $args): void
     {
         if (!method_exists($controller, $action)) {
             throw new BadMethodCallException("Method $action()  not found!");
         }
-        $controller = new $controller();
+        $controller = Container::getInstance()->get($controller);
         if (is_string($args)) {
             call_user_func_array([$controller, $action], []);
         } else {
@@ -122,6 +135,6 @@ class Route implements RouteInterface
 
     public function only($key)
     {
-        echo($key);
+
     }
 }

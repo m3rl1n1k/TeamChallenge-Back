@@ -1,5 +1,28 @@
 @base_url = http://localhost:8080/api/v1
 
+###Homepage
+GET http://localhost:8080
+
+###Login
+POST {{base_url}}/login
+Content-Type: application/json
+
+{
+  "email": "m3rl1n1k@gmail.com",
+  "password": "1111"
+}
+
+###Registration
+POST {{base_url}}/registration
+Content-Type: application/json
+
+{
+  "email": "m3rl1n1k@gmail.com",
+  "password": "1111",
+  "re-password": "1111",
+  "name": "Serhii"
+}
+
 ###Get All products
 GET {{base_url}}/index
 

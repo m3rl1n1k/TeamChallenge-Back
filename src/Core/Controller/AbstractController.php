@@ -1,13 +1,22 @@
 <?php
 
-namespace App\Core;
+namespace App\Core\Controller;
 
+use App\Core\Container\Container;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class AbstractController extends Response
+abstract class AbstractController
 {
+    protected mixed $response;
+
+    protected function Response(): void
+    {
+        $this->response = Container::getInstance()->get(Response::class);
+    }
+
     public function json($data, $format = 'json'): Response
     {
+        $this->Response();
         if ($format === 'json') {
             $json = json_encode($data);
             $this->headers($json);
@@ -20,15 +29,15 @@ abstract class AbstractController extends Response
 
     protected function headers($content): void
     {
-        $this->headers->set('Content-Type', 'application/json');
-        $this->headers->set('Access-Control-Allow-Origin', '*');
-        $this->setContent($content);
-        $this->send();
+        $this->response->headers->set('Content-Type', 'application/json');
+        $this->response->headers->set('Access-Control-Allow-Origin', '*');
+        $this->response->setContent($content);
+        $this->response->send();
     }
 
     public function render(string $path): Response
     {
         require_once ROOT . 'template' . $path . '.php';
-        return new Response();
+        return $this->response;
     }
 }

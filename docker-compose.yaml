@@ -8,6 +8,7 @@ services:
     restart: always
     ports:
       - "8080:80"
+      - "3443:443"
     volumes:
       - ./docker/configs/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./:/srv/src/
