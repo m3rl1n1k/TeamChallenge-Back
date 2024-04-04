@@ -19,6 +19,6 @@ class Register implements AuthenticateInterface
         $userIdentification = $userData['email'];
         $password = Password::encrypt($userData['password']);
         $name = $userData['name'];
-        Database::connect()->query("INSERT INTO user (email, password, name) VALUES ($userIdentification, $password, $name)");
+        ConnectionDB::getInstance()->query("INSERT INTO user (email, password, name) VALUES ($userIdentification, $password, $name)");
     }
 }
