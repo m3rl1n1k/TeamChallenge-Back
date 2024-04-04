@@ -2,7 +2,6 @@
 
 namespace App\Core;
 
-use Exception;
 use PDO;
 
 class ConnectionDB
@@ -24,24 +23,18 @@ class ConnectionDB
 
     public static function getInstance(): ?PDO
     {
-
         // Check if database is null
         if (self::$dbInstance === null) {
-
             // Create a new PDO connection
-            try {
-                $port = Config::instance()->get('database.port');
-                $host = Config::instance()->get('database.host');
-                $db = Config::instance()->get('database.db_name');
-                $user = Config::instance()->get('database.user');
-                $password = Config::instance()->get('database.password');
-                self::$dbInstance = new PDO("mysql:host=$host;dbname=$db;port=$port", $user, $password);
-            } catch (Exception $e) {
-                echo $e->getMessage();
-            }
+            $port = Config::getValue('database.port');
+            $host = Config::getValue('database.host');
+            $db = Config::getValue('database.db_name');
+            $user = Config::getValue('database.user');
+            $password = Config::getValue('database.password');
+            $dsn = "mysql:host=$host;dbname=$db;port=$port";
+
+            self::$dbInstance = new PDO($dsn, $user, $password,);
         }
         return self::$dbInstance;
     }
-
-
 }

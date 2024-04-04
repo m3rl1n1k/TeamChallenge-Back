@@ -42,8 +42,8 @@ class Authentication implements AuthenticateInterface
     protected function credentialsMatch(string $userIdentification, string $password): bool
     {
         //todo Change user provider
-        $user = "";
-        if ($user['userIdentification'] === $userIdentification && $user['password'] === Password::decrypt($password, $user['password'])) {
+        $user = [""];
+        if ($user['userIdentification'] === $userIdentification && $user['password'] == Password::decrypt($password, $user['password'])) {
             return true;
         }
         return false;

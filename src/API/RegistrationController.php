@@ -12,9 +12,13 @@ class RegistrationController extends AbstractController
     {
     }
 
-    public function register($request): Response
+    public function register($request)
     {
         $this->register->handle($request);
-        return $this->json('You registered!');
+    }
+
+    public function info()
+    {
+        return $this->render('/phpinfo');
     }
 }

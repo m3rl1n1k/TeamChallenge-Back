@@ -23,19 +23,20 @@ services:
     restart: always
     volumes:
       - ./:/srv/src/
+      - ./php/:/usr/local/etc/php/
     expose:
       - 9003
     links:
-      - mysql
-  mysql:
-    image: mysql
-    container_name: php_pro_mysql
-    restart: always
+      - db_mysql
+
+  db_mysql:
+    image: mysql:latest
+    container_name: mysql_php_pro
     ports:
       - "13306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: "m3rl1n1k"
-      MYSQL_DATABASE: "m3rl1n1k"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "team"
       MYSQL_USER: "m3rl1n1k"
       MYSQL_PASSWORD: "m3rl1n1k"
 
