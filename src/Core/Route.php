@@ -57,7 +57,6 @@ class Route implements RouteInterface
         return $this->add($uri, $controller, $action, "DELETE");
     }
 
-
     public function route(): void
     {
         $controller = $action = $args = null;
@@ -77,6 +76,9 @@ class Route implements RouteInterface
             // якщо урл має патерн {show} тоді заміняєм його на значення яке передане в урлі
             $uri = preg_match('/{[A-Za-z]+}/', $uri) ? $this->getArg($uri, $uriIn, true) : $uri;
 
+            if (strtoupper($methodIn) !== $param['method']) {
+                Helper::printError("You call request with $methodIn but you need {$param['method']}!");
+            }
             // Перевіряємо, чи співпадає URI та метод
             if ($uriIn === $uri && strtoupper($methodIn) === $param['method']) {
                 $controller = $param['controller'];

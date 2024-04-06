@@ -7,6 +7,6 @@ class Redirect
 
     public static function route($path = "/"): void
     {
-        header("Location: $path");
+        header("Location: http://localhost:8080/api/v1$path");
     }
 }

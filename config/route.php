@@ -14,9 +14,8 @@ $route->get('/', IndexController::class, 'index');
 //Auth
 $route->post('/api/v1/login', LoginController::class, 'auth');
 $route->post('/api/v1/registration', RegistrationController::class, 'register');
-//$route->get('/api/v1/registration', RegistrationController::class, 'info');
 //Product
-$route->get('/api/v1/index', ProductController::class, 'index')->only('auth');
+$route->get('/api/v1/products/index', ProductController::class, 'index')->only('auth');
 $route->get('/api/v1/product/show/{show}', ProductController::class, 'show');
 $route->post('/api/v1/product/new', ProductController::class, 'new');
 
