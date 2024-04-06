@@ -18,6 +18,6 @@ class LoginController extends AbstractController
      */
     public function auth($request)
     {
-        $this->authentication->handle($request);
+        return $this->json($this->authentication->handle($request));
     }
 }

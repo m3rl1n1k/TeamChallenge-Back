@@ -7,33 +7,30 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Header
 {
-    private static mixed $response;
+    private mixed $response;
 
-    protected function Response(): mixed
+    public function __construct()
     {
-        return Container::getInstance()->get(Response::class);
+        $this->response = Container::getInstance()->get(Response::class);
     }
 
     public function sendContent($content): void
     {
-        self::$response = (new Header)->Response();
-        self::$response->headers->set('Content-Type', 'application/json');
-        self::$response->headers->set('Access-Control-Allow-Origin', '*');
-        self::$response->setContent($content);
-        self::$response->send();
+        $this->response->headers->set('Content-Type', 'application/json');
+        $this->response->headers->set('Access-Control-Allow-Origin', '*');
+        $this->response->setContent($content);
+        $this->response->send();
     }
 
     public function sendHeader(string $key, string $value): void
     {
-        self::$response = (new Header)->Response();
-        self::$response->headers->set('Access-Control-Allow-Origin', '*');
-        self::$response->headers->set($key, $value);
-        self::$response->send();
+        $this->response->headers->set('Access-Control-Allow-Origin', '*');
+        $this->response->headers->set($key, $value);
+        $this->response->send();
     }
 
     public function getHeader($key): ?string
     {
-        self::$response = (new Header)->Response();
-        return self::$response->headers->get($key);
+        return $this->response->headers->get($key);
     }
 }

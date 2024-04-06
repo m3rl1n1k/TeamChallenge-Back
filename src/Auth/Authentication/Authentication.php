@@ -25,20 +25,20 @@ class Authentication implements AuthenticateInterface
     /**
      * @throws Exception
      */
-    public function handle(array $userData): void
+    public function handle(array $userData): string
     {
         $this->userCredentials = $userData;
         $email = $userData['email'];
         $password = $userData['password'];
-        $this->credentialsMatch($email, $password) ? $this->onSuccess() : $this->onFail();
+        return $this->credentialsMatch($email, $password) ? $this->onSuccess() : $this->onFail();
     }
 
-    protected function onSuccess(): void
+    protected function onSuccess(): string
     {
         $payload = $this->userCredentials;
         $key = Config::getValue('config.token');
-        $token = $this->token::encode($payload, $key, 'HS512');
-        $this->header->sendContent($token);
+        return $this->token::encode($payload, $key, 'HS512');
+
     }
 
     /**
