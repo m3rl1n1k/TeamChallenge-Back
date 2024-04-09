@@ -65,17 +65,10 @@ class Route implements RouteInterface
 
         foreach ($this->routes as $uri => $param) {
 
-            //отримуєм аргументи з адресного рядка
-            $arg = $this->getArg($uri, $uriIn);
-
-            // отримуємо тіло запиту
-            $request = $this->request->withName(array_key_first($arg) ?? "request")->getContent();
-
-            // якщо тіло то передаєм агрумент в противному випадку передаєтья тіло
-            $args = empty($request) ? $arg : $request;
+            $args = $this->getArguments($uri, $uriIn);
 
             // якщо урл має патерн {show} тоді заміняєм його на значення яке передане в урлі
-            $uri = preg_match('/{[A-Za-z]+}/', $uri) ? $this->getArg($uri, $uriIn, true) : $uri;
+            $uri = preg_match('/{[A-Za-z]+}/', $uri) ? $this->getParams($uri, $uriIn, true) : $uri;
 
             // Перевіряємо, чи співпадає URI та метод
             if ($uriIn === $uri && strtoupper($methodIn) === $param['method']) {
@@ -92,7 +85,7 @@ class Route implements RouteInterface
         $this->callController($controller, $action, $args);
     }
 
-    private function getArg(string $uri, string $uriIn, $replace = false): array|string
+    private function getParams(string $uri, string $uriIn, $replace = false): array|string
     {
         $key = null;
         //перевірка на те чи має вхідний урл id з патерном {id}
@@ -107,7 +100,7 @@ class Route implements RouteInterface
             return str_replace($matches[0], $id, $uri);
         }
         // отримання параметрів з GET
-        if ($uri === $uriIn) {
+        if ($uri === $uriIn && $this->request->getMethod() === 'GET') {
             return $this->request->getParams();
         }
 
@@ -141,5 +134,17 @@ class Route implements RouteInterface
     public function only($key)
     {
 
+    }
+
+    protected function getArguments(string $uri, string $uriIn): null|array|string
+    {
+        //отримуєм аргументи з адресного рядка
+        $arg = $this->getParams($uri, $uriIn);
+
+        // отримуємо тіло запиту
+        $request = $this->request->withName(array_key_first($arg) ?? "request")->getContent();
+
+        // якщо тіло то передаєм агрумент в противному випадку передаєтья тіло
+        return empty($request) ? $arg : $request;
     }
 }

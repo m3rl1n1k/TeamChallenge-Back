@@ -12,9 +12,9 @@ class ProductController extends AbstractController
     {
     }
 
-    public function index($request): Response
+    public function index($params): Response
     {
-        $products = $this->product->getProductFrom($request['type']);
+        $products = $this->product->getProductFrom($params['type']);
         return $this->response($products);
     }
 

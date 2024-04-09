@@ -24,7 +24,7 @@ Content-Type: application/json
 }
 
 ###Get All products
-GET {{base_url}}/products/index?type=shoes&limit=10
+GET {{base_url}}/products/index?type=shoes
 
 ### New product
 POST {{base_url}}/product/new

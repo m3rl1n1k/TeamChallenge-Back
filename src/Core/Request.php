@@ -28,13 +28,17 @@ class Request implements RequestInterface
 
     public function getParams(): array
     {
+        $paramsList = [];
         $params = $this->convert($this->uri, 1);
+        if ($params === null) {
+            return [];
+        }
         $params = explode('&', $params);
         foreach ($params as $param) {
             $param = explode('=', $param);
             $paramsList[$param[0]] = $param[1];
         }
-        return ['request' => $paramsList];
+        return ['params' => $paramsList];
 
     }
 
