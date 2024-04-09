@@ -7,17 +7,35 @@ use App\Core\Interface\RequestInterface;
 
 class Request implements RequestInterface
 {
+    private string $uri;
+
+    public function __construct(protected Header $header)
+    {
+        $this->uri = $_SERVER['REQUEST_URI'];
+    }
 
     private string $name;
 
-    protected function convert($uri): string
+    protected function convert($uri, $offset = 0): ?string
     {
-        return explode("?", $uri)[0];
+        return explode("?", $uri)[$offset];
     }
 
     public function getUrl(): string
     {
-        return $this->convert($_SERVER['REQUEST_URI']);
+        return $this->convert($this->uri);
+    }
+
+    public function getParams(): array
+    {
+        $params = $this->convert($this->uri, 1);
+        $params = explode('&', $params);
+        foreach ($params as $param) {
+            $param = explode('=', $param);
+            $paramsList[$param[0]] = $param[1];
+        }
+        return ['request' => $paramsList];
+
     }
 
     public function getMethod(): string
@@ -38,5 +56,10 @@ class Request implements RequestInterface
     {
         $this->name = $name;
         return $this;
+    }
+
+    public function bearerToken(): ?string
+    {
+        return $this->header->getHeader('Authorization');
     }
 }

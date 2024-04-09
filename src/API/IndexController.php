@@ -9,6 +9,6 @@ class IndexController extends AbstractController
 {
     public function index(): Response
     {
-        return $this->json('Use Documentation for API!');
+        return $this->response('Use Documentation for API!');
     }
 }

@@ -41,12 +41,9 @@ class Authentication implements AuthenticateInterface
 
     }
 
-    /**
-     * @throws Exception
-     */
-    protected function onFail()
+    protected function onFail(): string
     {
-        throw new Exception('Auth is failed!');
+        return false;
     }
 
     /**

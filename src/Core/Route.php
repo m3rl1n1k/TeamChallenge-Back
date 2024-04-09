@@ -64,6 +64,7 @@ class Route implements RouteInterface
         $methodIn = $this->request->getMethod();
 
         foreach ($this->routes as $uri => $param) {
+
             //отримуєм аргументи з адресного рядка
             $arg = $this->getArg($uri, $uriIn);
 
@@ -93,10 +94,10 @@ class Route implements RouteInterface
 
     private function getArg(string $uri, string $uriIn, $replace = false): array|string
     {
-        $key = $id = null;
-        //перевірка на те чи має вхідний урл id
-        $uriIn = preg_match('/\/(\d+)$/', $uriIn, $matches);
-        if ($uriIn) {
+        $key = null;
+        //перевірка на те чи має вхідний урл id з патерном {id}
+        $id = preg_match('/\/(\d+)$/', $uriIn, $matches);
+        if ($id) {
             $id = $matches[1];
             if (preg_match('/{[A-Za-z]+}/', $uri, $matches)) {
                 $key = trim($matches[0], '{}');
@@ -105,6 +106,11 @@ class Route implements RouteInterface
         if ($replace) {
             return str_replace($matches[0], $id, $uri);
         }
+        // отримання параметрів з GET
+        if ($uri === $uriIn) {
+            return $this->request->getParams();
+        }
+
         return $id ? [$key => $id] : [];
     }
 
