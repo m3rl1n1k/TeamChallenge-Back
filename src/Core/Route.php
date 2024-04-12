@@ -7,7 +7,6 @@ use App\Core\Container\Container;
 use App\Core\Controller\Helper;
 use App\Core\Interface\RouteInterface;
 use BadMethodCallException;
-use Closure;
 use DiggPHP\Psr11\NotFoundException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -66,9 +65,9 @@ class Route implements RouteInterface
         foreach ($this->routes as $uri => $param) {
 
             $args = $this->getArguments($uri, $uriIn);
-
+            $args = empty(!$args) ? $args : [];
             // якщо урл має патерн {show} тоді заміняєм його на значення яке передане в урлі
-            $uri = preg_match('/{[A-Za-z]+}/', $uri) ? $this->getParams($uri, $uriIn, true) : $uri;
+            $uri = $this->request->isPatternUri($uri) ? $this->getParams($uri, $uriIn, true) : $uri;
 
             // Перевіряємо, чи співпадає URI та метод
             if ($uriIn === $uri && strtoupper($methodIn) === $param['method']) {
@@ -87,24 +86,32 @@ class Route implements RouteInterface
 
     private function getParams(string $uri, string $uriIn, $replace = false): array|string
     {
-        $key = null;
+        //get params from URL-line with GET-request
+        $value = null;
+        //перевірка на співпадіння з урлом вхідним
+        $matchedURL = $this->request->isPatternUri($uri);
         //перевірка на те чи має вхідний урл id з патерном {id}
-        $id = preg_match('/\/(\d+)$/', $uriIn, $matches);
-        if ($id) {
-            $id = $matches[1];
-            if (preg_match('/{[A-Za-z]+}/', $uri, $matches)) {
-                $key = trim($matches[0], '{}');
+        $idIn = $this->request->isPatternUri($uriIn, '/\d+$/');
+        $incomeURl = $this->request->isPatternUri($uriIn);
+
+        if ($matchedURL) {
+            if ($incomeURl) {
+                //if they same, then get value $key as {type} from $uri and $value as /shoes
+                $value = substr($incomeURl[0], 1);
             }
         }
+        if ($matchedURL) {
+            $value = "$idIn[0]";
+        }
         if ($replace) {
-            return str_replace($matches[0], $id, $uri);
+            return str_replace($matchedURL[0], "/" . $value, $uri);
         }
         // отримання параметрів з GET
         if ($uri === $uriIn && $this->request->getMethod() === 'GET') {
             return $this->request->getParams();
         }
-
-        return $id ? [$key => $id] : [];
+        $key = $this->getKey($uri);
+        return $value ? [$key => $value] : [];
     }
 
     /**
@@ -141,10 +148,21 @@ class Route implements RouteInterface
         //отримуєм аргументи з адресного рядка
         $arg = $this->getParams($uri, $uriIn);
 
-        // отримуємо тіло запиту
-        $request = $this->request->withName(array_key_first($arg) ?? "request")->getContent();
-
-        // якщо тіло то передаєм агрумент в противному випадку передаєтья тіло
-        return empty($request) ? $arg : $request;
+        $request = $this->request->getRequestBody($uri);
+        // merge all data into one array and return
+        return array_merge($arg, $request ?? []);
     }
+
+    protected function getKey(string $uri): string
+    {
+        $key = $this->request->isPatternUri($uri);
+        if ($key) {
+            $key = str_replace("/", '', $key[0]);
+            $key = str_replace("{", '', $key);
+            return str_replace("}", '', $key);
+        }
+        return "arg";
+    }
+
+
 }

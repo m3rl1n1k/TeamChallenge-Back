@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use PDO;
+use PDOStatement;
 
 class Database
 {
@@ -14,11 +15,16 @@ class Database
         $this->db = ConnectionDB::getInstance();
     }
 
-    public function query(string $sql, array $placeholder = [])
+    public function query(string $sql)
     {
         $data = $this->db->prepare($sql);
-        $data->execute($placeholder);
+        $data->execute();
         return $data->columnCount() > 1 ? $data->fetchAll(PDO::FETCH_ASSOC) : $data->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function prepare(string $sql): false|PDOStatement
+    {
+        return $this->db->prepare($sql);
     }
 
 }

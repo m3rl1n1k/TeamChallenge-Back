@@ -1,4 +1,4 @@
-@base_url = http://localhost/api/v1
+@base_url = http://localhost:8080/api/v1
 
 ###Homepage
 GET http://localhost:80
@@ -27,26 +27,24 @@ Content-Type: application/json
 GET {{base_url}}/products/index?type=shoes
 
 ### New product
-POST {{base_url}}/product/new
+POST {{base_url}}/product/new/shoes
 Content-Type: application/json
 
 {
-  "9474476": {
-    "name": "snickers",
-    "size": {
-      "40": true,
-      "41": true,
-      "42": false
-    },
-    "color": "purple",
-    "art": 9474476,
-    "brand": "nike",
-    "model": "Air max",
-    "price": 199,
-    "genre": "man",
-    "description": "Some description about product",
-    "image": "path to image"
-  }
+  "name": "Training Shoes",
+  "size": {
+    "38": true,
+    "39": true,
+    "40": false
+  },
+  "color": "Green",
+  "article": 9474480,
+  "brand": "Under Armour",
+  "model": "Project Rock",
+  "price": 149,
+  "genre": "Woman",
+  "description": "Durable training shoes for gym workouts",
+  "image": "path/to/image5.jpg"
 }
 
 ### Get single product

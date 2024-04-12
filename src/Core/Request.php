@@ -28,18 +28,7 @@ class Request implements RequestInterface
 
     public function getParams(): array
     {
-        $paramsList = [];
-        $params = $this->convert($this->uri, 1);
-        if ($params === null) {
-            return [];
-        }
-        $params = explode('&', $params);
-        foreach ($params as $param) {
-            $param = explode('=', $param);
-            $paramsList[$param[0]] = $param[1];
-        }
-        return ['params' => $paramsList];
-
+        return ['params' => $_GET];
     }
 
     public function getMethod(): string
@@ -56,7 +45,7 @@ class Request implements RequestInterface
         return $content ? [$this->name => json_decode($content, true)] : [];
     }
 
-    public function withName(string $name): static
+    public function withName(string $name = "request"): static
     {
         $this->name = $name;
         return $this;
@@ -66,4 +55,23 @@ class Request implements RequestInterface
     {
         return $this->header->getHeader('Authorization');
     }
+
+    public function getRequestBody(string $uri): false|array|string
+    {
+        if ($this->isPatternUri($uri)) {
+            // отримуємо тіло запиту
+            return $this->withName()->getContent();
+        }
+        return [];
+    }
+
+    public function isPatternUri(string $uri, string $pattern = null): ?array
+    {
+        //якщо урл має патерн {show}
+        if (preg_match($pattern ?? '#/{[A-Za-z]+}$#', $uri, $matches)) {
+            return $matches;
+        }
+        return null;
+    }
+
 }

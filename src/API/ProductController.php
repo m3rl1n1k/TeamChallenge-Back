@@ -14,19 +14,22 @@ class ProductController extends AbstractController
 
     public function index($params): Response
     {
-        $products = $this->product->getProductFrom($params['type']);
+        $type = $params['type'];
+        $limit = $params['limit'];
+        $products = $this->product->getProductByType($type);
         return $this->response($products);
     }
 
     public function show($show): Response
     {
         //get variable with name from {variable} from address show/{variable}
-        return $this->response($show);
+        return $this->response($this->product->getSingle($show));
     }
 
-    public function new($request): Response
+    public function new($type, $request): Response
     {
         //get content from request body $request
-        return $this->response($request);
+        $product = $this->product->record($request, $type);
+        return $this->response($product);
     }
 }

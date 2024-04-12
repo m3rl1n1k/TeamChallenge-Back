@@ -2,19 +2,32 @@
 
 namespace App\Repository;
 
-use App\Core\Database;
+use App\Core\Builder\QueryBuilder;
+use Exception;
 
 class Product
 {
-    public function __construct(protected Database $db)
+    public function __construct(protected QueryBuilder $db)
     {
     }
 
-    public function getProductFrom(string $type)
+    public function getProductByType(string $type)
     {
-        $sql = "select * from $type";
-        $products = $this->db->query($sql);
-
-        return !empty($products) ? $products : "Not found any product!";
+        return $this->db->select($type, ['*'])->getResult();
     }
+
+    public function record(array $data, string $table): int
+    {
+        return 0;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getSingle($article)
+    {
+        return $this->db->select('shoes', ['*'])->where('article', $article)->getResult();
+    }
+
+
 }
