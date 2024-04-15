@@ -89,7 +89,7 @@ GET<i/> [http://localhost:8080/api/v1/product/index?type=shoes](http://localhost
 <tr>
 <td>sorting</td>
 <td>Set type for sorting selected records</td>
-<td>sort=price.up/down</td>
+<td>sort=column_name.up/down</td>
 </tr>
 </table>
 
