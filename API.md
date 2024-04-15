@@ -65,7 +65,7 @@ POST<i/> [http://localhost:8080/api/v1/registration](http://localhost:8080/api/v
 
 <b>Return: </b><i>Msg of result</i>
 <hr>
-<b> Name: Get All products by type</b>
+<b> Name: Get All products</b>
 
 <b>Request method: </b> <i>
 GET<i/> [http://localhost:8080/api/v1/product/index?type=shoes](http://localhost:8080/api/v1/product/index?type=shoes)
@@ -89,7 +89,7 @@ GET<i/> [http://localhost:8080/api/v1/product/index?type=shoes](http://localhost
 <tr>
 <td>sorting</td>
 <td>Set type for sorting selected records</td>
-<td>sort=price</td>
+<td>sort=price.up/down</td>
 </tr>
 </table>
 
