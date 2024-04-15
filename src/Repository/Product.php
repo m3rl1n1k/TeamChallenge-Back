@@ -14,12 +14,7 @@ class Product
     public function getProductBy(string $table, array $filters = [])
     {
         $limit = $filters['limit'];
-        $field = explode('.', $filters['sort']);
-        if ($field[1] === "up") {
-            $field[1] = "ASC";
-        } else {
-            $field[1] = "DESC";
-        }
+        $field = $this->orderPrepare($filters['sort']);
         $records = $this->db->select($table, ['*'])->limit($limit)->sort($field[0], $field[1])->getResult();
         foreach ($records as $key => $record) {
             $records[$key]['size'] = json_decode($record['size']);
@@ -38,6 +33,17 @@ class Product
     public function getSingle($article)
     {
         return $this->db->select('shoes', ['*'])->where('article', $article)->getResult();
+    }
+
+    protected function orderPrepare(mixed $sort): array
+    {
+        $field = explode('.', $sort);
+        if ($field[1] === "up") {
+            $field[1] = "ASC";
+        } else {
+            $field[1] = "DESC";
+        }
+        return $field;
     }
 
 
