@@ -4,6 +4,10 @@ namespace App\Core\Controller;
 
 use App\Core\Container\Container;
 use App\Core\Header;
+use DiggPHP\Psr11\NotFoundException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use ReflectionException;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractController
@@ -11,6 +15,12 @@ abstract class AbstractController
     protected Response $response;
     private Header $header;
 
+    /**
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws ReflectionException
+     * @throws NotFoundException
+     */
     protected function responseCall(): void
     {
         $this->response = Container::getInstance()->get(Response::class);

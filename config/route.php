@@ -16,6 +16,7 @@ $route->post('/api/v1/login', LoginController::class, 'auth');
 $route->post('/api/v1/registration', RegistrationController::class, 'register');
 //Product
 $route->get('/api/v1/product/index', ProductController::class, 'index');
+
 $route->get('/api/v1/product/show/{show}', ProductController::class, 'show');
 $route->post('/api/v1/product/new/{type}', ProductController::class, 'new');
 

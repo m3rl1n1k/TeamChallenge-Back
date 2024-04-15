@@ -72,12 +72,12 @@ class QueryBuilder
     /**
      * @throws Exception
      */
-    public function limit(int $start, int $offset): QueryBuilder
+    public function limit(int $offset): QueryBuilder
     {
         if ($this->query->type != 'select') {
             throw new Exception("LIMIT can only be added to SELECT");
         }
-        $this->query->limit = " LIMIT " . $start . ", " . $offset;
+        $this->query->limit = " LIMIT " . 0 . ", " . $offset;
 
         return $this;
     }
@@ -114,5 +114,15 @@ class QueryBuilder
         $sql .= ";";
         $res = $this->DB->query($sql);
         return !empty($res) ? $res : "Not found any product!";
+    }
+
+    public function sort(string $field, string $sort): static
+    {
+        if ($this->query->type != 'select') {
+            throw new Exception("LIMIT can only be added to SELECT");
+        }
+        $this->query->limit = " ORDER BY " . $field . " " . $sort;
+
+        return $this;
     }
 }

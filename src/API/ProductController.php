@@ -15,8 +15,7 @@ class ProductController extends AbstractController
     public function index($params): Response
     {
         $type = $params['type'];
-        $limit = $params['limit'];
-        $products = $this->product->getProductByType($type);
+        $products = $this->product->getProductBy($type, $params);
         return $this->response($products);
     }
 

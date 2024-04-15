@@ -62,6 +62,7 @@ POST<i/> [http://localhost:8080/api/v1/registration](http://localhost:8080/api/v
 }</pre>
 
 <b>Params: </b><i>Empty</i>
+
 <b>Return: </b><i>Msg of result</i>
 <hr>
 <b> Name: Get All products by type</b>
