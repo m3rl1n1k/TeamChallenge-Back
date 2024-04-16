@@ -7,7 +7,7 @@ use Exception;
 
 class Product
 {
-    public function __construct(protected QueryBuilder $db)
+    public function __construct()
     {
     }
 
@@ -24,6 +24,9 @@ class Product
 
     public function record(array $data, string $table): int
     {
+        if (in_array($data['size'], $data)) {
+            $data['size'] = json_encode($data['size']);
+        }
         return $this->db->insert($table, $data);
     }
 
@@ -32,18 +35,11 @@ class Product
      */
     public function getSingle($article)
     {
-        return $this->db->select('shoes', ['*'])->where('article', $article)->getResult();
-    }
-
-    protected function orderPrepare(mixed $sort): array
-    {
-        $field = explode('.', $sort);
-        if ($field[1] === "up") {
-            $field[1] = "ASC";
-        } else {
-            $field[1] = "DESC";
+        $result = $this->db->select('shoes', ['*'])->where('article', $article)->getResult();
+        if (in_array($result['size'], $result)) {
+            $result['size'] = json_encode($result['size']);
         }
-        return $field;
+        return $result;
     }
 
 

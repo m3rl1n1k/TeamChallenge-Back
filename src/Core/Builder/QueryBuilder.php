@@ -69,15 +69,12 @@ class QueryBuilder
         return $stmt->execute();
     }
 
-    /**
-     * @throws Exception
-     */
-    public function limit(int $offset): QueryBuilder
+    public function limit(?int $offset): QueryBuilder
     {
         if ($this->query->type != 'select') {
             throw new Exception("LIMIT can only be added to SELECT");
         }
-        $this->query->limit = " LIMIT " . 0 . ", " . $offset;
+        $this->query->limit = " LIMIT " . 0 . ", " . $offset ?? 3;
 
         return $this;
     }

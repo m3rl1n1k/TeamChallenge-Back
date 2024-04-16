@@ -28,7 +28,7 @@ class Request implements RequestInterface
 
     public function getParams(): array
     {
-        return ['params' => $_GET];
+        return $_GET ? ['params' => $_GET] : [];
     }
 
     public function getMethod(): string

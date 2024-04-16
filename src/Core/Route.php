@@ -92,16 +92,16 @@ class Route implements RouteInterface
         $matchedURL = $this->request->isPatternUri($uri);
         //перевірка на те чи має вхідний урл id з патерном {id}
         $idIn = $this->request->isPatternUri($uriIn, '/\d+$/');
-        $incomeURl = $this->request->isPatternUri($uriIn);
+        $incomeURl = $this->request->isPatternUri($uriIn, '/[a-zA-Z]+$/');
 
         if ($matchedURL) {
             if ($incomeURl) {
                 //if they same, then get value $key as {type} from $uri and $value as /shoes
-                $value = substr($incomeURl[0], 1);
+                $value = substr($incomeURl[0], 0);
             }
-        }
-        if ($matchedURL) {
-            $value = "$idIn[0]";
+            if ($idIn) {
+                $value = "$idIn[0]";
+            }
         }
         if ($replace) {
             return str_replace($matchedURL[0], "/" . $value, $uri);
@@ -122,8 +122,11 @@ class Route implements RouteInterface
      */
     private function callController(string $controller, string $action, array|string $args): void
     {
+        if (!class_exists($controller)) {
+            throw new NotFoundException("Controller $controller not found!");
+        }
         if (!method_exists($controller, $action)) {
-            throw new BadMethodCallException("Method $action()  not found!");
+            throw new BadMethodCallException("Method $action() not found!");
         }
         $controller = Container::getInstance()->get($controller);
         if (is_string($args)) {
