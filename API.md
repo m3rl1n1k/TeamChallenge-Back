@@ -68,7 +68,7 @@ POST<i/> [http://localhost:8080/api/v1/registration](http://localhost:8080/api/v
 <b> Name: Get All products</b>
 
 <b>Request method: </b> <i>
-GET<i/> [http://localhost:8080/api/v1/product/index?type=shoes](http://localhost:8080/api/v1/product/index?type=shoes)
+GET<i/> [http://localhost:8080/api/v1/product/{type}?limit=10&sort=price.up](http://localhost:8080/api/v1/product/shoes?limit=10&sort=price.up])
 
 <b>Headers: </b> <i>Content-Type: application/json<i/>
 
@@ -79,7 +79,7 @@ GET<i/> [http://localhost:8080/api/v1/product/index?type=shoes](http://localhost
 <tr>
 <td>type</td>
 <td>Select all products by type "shoes"</td>
-<td>type=shoes</td>
+<td>etc. shoes/sweats </td>
 </tr>
 <tr>
 <td>limit</td>
@@ -135,7 +135,7 @@ POST <i/> [http://localhost:8080/api/v1/product/new/{type}](http://localhost:808
 <b> Name: Show product</b>
 
 <b>Request method: </b> <i>
-POST <i/> [http://localhost:8080/api/v1/product/show/{show}](http://localhost:8080/api/v1/product/show/9474480)
+POST <i/> [http://localhost:8080/api/v1/product/shoes/show/{show}](http://localhost:8080//api/v1/product/shoes/show/9474480)
 
 <b>Headers: </b> <i>Content-Type: application/json<i/>
 

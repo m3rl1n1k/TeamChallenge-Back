@@ -18,8 +18,6 @@ $route->post('/api/v1/registration', RegistrationController::class, 'register');
 //shoes
 $route->get('/api/v1/product/shoes', ShoesController::class, 'index');
 $route->get('/api/v1/product/shoes/show/{show}', ShoesController::class, 'show');
-//sweats
-$route->get('/api/v1/product/sweats/show/{show}', ProductController::class, 'show');
 
 $route->post('/api/v1/product/new/{type}', ProductController::class, 'new');
 

@@ -7,3 +7,4 @@ dz.sql
 /config/database.php
 /src/BIN/
 /php/
+docker-compose.yaml
