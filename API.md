@@ -68,7 +68,7 @@ POST<i/> [http://localhost:8080/api/v1/registration](http://localhost:8080/api/v
 <b> Name: Get All products</b>
 
 <b>Request method: </b> <i>
-GET<i/> [http://localhost:8080/api/v1/product/{type}?limit=10&sort=price.up](http://localhost:8080/api/v1/product/shoes?limit=10&sort=price.up])
+GET<i/> [http://localhost:8080/api/v1/product/{type}?limit=10&sort=price.up](http://localhost:8080/api/v1/product/shoes?limit=10&sort=price.up)
 
 <b>Headers: </b> <i>Content-Type: application/json<i/>
 
