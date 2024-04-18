@@ -58,7 +58,7 @@ class Request implements RequestInterface
 
     public function getRequestBody(string $uri): false|array|string
     {
-        if ($this->isPatternUri($uri)) {
+        if ($this->isPatternUri($uri, '/\/new$/')) {
             // отримуємо тіло запиту
             return $this->withName()->getContent();
         }

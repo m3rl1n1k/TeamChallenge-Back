@@ -15,11 +15,15 @@ $route->get('/', IndexController::class, 'index');
 //Auth
 $route->post('/api/v1/login', LoginController::class, 'auth');
 $route->post('/api/v1/registration', RegistrationController::class, 'register');
+
 //shoes
 $route->get('/api/v1/product/shoes', ShoesController::class, 'index');
 $route->get('/api/v1/product/shoes/show/{show}', ShoesController::class, 'show');
+$route->post('/api/v1/product/shoes/new', ShoesController::class, 'new');
+$route->put('/api/v1/product/shoes/update/{id}', ShoesController::class, 'update');
 
-$route->post('/api/v1/product/new/{type}', ProductController::class, 'new');
+//Accessories
+$route->get('/api/v1/product/accessories', ShoesController::class, 'index');
 
 
 $route->route();

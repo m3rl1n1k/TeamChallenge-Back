@@ -21,14 +21,18 @@ class ShoesController extends AbstractController
 
     public function show($show): Response
     {
-        //get variable with name from {variable} from address show/{variable}
-        return $this->response($this->shoes->find($show));
+        return $this->response($this->shoes->oneRecord($show));
     }
 
-    public function new($type, $request): Response
+    public function new($request): Response
     {
-        //get content from request body $request
-        $product = $this->shoes->save($request, $type);
-        return $this->response($product);
+        $record = $this->shoes->save($request);
+        $response = $record ? "create successfully!" : "Error!";
+        return $this->response($response);
+    }
+
+    public function update($id)
+    {
+        dd($id);
     }
 }

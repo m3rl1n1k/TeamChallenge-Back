@@ -15,11 +15,11 @@ class Database
         $this->db = ConnectionDB::getInstance();
     }
 
-    public function query(string $sql)
+    public function query(string $sql): false|PDOStatement
     {
         $data = $this->db->prepare($sql);
         $data->execute();
-        return $data->columnCount() > 1 ? $data->fetchAll(PDO::FETCH_ASSOC) : $data->fetch(PDO::FETCH_ASSOC);
+        return $data;
     }
 
     public function prepare(string $sql): false|PDOStatement

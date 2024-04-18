@@ -3,10 +3,12 @@
 namespace App\Core\Builder;
 
 use App\Core\Database;
+use App\Core\Interface\QueryInterface;
 use Exception;
+use PDO;
 use stdClass;
 
-class QueryBuilder
+class QueryBuilder implements QueryInterface
 {
     public function __construct(protected Database $DB)
     {
@@ -31,7 +33,7 @@ class QueryBuilder
         if (!in_array($this->query->type, ['select', 'update', 'delete'])) {
             throw new Exception("WHERE can only be added to SELECT, UPDATE OR DELETE");
         }
-        $this->query->where[] = "$field $operator '$value'";
+        $this->query->where[] = "$field $operator '$value'";// price = '10'
 
         return $this;
     }
@@ -44,14 +46,16 @@ class QueryBuilder
         $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
         $stmt = $this->DB->prepare($sql);
 
+        if ($data['size']) {
+            $data['size'] = json_encode($data['size']);
+        }
         foreach ($data as $key => $value) {
             $stmt->bindValue(":$key", $value);
         }
-
         return $stmt->execute();
     }
 
-    public function update(string $table, array $data, string $where): bool
+    public function update(string $table, array $data): bool
     {
         $set = [];
         foreach ($data as $key => $value) {
@@ -59,7 +63,8 @@ class QueryBuilder
         }
         $setClause = implode(', ', $set);
 
-        $sql = "UPDATE $table SET $setClause WHERE $where";
+        $sql = "UPDATE $table SET $setClause WHERE";
+        $sql .= $this->query->where;
         $stmt = $this->DB->prepare($sql);
 
         foreach ($data as $key => $value) {
@@ -69,12 +74,12 @@ class QueryBuilder
         return $stmt->execute();
     }
 
-    public function limit(?int $offset): QueryBuilder
+    public function limit(?int $offset, int $start = 0): QueryBuilder
     {
         if ($this->query->type != 'select') {
             throw new Exception("LIMIT can only be added to SELECT");
         }
-        $this->query->limit = " LIMIT " . 0 . ", " . $offset ?? 3;
+        $this->query->limit = " LIMIT " . $start . ", " . $offset ?? 3;
 
         return $this;
     }
@@ -98,7 +103,7 @@ class QueryBuilder
         return $sql;
     }
 
-    public function getResult()
+    public function all(): false|array|string
     {
         $query = $this->query;
         $sql = $query->base;
@@ -110,10 +115,10 @@ class QueryBuilder
         }
         $sql .= ";";
         $res = $this->DB->query($sql);
-        return !empty($res) ? $res : "Not found any product!";
+        return !empty($res) ? $res->fetchAll(PDO::FETCH_ASSOC) : "Not found any product!";
     }
 
-    public function sort(string $field, string $sort): static
+    public function orderBy(string $field, string $sort): static
     {
         if ($this->query->type != 'select') {
             throw new Exception("LIMIT can only be added to SELECT");
@@ -121,5 +126,17 @@ class QueryBuilder
         $this->query->limit = " ORDER BY " . $field . " " . $sort;
 
         return $this;
+    }
+
+    public function get()
+    {
+        $query = $this->query;
+        $sql = $query->base;
+        if (!empty($query->where)) {
+            $sql .= " WHERE " . implode(' AND ', $query->where);
+        }
+        $sql .= ";";
+        $res = $this->DB->query($sql);
+        return !empty($res) ? $res->fetch(PDO::FETCH_ASSOC) : "Not found any product!";
     }
 }
