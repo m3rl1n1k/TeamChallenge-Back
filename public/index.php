@@ -12,5 +12,5 @@ try {
     /** @var Route $route */
     Route::configRoute();
 } catch (Exception|Error $e) {
-    echo $e->getMessage() . " " . $e->getLine() . " " . $e->getFile();
+    mode($e);
 }

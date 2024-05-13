@@ -8,6 +8,7 @@ use App\Core\Controller\Helper;
 use App\Core\Interface\RouteInterface;
 use BadMethodCallException;
 use DiggPHP\Psr11\NotFoundException;
+use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use ReflectionException;
@@ -84,6 +85,9 @@ class Route implements RouteInterface
         $this->callController($controller, $action, $args);
     }
 
+    /**
+     * @throws Exception
+     */
     private function getParams(string $uri, string $uriIn, $replace = false): array|string
     {
         //get params from URL-line with GET-request
@@ -92,6 +96,10 @@ class Route implements RouteInterface
         $matchedURL = $this->request->isPatternUri($uri);
         //перевірка на те чи має вхідний урл id з патерном {id}
         $idIn = $this->request->isPatternUri($uriIn, '/\d+$/');
+        // Id always must be as number only
+        if (!preg_match('/\/\d+$/', "/" . $idIn[0])) {
+            throw new Exception("Id must be only numbers!");
+        }
         $incomeURl = $this->request->isPatternUri($uriIn, '/[a-zA-Z]+$/');
 
         if ($matchedURL) {

@@ -12,3 +12,11 @@ Config::instance(
         ]
     )
 );
+function mode($exception): void
+{
+    $res = match (Config::getValue('config.mode')) {
+        'dev' => $exception->getMessage() . " " . $exception->getLine() . " " . $exception->getFile(),
+        'prod' => $exception->getMessage(),
+    };
+    echo $res;
+}

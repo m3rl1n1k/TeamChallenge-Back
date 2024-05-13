@@ -4,6 +4,7 @@ namespace App\API;
 
 use App\Core\Controller\AbstractController;
 use App\Repository\Shoes;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class ShoesController extends AbstractController
@@ -13,17 +14,26 @@ class ShoesController extends AbstractController
     {
     }
 
+    /**
+     * @throws Exception
+     */
     public function index($params): Response
     {
-        $products = $this->shoes->setSort($params['sort'])->setLimit($params['limit'])->getAll();
+        $products = $this->shoes->getAll($params);
         return $this->response($products);
     }
 
+    /**
+     * @throws Exception
+     */
     public function show($show): Response
     {
         return $this->response($this->shoes->oneRecord($show));
     }
 
+    /**
+     * @throws Exception
+     */
     public function new($request): Response
     {
         $record = $this->shoes->save($request);

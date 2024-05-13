@@ -18,18 +18,29 @@ class Shoes extends AbstractModel
     /**
      * @throws Exception
      */
-    public function getAll(): false|array|string
+    public function getAll(array $params = []): false|array|string
     {
+        $this->setLimit($params['limit']);
+        $this->setSort($params['sort']);
         return $this->findAll();
     }
 
+    /**
+     * @throws Exception
+     */
     public function oneRecord(int $record)
     {
         return $this->find($record);
     }
 
-    public function save($request): bool
+    /**
+     * @throws Exception
+     */
+    public function save(array $data): bool
     {
-        return $this->insert($request);
+        if ($this->find($data['article'])) {
+            throw new Exception("Can't duplicate article {$data['article']}");
+        }
+        return $this->insert($data);
     }
 }

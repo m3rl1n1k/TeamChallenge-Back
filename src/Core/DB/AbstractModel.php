@@ -3,6 +3,7 @@
 namespace App\Core\DB;
 
 use App\Core\Builder\QueryBuilder;
+use DiggPHP\Psr11\NotFoundException;
 use Exception;
 
 class AbstractModel
@@ -29,11 +30,14 @@ class AbstractModel
     /**
      * @throws Exception
      */
-    public function find($id)
+    public function find($article)
     {
-        $result = $this->db->select($this->table, ['*'])->where('article', $id)->get();
-        if (in_array($result['size'], $result)) {
+        $result = $this->db->select($this->table, ['*'])->where('article', $article)->get();
+        if (!is_bool($result) && in_array($result['size'], $result)) {
             $result['size'] = json_encode($result['size']);
+        }
+        if (!$result) {
+            throw new NotFoundException('Product not found!');
         }
         return $result;
     }
@@ -51,13 +55,13 @@ class AbstractModel
 
     }
 
-    public function setLimit(mixed $limit): static
+    public function setLimit(int $limit): static
     {
 
-        if (is_string($limit))
-            $this->limit = null;
-        else
-            $this->limit = $limit;
+//        if (is_string($limit))
+//            $this->limit = null;
+//        else
+        $this->limit = $limit;
         return $this;
     }
 
@@ -78,7 +82,7 @@ class AbstractModel
         return $field;
     }
 
-    public function insert($data): bool
+    public function insert(array $data): bool
     {
         return $this->db->insert($this->table, $data);
     }

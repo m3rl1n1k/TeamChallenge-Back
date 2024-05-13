@@ -19,9 +19,8 @@ class QueryBuilder implements QueryInterface
     public function select(string $table, array $fields): QueryBuilder
     {
         $this->reset();
-        $this->query->base = "SELECT " . implode(", ", $fields) . " FROM " . $table;
         $this->query->type = 'select';
-
+        $this->query->base = "SELECT " . implode(", ", $fields) . " FROM " . $table;
         return $this;
     }
 
@@ -121,9 +120,9 @@ class QueryBuilder implements QueryInterface
     public function orderBy(string $field, string $sort): static
     {
         if ($this->query->type != 'select') {
-            throw new Exception("LIMIT can only be added to SELECT");
+            throw new Exception("ORDER can only be added to SELECT");
         }
-        $this->query->limit = " ORDER BY " . $field . " " . $sort;
+        $this->query->order = " ORDER BY " . $field . " " . $sort;
 
         return $this;
     }
