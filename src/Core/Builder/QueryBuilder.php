@@ -54,31 +54,30 @@ class QueryBuilder implements QueryInterface
         return $stmt->execute();
     }
 
-    public function update(string $table, array $data): bool
+    public function update(string $table, array $data): static
     {
+        $this->reset();
+        $this->query->type = 'update';
         $set = [];
         foreach ($data as $key => $value) {
             $set[] = "$key = :$key";
         }
         $setClause = implode(', ', $set);
-
-        $sql = "UPDATE $table SET $setClause WHERE";
-        $sql .= $this->query->where;
-        $stmt = $this->DB->prepare($sql);
-
-        foreach ($data as $key => $value) {
-            $stmt->bindValue(":$key", $value);
-        }
-
-        return $stmt->execute();
+        $sql = "UPDATE $table SET $setClause WHERE ";
+        $this->query->base = $sql;
+        $this->query->data = $data;
+        return $this;
     }
 
     public function limit(?int $offset, int $start = 0): QueryBuilder
     {
+        if ($offset > 10 || $offset === null) {
+            $offset = 10;
+        }
         if ($this->query->type != 'select') {
             throw new Exception("LIMIT can only be added to SELECT");
         }
-        $this->query->limit = " LIMIT " . $start . ", " . $offset ?? 3;
+        $this->query->limit = " LIMIT " . $start . ", " . $offset;
 
         return $this;
     }
@@ -137,5 +136,21 @@ class QueryBuilder implements QueryInterface
         $sql .= ";";
         $res = $this->DB->query($sql);
         return !empty($res) ? $res->fetch(PDO::FETCH_ASSOC) : "Not found any product!";
+    }
+
+    public function save(): bool
+    {
+        $sql = $this->query->base;
+        if (!empty($this->query->where)) {
+            $sql .= implode(' AND ', $this->query->where);
+        }
+        $sql = $this->DB->prepare($sql);
+        foreach ($this->query->data as $key => $value) {
+            if (is_array($value)) {
+                $value = json_encode($value);
+            }
+            $sql->bindValue(":$key", $value);
+        }
+        return $sql->execute();
     }
 }

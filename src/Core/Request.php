@@ -9,7 +9,7 @@ class Request implements RequestInterface
 {
     private string $uri;
 
-    public function __construct(protected Header $header)
+    public function __construct()
     {
         $this->uri = $_SERVER['REQUEST_URI'];
     }
@@ -53,12 +53,14 @@ class Request implements RequestInterface
 
     public function bearerToken(): ?string
     {
-        return $this->header->getHeader('Authorization');
+        // todo return $this->header->getHeader('Authorization');
     }
 
     public function getRequestBody(string $uri): false|array|string
     {
-        if ($this->isPatternUri($uri, '/\/new$/')) {
+        $new = $this->isPatternUri($uri, '/\/new$/');
+        $update = $this->isPatternUri($uri, '/\/update\/{[a-z]+}$/');
+        if ($new || $update) {
             // отримуємо тіло запиту
             return $this->withName()->getContent();
         }
@@ -67,6 +69,7 @@ class Request implements RequestInterface
 
     public function isPatternUri(string $uri, string $pattern = null): ?array
     {
+
         //якщо урл має патерн {show}
         if (preg_match($pattern ?? '#/{[A-Za-z]+}$#', $uri, $matches)) {
             return $matches;

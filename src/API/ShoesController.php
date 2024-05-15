@@ -3,46 +3,51 @@
 namespace App\API;
 
 use App\Core\Controller\AbstractController;
+use App\Core\HttpStatusCode;
+use App\Core\Request;
 use App\Repository\Shoes;
 use Exception;
-use Symfony\Component\HttpFoundation\Response;
 
 class ShoesController extends AbstractController
 {
 
-    public function __construct(protected Shoes $shoes)
+    public function __construct(protected Shoes $shoes, protected Request $re)
     {
     }
 
     /**
      * @throws Exception
      */
-    public function index($params): Response
+    public function index($params): void
     {
         $products = $this->shoes->getAll($params);
-        return $this->response($products);
+        $products ? $this->response($products, HttpStatusCode::OK) : $this->response('Fail', HttpStatusCode::NOT_FOUND);
     }
 
     /**
      * @throws Exception
      */
-    public function show($show): Response
+    public function show($show)
     {
-        return $this->response($this->shoes->oneRecord($show));
+        $data = $this->shoes->oneRecord($show);
+        $this->response($data, HttpStatusCode::OK);
     }
 
     /**
      * @throws Exception
      */
-    public function new($request): Response
+    public function new($request)
     {
         $record = $this->shoes->save($request);
-        $response = $record ? "create successfully!" : "Error!";
-        return $this->response($response);
+        $record ? $this->response("Created successfully", HttpStatusCode::CREATED) : $this->response('Fail', HttpStatusCode::BAD_REQUEST);
     }
 
-    public function update($id)
+    /**
+     * @throws Exception
+     */
+    public function update($request, $article)
     {
-        dd($id);
+        $record = $this->shoes->saveUpdate($request, $article);
+        $record ? $this->response("Updated successfully", HttpStatusCode::OK) : $this->response('Fail', HttpStatusCode::BAD_REQUEST);
     }
 }

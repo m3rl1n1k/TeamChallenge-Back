@@ -24,7 +24,7 @@ class LoginController extends AbstractController
         if ($token) {
             $msg['token'] = $token;
         } else {
-            $msg['failed'] = 'Auth is failed!';
+            $msg['failed'] = 'Security is failed!';
         }
         return $this->response($msg);
     }

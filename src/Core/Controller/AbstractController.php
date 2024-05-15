@@ -3,49 +3,34 @@
 namespace App\Core\Controller;
 
 use App\Core\Container\Container;
-use App\Core\Header;
-use DiggPHP\Psr11\NotFoundException;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
-use ReflectionException;
-use Symfony\Component\HttpFoundation\Response;
+use App\Core\Exceptions\NotSendHeaders;
+use App\Core\Security\Response;
 
 abstract class AbstractController
 {
     protected Response $response;
-    private Header $header;
+
+    protected function prepare(): void
+    {
+        $this->response = Container::call(Response::class);
+    }
 
     /**
-     * @throws NotFoundExceptionInterface
-     * @throws ContainerExceptionInterface
-     * @throws ReflectionException
-     * @throws NotFoundException
+     * @throws NotSendHeaders
      */
-    protected function responseCall(): void
+    public function response($data, int $statusCode): void
     {
-        $this->response = Container::getInstance()->get(Response::class);
-        $this->header = Container::getInstance()->get(Header::class);
+        $this->prepare();
+
+        $this->response->setHeader('Content-Type', 'application/json');
+        $this->response->setData($data);
+        $this->response->setStatusCode($statusCode);
+        $this->response->send();
+        echo $this->response->response();
     }
 
-    public function response($data, $format = 'json'): Response
-    {
-        $this->responseCall();
-        if ($data === null) {
-            return $this->header->sendResponse(null, Response::HTTP_NOT_FOUND);
-        }
-        if ($format === 'json') {
-            $json = json_encode($data);
-            return $this->header->sendResponse($json);
-        }
-        if ($format === 'array') {
-            return json_decode($data, true);
-        }
-        return $this->response;
-    }
-
-    public function render(string $path): Response
+    public function render(string $path): void
     {
         require_once ROOT . 'template' . $path . '.php';
-        return $this->response;
     }
 }

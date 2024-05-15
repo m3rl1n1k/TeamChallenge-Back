@@ -79,7 +79,7 @@ class Route implements RouteInterface
         }
         //Перевірка наявності контролкера
         if (is_null($controller)) {
-            Helper::printError('Controller %s or route "%s" not found!', $controller, $uriIn);
+            throw new NotFoundException("Controller $controller or route $uriIn not found!");
         }
         // Викликаємо метод контролера з переданими аргументами
         $this->callController($controller, $action, $args);
@@ -97,9 +97,6 @@ class Route implements RouteInterface
         //перевірка на те чи має вхідний урл id з патерном {id}
         $idIn = $this->request->isPatternUri($uriIn, '/\d+$/');
         // Id always must be as number only
-        if (!preg_match('/\/\d+$/', "/" . $idIn[0])) {
-            throw new Exception("Id must be only numbers!");
-        }
         $incomeURl = $this->request->isPatternUri($uriIn, '/[a-zA-Z]+$/');
 
         if ($matchedURL) {
@@ -136,7 +133,7 @@ class Route implements RouteInterface
         if (!method_exists($controller, $action)) {
             throw new BadMethodCallException("Method $action() not found!");
         }
-        $controller = Container::getInstance()->get($controller);
+        $controller = Container::call($controller);
         if (is_string($args)) {
             call_user_func_array([$controller, $action], []);
         } else {

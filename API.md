@@ -1,18 +1,30 @@
 # Team Challenge
 
-<hr>
-<b> Name: </b>
+[//]: # (<hr>)
 
-<b>Request method: </b> <i>GET<i/> [http://localhost](http://localhost:8080)
+[//]: # (<b> Name: </b>)
 
-<b>Headers: </b> <i>Content-Type: application/json<i/>
+[//]: # ()
 
-<b>Body(only json): </b> <pre>{}</pre>
+[//]: # (<b>Request method: </b> <i>GET<i/> [http://localhost]&#40;http://localhost:8080&#41;)
 
-<b>Params: </b><i>Empty</i>
+[//]: # ()
 
-<b>Return: </b>
-<hr>
+[//]: # (<b>Headers: </b> <i>Content-Type: application/json<i/>)
+
+[//]: # ()
+
+[//]: # (<b>Body&#40;only json&#41;: </b> <pre>{}</pre>)
+
+[//]: # ()
+
+[//]: # (<b>Params: </b><i>Empty</i>)
+
+[//]: # ()
+
+[//]: # (<b>Return: </b>)
+
+[//]: # (<hr>)
 
 ## API Doc
 
@@ -76,14 +88,24 @@ GET<i/> [http://localhost:8080/api/v1/product/{type}?limit=10&sort=price.up](htt
 
 <b>Params: </b>
 <table>
+
+[//]: # (<tr>)
+
+[//]: # (<td>type</td>)
+
+[//]: # (<td>Select all products by type "shoes"</td>)
+
+[//]: # (<td>etc. shoes/sweats </td>)
+
+[//]: # (</tr>)
 <tr>
-<td>type</td>
-<td>Select all products by type "shoes"</td>
-<td>etc. shoes/sweats </td>
+<td>page</td>
+<td>Show page number 1</td>
+<td>page=1</td>
 </tr>
 <tr>
 <td>limit</td>
-<td>Set limits selected records to 10</td>
+<td>Set limits selected records to 10. Max 10 records</td>
 <td>limit=10</td>
 </tr>
 <tr>

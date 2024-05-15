@@ -15,9 +15,8 @@ class Authentication implements AuthenticateInterface
     protected array $userCredentials;
 
     public function __construct(
-        protected JWT    $token,
-        protected User   $user,
-        protected Header $header
+        protected JWT  $token,
+        protected User $user,
     )
     {
     }

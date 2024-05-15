@@ -83,4 +83,9 @@ class Container implements ContainerInterface
         // И возвращаем экземпляр класса со всеми зависимостями
         return new $class(...$args);
     }
+
+    public static function call(string $class)
+    {
+        return Container::getInstance()->get($class);
+    }
 }

@@ -3,7 +3,7 @@
 use App\Core\Config;
 
 require_once ROOT . "vendor/autoload.php";
-
+// map configs
 Config::instance(
     array_merge(
         [
@@ -12,6 +12,7 @@ Config::instance(
         ]
     )
 );
+// check set mode
 function mode($exception): void
 {
     $res = match (Config::getValue('config.mode')) {

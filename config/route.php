@@ -2,17 +2,16 @@
 
 use App\API\IndexController;
 use App\API\LoginController;
-use App\API\ProductController;
 use App\API\RegistrationController;
 use App\API\ShoesController;
 use App\Core\Container\Container;
 use App\Core\Route;
 
 /** @var Route $route */
-$route = Container::getInstance()->get(Route::class);
+$route = Container::call(Route::class);
 
 $route->get('/', IndexController::class, 'index');
-//Auth
+//Security
 $route->post('/api/v1/login', LoginController::class, 'auth');
 $route->post('/api/v1/registration', RegistrationController::class, 'register');
 
@@ -20,7 +19,7 @@ $route->post('/api/v1/registration', RegistrationController::class, 'register');
 $route->get('/api/v1/product/shoes', ShoesController::class, 'index');
 $route->get('/api/v1/product/shoes/show/{show}', ShoesController::class, 'show');
 $route->post('/api/v1/product/shoes/new', ShoesController::class, 'new');
-$route->put('/api/v1/product/shoes/update/{id}', ShoesController::class, 'update');
+$route->put('/api/v1/product/shoes/update/{article}', ShoesController::class, 'update');
 
 //Accessories
 $route->get('/api/v1/product/accessories', ShoesController::class, 'index');

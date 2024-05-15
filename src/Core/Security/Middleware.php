@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Middleware
 {
-    public function __construct(protected Request $request, protected Header $header)
+    public function __construct(protected Request $request)
     {
     }
 
@@ -21,7 +21,7 @@ class Middleware
         $token = $this->request->bearerToken();
 
         if (!$token) {
-            return $this->header->sendResponse("Forbidden!", Response::HTTP_FORBIDDEN);
+            // todo return $this->header->sendResponse("Forbidden!", Response::HTTP_FORBIDDEN);
         }
 
         try {
