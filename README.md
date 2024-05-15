@@ -19,3 +19,5 @@ docker-compose up --build
 ### Start on
 
 [http://localhost:8080](http://localhost:8080)
+
+Documentation in API.md
