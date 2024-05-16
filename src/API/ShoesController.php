@@ -57,7 +57,7 @@ class ShoesController extends AbstractController
      */
     public function delete($article): void
     {
-        $this->shoes->delete($article);
-        $this->response($article, HttpStatusCode::OK);
+        $res = $this->shoes->delete($article);
+        $res ? $this->response("Deleted!", HttpStatusCode::OK) : $this->response("Fail", HttpStatusCode::BAD_REQUEST);
     }
 }

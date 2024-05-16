@@ -80,11 +80,6 @@ abstract class AbstractModel implements ModelInterface
         return $this->qb->update($this->table, $data)->where('article', $article)->save();
     }
 
-//    public function delete($article)
-//    {
-//        $this->qb->delete($this->table)->where('article', $article);
-//    }
-
     public function findBy(array $criteria)
     {
         return "Method not realized";

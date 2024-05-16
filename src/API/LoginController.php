@@ -2,10 +2,11 @@
 
 namespace App\API;
 
-use App\Auth\Authentication\Authentication;
 use App\Core\Controller\AbstractController;
+use App\Core\HttpStatusCode;
+use App\Security\Authentication\Authentication;
 use Exception;
-use Symfony\Component\HttpFoundation\Response;
+
 
 class LoginController extends AbstractController
 {
@@ -17,7 +18,7 @@ class LoginController extends AbstractController
     /**
      * @throws Exception
      */
-    public function auth($request): Response
+    public function auth($request)
     {
         $msg = [];
         $token = $this->authentication->handle($request);
@@ -26,6 +27,6 @@ class LoginController extends AbstractController
         } else {
             $msg['failed'] = 'Security is failed!';
         }
-        return $this->response($msg);
+        $this->response($msg, HttpStatusCode::OK);
     }
 }

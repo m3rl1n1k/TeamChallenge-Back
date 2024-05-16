@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Auth\Authentication;
+namespace App\Security\Authentication;
 
 use App\Core\Config;
 use App\Core\Interface\AuthenticateInterface;

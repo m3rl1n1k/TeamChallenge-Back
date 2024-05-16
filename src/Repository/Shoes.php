@@ -36,9 +36,4 @@ class Shoes extends AbstractModel
         }
         return $this->insert($data);
     }
-
-    public function findBy($criteria): array|string
-    {
-        return $criteria;
-    }
 }
