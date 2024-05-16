@@ -15,9 +15,6 @@ abstract class AbstractController
         $this->response = Container::call(Response::class);
     }
 
-    /**
-     * @throws NotSendHeaders
-     */
     public function response($data, int $statusCode): void
     {
         $this->prepare();

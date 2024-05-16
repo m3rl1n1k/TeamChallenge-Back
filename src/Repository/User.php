@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Core\ConnectionDB;
+use App\Core\DB\ConnectionDB;
 use App\Core\Security\Password;
 use Error;
 use PDO;

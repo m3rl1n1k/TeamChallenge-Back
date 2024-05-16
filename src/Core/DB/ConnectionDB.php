@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Core;
+namespace App\Core\DB;
 
+use App\Core\Config;
 use PDO;
 
 class ConnectionDB

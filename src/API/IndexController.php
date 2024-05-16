@@ -3,12 +3,12 @@
 namespace App\API;
 
 use App\Core\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use App\Core\HttpStatusCode;
 
 class IndexController extends AbstractController
 {
-    public function index(): Response
+    public function index()
     {
-        return $this->response('Use Documentation for API!');
+        $this->response('Use Documentation for API!', HttpStatusCode::OK);
     }
 }

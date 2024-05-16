@@ -3,7 +3,6 @@
 namespace App\Auth\Authentication;
 
 use App\Core\Config;
-use App\Core\Header;
 use App\Core\Interface\AuthenticateInterface;
 use App\Core\Security\Password;
 use App\Repository\User;

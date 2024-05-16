@@ -3,15 +3,17 @@
 namespace App\Core\DB;
 
 use App\Core\Builder\QueryBuilder;
+use App\Core\Interface\ModelInterface;
 use DiggPHP\Psr11\NotFoundException;
 use Exception;
+use Override;
 
-class AbstractModel
+abstract class AbstractModel implements ModelInterface
 {
     protected string $table;
     protected ?array $orderBy;
     protected ?int $limit;
-    protected QueryBuilder $db;
+    protected QueryBuilder $qb;
     protected ?int $page;
 
 
@@ -20,7 +22,7 @@ class AbstractModel
      */
     public function findAll(): false|array|string
     {
-        $records = $this->db->select($this->table, ['*'])->limit($this->limit, $this->page)->orderBy($this->orderBy[0], $this->orderBy[1])->all();
+        $records = $this->qb->select($this->table, ['*'])->limit($this->limit, $this->page)->orderBy($this->orderBy[0], $this->orderBy[1])->all();
         foreach ($records as $key => $record) {
             $records[$key]['size'] = json_decode($record['size']);
         }
@@ -31,22 +33,9 @@ class AbstractModel
     /**
      * @throws Exception
      */
-    public function find($article)
+    public function find($id)
     {
-        return $this->db->select($this->table, ['*'])->where('article', $article)->get();
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function findBy(array $conditions)
-    {
-        $select = $this->db->select($this->table, ['*']);
-        foreach ($conditions as $key => $condition) {
-            $select = $select->where($key, $condition);
-        }
-        dd($select);
-
+        return $this->qb->select($this->table, ['*'])->where('article', $id)->get();
     }
 
     public function setLimit(int $limit): static
@@ -70,17 +59,17 @@ class AbstractModel
     protected function orderPrepare(string $sort): array
     {
         $field = explode('.', $sort);
-        if ($field[1] === "up") {
-            $field[1] = "ASC";
-        } else {
+        if ($field[0] === "up") {
             $field[1] = "DESC";
+        } else {
+            $field[1] = "ASC";
         }
         return $field;
     }
 
     public function insert(array $data): bool
     {
-        return $this->db->insert($this->table, $data);
+        return $this->qb->insert($this->table, $data)->save();
     }
 
     /**
@@ -88,6 +77,24 @@ class AbstractModel
      */
     public function update($data, $article): bool
     {
-        return $this->db->update($this->table, $data)->where('article', $article)->save();
+        return $this->qb->update($this->table, $data)->where('article', $article)->save();
+    }
+
+//    public function delete($article)
+//    {
+//        $this->qb->delete($this->table)->where('article', $article);
+//    }
+
+    public function findBy(array $criteria)
+    {
+        return "Method not realized";
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function delete($id)
+    {
+        return $this->qb->delete($this->table)->where('article', $id)->get();
     }
 }

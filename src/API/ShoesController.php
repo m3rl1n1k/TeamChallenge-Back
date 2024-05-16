@@ -11,7 +11,7 @@ use Exception;
 class ShoesController extends AbstractController
 {
 
-    public function __construct(protected Shoes $shoes, protected Request $re)
+    public function __construct(protected Shoes $shoes)
     {
     }
 
@@ -27,16 +27,17 @@ class ShoesController extends AbstractController
     /**
      * @throws Exception
      */
-    public function show($show)
+    public function show($show): void
     {
-        $data = $this->shoes->oneRecord($show);
-        $this->response($data, HttpStatusCode::OK);
+        $record = $this->shoes->find($show);
+        $record['size'] = json_decode($record['size']);
+        $this->response($record, HttpStatusCode::OK);
     }
 
     /**
      * @throws Exception
      */
-    public function new($request)
+    public function new($request): void
     {
         $record = $this->shoes->save($request);
         $record ? $this->response("Created successfully", HttpStatusCode::CREATED) : $this->response('Fail', HttpStatusCode::BAD_REQUEST);
@@ -45,9 +46,18 @@ class ShoesController extends AbstractController
     /**
      * @throws Exception
      */
-    public function update($request, $article)
+    public function update($request, $article): void
     {
-        $record = $this->shoes->saveUpdate($request, $article);
+        $record = $this->shoes->update($request, $article);
         $record ? $this->response("Updated successfully", HttpStatusCode::OK) : $this->response('Fail', HttpStatusCode::BAD_REQUEST);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function delete($article): void
+    {
+        $this->shoes->delete($article);
+        $this->response($article, HttpStatusCode::OK);
     }
 }

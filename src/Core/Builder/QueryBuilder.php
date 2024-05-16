@@ -2,16 +2,21 @@
 
 namespace App\Core\Builder;
 
-use App\Core\Database;
+use App\Core\DB\MySQL;
 use App\Core\Interface\QueryInterface;
 use Exception;
+use Override;
 use PDO;
+use PDOStatement;
 use stdClass;
 
 class QueryBuilder implements QueryInterface
 {
-    public function __construct(protected Database $DB)
+    protected ?PDO $DB;
+
+    public function __construct(protected MySQL $PDO)
     {
+        $this->DB = $this->PDO::connect();
     }
 
     private stdClass $query;
@@ -37,21 +42,16 @@ class QueryBuilder implements QueryInterface
         return $this;
     }
 
-    public function insert(string $table, array $data): bool
+    public function insert(string $table, array $data): QueryBuilder
     {
+        $this->reset();
+        $query = $this->query;
+        $query->type = 'insert';
         $columns = implode(', ', array_keys($data));
         $placeholders = ':' . implode(', :', array_keys($data));
-
-        $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
-        $stmt = $this->DB->prepare($sql);
-
-        if ($data['size']) {
-            $data['size'] = json_encode($data['size']);
-        }
-        foreach ($data as $key => $value) {
-            $stmt->bindValue(":$key", $value);
-        }
-        return $stmt->execute();
+        $query->data = $data;
+        $query->base = "INSERT INTO $table ($columns) VALUES ($placeholders)";
+        return $this;
     }
 
     public function update(string $table, array $data): static
@@ -63,9 +63,17 @@ class QueryBuilder implements QueryInterface
             $set[] = "$key = :$key";
         }
         $setClause = implode(', ', $set);
-        $sql = "UPDATE $table SET $setClause WHERE ";
-        $this->query->base = $sql;
+        $this->query->base = "UPDATE $table SET $setClause ";
         $this->query->data = $data;
+        return $this;
+    }
+
+    public function delete(string $table): static
+    {
+        $this->reset();
+        $query = $this->query;
+        $query->type = "delete";
+        $query->base = "DELETE FROM $table ";
         return $this;
     }
 
@@ -87,35 +95,6 @@ class QueryBuilder implements QueryInterface
         $this->query = new stdClass();
     }
 
-    public function getQuery(): string
-    {
-        $query = $this->query;
-        $sql = $query->base;
-        if (!empty($query->where)) {
-            $sql .= " WHERE " . implode(' AND ', $query->where);
-        }
-        if (isset($query->limit)) {
-            $sql .= $query->limit;
-        }
-        $sql .= ";";
-        return $sql;
-    }
-
-    public function all(): false|array|string
-    {
-        $query = $this->query;
-        $sql = $query->base;
-        if (!empty($query->where)) {
-            $sql .= " WHERE " . implode(' AND ', $query->where);
-        }
-        if (isset($query->limit)) {
-            $sql .= $query->limit;
-        }
-        $sql .= ";";
-        $res = $this->DB->query($sql);
-        return !empty($res) ? $res->fetchAll(PDO::FETCH_ASSOC) : "Not found any product!";
-    }
-
     public function orderBy(string $field, string $sort): static
     {
         if ($this->query->type != 'select') {
@@ -126,31 +105,53 @@ class QueryBuilder implements QueryInterface
         return $this;
     }
 
+    public function all(): false|array|string
+    {
+        $res = $this->queryToDB();
+        return !empty($res) ? $res->fetchAll(PDO::FETCH_ASSOC) : "Not found any product!";
+    }
+
     public function get()
+    {
+        $res = $this->queryToDB();
+        return !empty($res) ? $res->fetch(PDO::FETCH_ASSOC) : "Not found any product!";
+    }
+
+    public function save(): bool
+    {
+        return $this->queryToDB(true);
+    }
+
+    protected function queryToDB(bool $prepare = false): bool|PDOStatement
     {
         $query = $this->query;
         $sql = $query->base;
         if (!empty($query->where)) {
             $sql .= " WHERE " . implode(' AND ', $query->where);
         }
-        $sql .= ";";
-        $res = $this->DB->query($sql);
-        return !empty($res) ? $res->fetch(PDO::FETCH_ASSOC) : "Not found any product!";
+        if (isset($query->order)) {
+            $sql .= $query->order;
+        }
+        if (isset($query->limit)) {
+            $sql .= $query->limit;
+        }
+        if ($prepare) {
+            $sql = $this->DB->prepare($sql);
+            foreach ($query->data as $key => $value) {
+                if (is_array($value)) {
+                    $value = json_encode($value);
+                }
+                $sql->bindValue(":$key", $value);
+            }
+            $result = $sql->execute();
+        } else {
+            $result = $this->DB->query($sql);
+        }
+        return $result;
     }
 
-    public function save(): bool
+    #[Override] public function getQuery(): string
     {
-        $sql = $this->query->base;
-        if (!empty($this->query->where)) {
-            $sql .= implode(' AND ', $this->query->where);
-        }
-        $sql = $this->DB->prepare($sql);
-        foreach ($this->query->data as $key => $value) {
-            if (is_array($value)) {
-                $value = json_encode($value);
-            }
-            $sql->bindValue(":$key", $value);
-        }
-        return $sql->execute();
+        return $this->query->base . $this->query->where . $this->query->limit;
     }
 }

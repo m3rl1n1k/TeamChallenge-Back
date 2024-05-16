@@ -4,15 +4,13 @@ namespace App\Repository;
 
 use App\Core\Builder\QueryBuilder;
 use App\Core\DB\AbstractModel;
+use App\Core\Exceptions\BadParameter;
 use App\Core\Request;
 use Exception;
 
 class Shoes extends AbstractModel
 {
-
-
-    public function __construct(protected QueryBuilder $db,
-                                protected Request      $request)
+    public function __construct(protected QueryBuilder $qb)
     {
         $this->table = "shoes";
     }
@@ -22,21 +20,13 @@ class Shoes extends AbstractModel
      */
     public function getAll(array $params = []): false|array|string
     {
-        $page = $params['page'];
+        $page = $params['page'] ?? 1;
         $limit = $params['limit'];
         $begin = ($page * $limit) - $limit;
         $this->setLimit($limit);
         $this->setPage($begin);
-        $this->setSort($params['sort'] ?? "ASC");
+        $this->setSort($params['sort']);
         return $this->findAll();
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function oneRecord(int $record)
-    {
-        return $this->find($record);
     }
 
     public function save(array $data): bool
@@ -47,11 +37,8 @@ class Shoes extends AbstractModel
         return $this->insert($data);
     }
 
-    /**
-     * @throws Exception
-     */
-    public function saveUpdate($data, $article): bool
+    public function findBy($criteria): array|string
     {
-        return $this->update($data, $article);
+        return $criteria;
     }
 }

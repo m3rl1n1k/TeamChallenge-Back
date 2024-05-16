@@ -10,7 +10,15 @@ interface QueryInterface
 
     public function all();
 
+    public function save();
+
     public function select(string $table, array $fields): self;
+
+    public function insert(string $table, array $data): self;
+
+    public function update(string $table, array $data): self;
+
+    public function delete(string $table): self;
 
     public function where(string $field, string $value, string $operator = '='): self;
 

@@ -88,16 +88,6 @@ GET<i/> [http://localhost:8080/api/v1/product/{type}?limit=10&sort=price.up](htt
 
 <b>Params: </b>
 <table>
-
-[//]: # (<tr>)
-
-[//]: # (<td>type</td>)
-
-[//]: # (<td>Select all products by type "shoes"</td>)
-
-[//]: # (<td>etc. shoes/sweats </td>)
-
-[//]: # (</tr>)
 <tr>
 <td>page</td>
 <td>Show page number 1</td>
@@ -148,6 +138,7 @@ POST <i/> [http://localhost:8080/api/v1/product/new/{type}](http://localhost:808
 <tr>
 <td>type</td>
 <td>Name of table where save record</td>
+<td>.../new/shoes</td>
 </tr>
 </table>
 

@@ -2,7 +2,6 @@
 
 namespace App\Auth\Register;
 
-use App\Core\ConnectionDB;
 use App\Core\Interface\AuthenticateInterface;
 use App\Repository\User;
 use Exception;
