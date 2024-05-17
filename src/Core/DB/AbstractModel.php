@@ -35,7 +35,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function find($id)
     {
-        return $this->qb->select($this->table, ['*'])->where('article', $id)->get();
+        return $this->qb->select($this->table, ['article'])->where('article', $id)->get();
     }
 
     public function setLimit(int $limit): static
@@ -75,9 +75,9 @@ abstract class AbstractModel implements ModelInterface
     /**
      * @throws Exception
      */
-    public function update($data, $article): bool
+    public function update($data, $id): bool
     {
-        return $this->qb->update($this->table, $data)->where('article', $article)->save();
+        return $this->qb->update($this->table, $data)->where('article', $id)->save();
     }
 
     public function findBy(array $criteria)
@@ -91,5 +91,12 @@ abstract class AbstractModel implements ModelInterface
     public function delete($id)
     {
         return $this->qb->delete($this->table)->where('article', $id)->get();
+    }
+
+    public function recordNotFound($record): void
+    {
+        if (!$record) {
+            throw new NotFoundException('Record Not found!');
+        }
     }
 }

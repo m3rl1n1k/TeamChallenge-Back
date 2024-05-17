@@ -48,8 +48,8 @@ class ShoesController extends AbstractController
      */
     public function update($request, $article): void
     {
-        $record = $this->shoes->update($request, $article);
-        $record ? $this->response("Updated successfully", HttpStatusCode::OK) : $this->response('Fail', HttpStatusCode::BAD_REQUEST);
+        $this->shoes->update($request, $article);
+        $this->response("Updated successfully", HttpStatusCode::OK);
     }
 
     /**
@@ -57,7 +57,7 @@ class ShoesController extends AbstractController
      */
     public function delete($article): void
     {
-        $res = $this->shoes->delete($article);
-        $res ? $this->response("Deleted!", HttpStatusCode::OK) : $this->response("Fail", HttpStatusCode::BAD_REQUEST);
+        $this->shoes->delete($article);
+        $this->response("Deleted!", HttpStatusCode::OK);
     }
 }

@@ -10,6 +10,8 @@ interface ModelInterface
 
     public function findAll();
 
+    public function update($data, $id);
+
     public function delete(int $id);
 
 }

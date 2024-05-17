@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Auth\Register;
+namespace App\Security\Register;
 
 use App\Core\Interface\AuthenticateInterface;
 use App\Repository\User;

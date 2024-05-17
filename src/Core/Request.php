@@ -56,15 +56,10 @@ class Request implements RequestInterface
         // todo return $this->header->getHeader('Authorization');
     }
 
-    public function getRequestBody(string $uri): false|array|string
+    public function getRequestBody(): false|array|string
     {
-        $new = $this->isPatternUri($uri, '/\/new$/');
-        $update = $this->isPatternUri($uri, '/\/update\/{[a-z]+}$/');
-        if ($new || $update) {
-            // отримуємо тіло запиту
-            return $this->withName()->getContent();
-        }
-        return [];
+        // отримуємо тіло запиту
+        return $this->withName()->getContent();
     }
 
     public function isPatternUri(string $uri, string $pattern = null): ?array

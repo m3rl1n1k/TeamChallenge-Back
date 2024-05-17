@@ -6,6 +6,7 @@ use App\Core\Builder\QueryBuilder;
 use App\Core\DB\AbstractModel;
 use App\Core\Exceptions\BadParameter;
 use App\Core\Request;
+use DiggPHP\Psr11\NotFoundException;
 use Exception;
 
 class Shoes extends AbstractModel
@@ -23,6 +24,7 @@ class Shoes extends AbstractModel
         $page = $params['page'] ?? 1;
         $limit = $params['limit'];
         $begin = ($page * $limit) - $limit;
+
         $this->setLimit($limit);
         $this->setPage($begin);
         $this->setSort($params['sort']);
@@ -35,5 +37,19 @@ class Shoes extends AbstractModel
             throw new Exception("Can't duplicate article {$data['article']}");
         }
         return $this->insert($data);
+    }
+
+    public function update($data, $id): bool
+    {
+        $record = $this->find($id);
+        $this->recordNotFound($record);
+        return $this->qb->update($this->table, $data)->where('article', $id)->save();
+    }
+
+    public function delete($id)
+    {
+        $record = $this->find($id);
+        $this->recordNotFound($record);
+        return $this->qb->delete($this->table)->where('article', $id)->get();
     }
 }

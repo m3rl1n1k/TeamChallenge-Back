@@ -1,8 +1,12 @@
 <?php
 
+use App\API\ExceptionController;
 use App\Core\Config;
+use App\Core\Container\Container;
 
 require_once ROOT . "vendor/autoload.php";
+/** @var ExceptionController $eHandler */
+Container::call(ExceptionController::class);
 // map configs
 Config::instance(
     array_merge(
@@ -13,11 +17,11 @@ Config::instance(
     )
 );
 // check set mode
-function mode($exception): void
-{
-    $res = match (Config::getValue('config.mode')) {
-        'dev' => $exception->getMessage() . " " . $exception->getLine() . " " . $exception->getFile(),
-        'prod' => $exception->getMessage(),
-    };
-    echo $res;
-}
+//function mode($exception): void
+//{
+//    $res = match (Config::getValue('config.mode')) {
+//        'dev' => $exception->getMessage() . " " . $exception->getLine() . " " . $exception->getFile(),
+//        'prod' => $exception->getMessage(),
+//    };
+//    echo $res;
+//}

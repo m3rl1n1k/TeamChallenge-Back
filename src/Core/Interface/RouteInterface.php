@@ -15,6 +15,4 @@ interface RouteInterface
     public function delete(string $uri, string $controller, string $action): RouteInterface;
 
     public function route(): void;
-
-    public function only(string $key);
 }

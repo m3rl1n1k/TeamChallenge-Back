@@ -6,7 +6,7 @@ use App\Core\Container\Container;
 use App\Core\Exceptions\NotSendHeaders;
 use App\Core\Security\Response;
 
-class AbstractController
+abstract class AbstractController
 {
     protected Response $response;
 

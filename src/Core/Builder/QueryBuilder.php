@@ -122,6 +122,11 @@ class QueryBuilder implements QueryInterface
         return $this->queryToDB(true);
     }
 
+    public function makeQuery()
+    {
+        return $this->queryToDB();
+    }
+
     protected function queryToDB(bool $prepare = false): bool|PDOStatement
     {
         $query = $this->query;

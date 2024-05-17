@@ -2,16 +2,11 @@
 
 namespace App\Core;
 
-
 use App\Core\Container\Container;
-use App\Core\Controller\Helper;
 use App\Core\Interface\RouteInterface;
 use BadMethodCallException;
 use DiggPHP\Psr11\NotFoundException;
-use Exception;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
-use ReflectionException;
+use Override;
 
 class Route implements RouteInterface
 {
@@ -19,6 +14,11 @@ class Route implements RouteInterface
 
     public function __construct(protected Request $request)
     {
+    }
+
+    public static function configRoute(): void
+    {
+        require_once ROOT . 'config/route.php';
     }
 
     protected function add(string $uri, string $controller, string $action, string $method): Route
@@ -57,7 +57,7 @@ class Route implements RouteInterface
         return $this->add($uri, $controller, $action, "DELETE");
     }
 
-    public function route(): void
+    #[Override] public function route(): void
     {
         $controller = $action = $args = null;
         $uriIn = $this->request->getUrl();
@@ -86,8 +86,34 @@ class Route implements RouteInterface
     }
 
     /**
-     * @throws Exception
+     * @throws NotFoundException
      */
+    private function callController(string $controller, string $action, array|string $args): void
+    {
+        if (!class_exists($controller)) {
+            throw new NotFoundException("Controller $controller not found!");
+        }
+        if (!method_exists($controller, $action)) {
+            throw new BadMethodCallException("Method $action() not found!");
+        }
+        $controller = Container::call($controller);
+        if (is_string($args)) {
+            call_user_func_array([$controller, $action], []);
+        } else {
+            call_user_func_array([$controller, $action], $args);
+        }
+    }
+
+    protected function getArguments(string $uri, string $uriIn): null|array|string
+    {
+        //отримуєм аргументи з адресного рядка
+        $arg = $this->getParams($uri, $uriIn);
+        unset($request);
+        $request = $this->request->getRequestBody();
+        // merge all data into one array and return
+        return array_merge($arg, $request ?? []);
+    }
+
     private function getParams(string $uri, string $uriIn, $replace = false): array|string
     {
         //get params from URL-line with GET-request
@@ -119,58 +145,12 @@ class Route implements RouteInterface
         return $value ? [$key => $value] : [];
     }
 
-    /**
-     * @throws NotFoundExceptionInterface
-     * @throws ReflectionException
-     * @throws NotFoundException
-     * @throws ContainerExceptionInterface
-     */
-    private function callController(string $controller, string $action, array|string $args): void
-    {
-        if (!class_exists($controller)) {
-            throw new NotFoundException("Controller $controller not found!");
-        }
-        if (!method_exists($controller, $action)) {
-            throw new BadMethodCallException("Method $action() not found!");
-        }
-        $controller = Container::call($controller);
-        if (is_string($args)) {
-            call_user_func_array([$controller, $action], []);
-        } else {
-            call_user_func_array([$controller, $action], $args);
-        }
-    }
-
-    public static function configRoute(): void
-    {
-        require_once ROOT . 'config/route.php';
-    }
-
-    public function only($key)
-    {
-
-    }
-
-    protected function getArguments(string $uri, string $uriIn): null|array|string
-    {
-        //отримуєм аргументи з адресного рядка
-        $arg = $this->getParams($uri, $uriIn);
-
-        $request = $this->request->getRequestBody($uri);
-        // merge all data into one array and return
-        return array_merge($arg, $request ?? []);
-    }
-
     protected function getKey(string $uri): string
     {
         $key = $this->request->isPatternUri($uri);
         if ($key) {
-            $key = str_replace("/", '', $key[0]);
-            $key = str_replace("{", '', $key);
-            return str_replace("}", '', $key);
+            return str_replace(["/", "{", "}"], '', $key[0]);
         }
         return "arg";
     }
-
-
 }
