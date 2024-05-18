@@ -30,12 +30,9 @@ abstract class AbstractModel implements ModelInterface
 
     }
 
-    /**
-     * @throws Exception
-     */
     public function find($id)
     {
-        return $this->qb->select($this->table, ['article'])->where('article', $id)->get();
+        return $this->qb->select($this->table, ['*'])->where('article', $id)->get();
     }
 
     public function setLimit(int $limit): static

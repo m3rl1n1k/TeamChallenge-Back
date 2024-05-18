@@ -12,7 +12,8 @@ Config::instance(
     array_merge(
         [
             'database' => require_once ROOT . "config/database.php",
-            'config' => require ROOT . "/config/config.php"
+            'config' => require ROOT . "/config/config.php",
+            'headers' => require ROOT . "/config/headers.php"
         ]
     )
 );

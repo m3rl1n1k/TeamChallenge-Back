@@ -5,6 +5,7 @@ namespace App\Core\Builder;
 use App\Core\DB\MySQL;
 use App\Core\Interface\QueryInterface;
 use Exception;
+use LogicException;
 use Override;
 use PDO;
 use PDOStatement;
@@ -35,7 +36,7 @@ class QueryBuilder implements QueryInterface
     public function where(string $field, string $value, string $operator = '='): QueryBuilder
     {
         if (!in_array($this->query->type, ['select', 'update', 'delete'])) {
-            throw new Exception("WHERE can only be added to SELECT, UPDATE OR DELETE");
+            throw new LogicException("WHERE can only be added to SELECT, UPDATE OR DELETE");
         }
         $this->query->where[] = "$field $operator '$value'";// price = '10'
 

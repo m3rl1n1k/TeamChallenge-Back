@@ -72,7 +72,7 @@ class Container implements ContainerInterface
         foreach ($constructArguments as $argument) {
             // Получаем тип аргумента
             $argumentType = $argument->getType()->getName();
-            $denied = ['array', 'string', 'int', 'bool'];
+            $denied = ['array', 'string', 'int', 'bool', 'mixed'];
             if (in_array($argumentType, $denied)) {
                 break;
             }

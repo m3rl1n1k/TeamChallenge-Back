@@ -3,6 +3,9 @@
 namespace App\API;
 
 use App\Core\Controller\AbstractController;
+use App\Core\Exceptions\DuplicateRecordsException;
+use App\Core\Exceptions\NotSendHeaders;
+use App\Core\Http\Response;
 use App\Core\HttpStatusCode;
 use App\Core\Request;
 use App\Repository\Shoes;
@@ -18,46 +21,47 @@ class ShoesController extends AbstractController
     /**
      * @throws Exception
      */
-    public function index($params): void
+    public function index($params): Response
     {
         $products = $this->shoes->getAll($params);
-        $products ? $this->response($products, HttpStatusCode::OK) : $this->response('Fail', HttpStatusCode::NOT_FOUND);
+        return $products ? new Response($products) : new Response('Fail', HttpStatusCode::NOT_FOUND);
     }
 
     /**
      * @throws Exception
      */
-    public function show($show): void
+    public function show($show): Response
     {
         $record = $this->shoes->find($show);
         $record['size'] = json_decode($record['size']);
-        $this->response($record, HttpStatusCode::OK);
+        return $record ? new Response($record) : new Response('Fail', HttpStatusCode::NOT_FOUND);
     }
 
     /**
-     * @throws Exception
+     * @throws NotSendHeaders
+     * @throws DuplicateRecordsException
      */
-    public function new($request): void
+    public function new($request): Response
     {
         $record = $this->shoes->save($request);
-        $record ? $this->response("Created successfully", HttpStatusCode::CREATED) : $this->response('Fail', HttpStatusCode::BAD_REQUEST);
+        return $record ? new Response($record) : new Response('Fail', HttpStatusCode::NOT_FOUND);
     }
 
     /**
      * @throws Exception
      */
-    public function update($request, $article): void
+    public function update($request, $article): Response
     {
         $this->shoes->update($request, $article);
-        $this->response("Updated successfully", HttpStatusCode::OK);
+        return new Response("Updated!");
     }
 
     /**
      * @throws Exception
      */
-    public function delete($article): void
+    public function delete($article): Response
     {
         $this->shoes->delete($article);
-        $this->response("Deleted!", HttpStatusCode::OK);
+        return new Response("Deleted!");
     }
 }

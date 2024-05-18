@@ -3,16 +3,14 @@
 namespace App\Core\Security;
 
 use App\Core\Config;
-use App\Core\Header;
-use App\Core\Request;
+use App\Core\Http\Response;
 use Closure;
 use Exception;
 use Firebase\JWT\JWT;
-use Symfony\Component\HttpFoundation\Response;
 
 class Middleware
 {
-    public function __construct(protected Request $request)
+    public function __construct(protected Response $response)
     {
     }
 

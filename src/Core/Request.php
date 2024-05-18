@@ -51,11 +51,6 @@ class Request implements RequestInterface
         return $this;
     }
 
-    public function bearerToken(): ?string
-    {
-        // todo return $this->header->getHeader('Authorization');
-    }
-
     public function getRequestBody(): false|array|string
     {
         // отримуємо тіло запиту

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Core\Builder\QueryBuilder;
 use App\Core\DB\AbstractModel;
 use App\Core\Exceptions\BadParameter;
+use App\Core\Exceptions\DuplicateRecordsException;
 use App\Core\Request;
 use DiggPHP\Psr11\NotFoundException;
 use Exception;
@@ -31,10 +32,13 @@ class Shoes extends AbstractModel
         return $this->findAll();
     }
 
+    /**
+     * @throws DuplicateRecordsException
+     */
     public function save(array $data): bool
     {
         if ($this->find($data['article'])) {
-            throw new Exception("Can't duplicate article {$data['article']}");
+            throw new DuplicateRecordsException("Can't duplicate article {$data['article']}");
         }
         return $this->insert($data);
     }

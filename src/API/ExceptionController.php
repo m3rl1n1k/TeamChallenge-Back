@@ -4,6 +4,7 @@ namespace App\API;
 
 use App\Core\Config;
 use App\Core\Controller\AbstractController;
+use App\Core\Http\Response;
 use App\Core\HttpStatusCode;
 use Throwable;
 
@@ -14,9 +15,9 @@ class ExceptionController extends AbstractController
         @set_exception_handler(array($this, 'handler'));
     }
 
-    public function handler(Throwable $e): void
+    public function handler(Throwable $e): Response
     {
-        $this->response($this->mode($e), HttpStatusCode::BAD_REQUEST);
+        return new Response($this->mode($e), HttpStatusCode::BAD_REQUEST);
     }
 
     protected function mode($e)
