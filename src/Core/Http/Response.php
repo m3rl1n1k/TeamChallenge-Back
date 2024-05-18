@@ -5,7 +5,6 @@ namespace App\Core\Http;
 use App\Core\Config;
 use App\Core\Container\Container;
 use App\Core\Exceptions\NotSendHeaders;
-use App\Core\HttpStatusCode;
 use App\Core\Interface\ResponseInterface;
 use Override;
 
@@ -42,7 +41,7 @@ class Response implements ResponseInterface
         foreach ($this->headers as $header => $value) {
             $this->header->setHeader($header, $value);
         }
-        $this->setData($this->data);
+        $this->setData($this->data); // todo review
         $this->setStatusCode($this->responseCode);
         $this->header->send();
     }
@@ -73,9 +72,10 @@ class Response implements ResponseInterface
     {
         $this->prepareHeaders();
         return json_encode([
-            'code' => $this->getStatusCode(),
-            'headers' => $this->header->getHeaders(),
-            'response' => $this->data
+            'response' => [
+                'code' => $this->getStatusCode(),
+                'headers' => $this->header->getHeaders(),
+                'body' => $this->data]
         ]);
     }
 }

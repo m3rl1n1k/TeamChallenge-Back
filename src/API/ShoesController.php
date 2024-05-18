@@ -5,9 +5,8 @@ namespace App\API;
 use App\Core\Controller\AbstractController;
 use App\Core\Exceptions\DuplicateRecordsException;
 use App\Core\Exceptions\NotSendHeaders;
+use App\Core\Http\HttpStatusCode;
 use App\Core\Http\Response;
-use App\Core\HttpStatusCode;
-use App\Core\Request;
 use App\Repository\Shoes;
 use Exception;
 

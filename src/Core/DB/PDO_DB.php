@@ -5,7 +5,7 @@ namespace App\Core\DB;
 use App\Core\Config;
 use PDO;
 
-class ConnectionDB
+class PDO_DB
 {
 
     private static ?PDO $dbInstance = null;

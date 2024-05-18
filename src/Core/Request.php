@@ -3,6 +3,8 @@
 namespace App\Core;
 
 
+use App\Core\Http\HttpStatusCode;
+use App\Core\Http\Response;
 use App\Core\Interface\RequestInterface;
 
 class Request implements RequestInterface
@@ -65,6 +67,11 @@ class Request implements RequestInterface
             return $matches;
         }
         return null;
+    }
+
+    public function getRequestHeader(string $name): string|Response
+    {
+        return getallheaders()[$name] ?? new Response("Fail to get header with name $name. Maybe header not be sent!", HttpStatusCode::BAD_REQUEST);
     }
 
 }

@@ -3,12 +3,12 @@
 namespace App\API;
 
 use App\Core\Controller\AbstractController;
-use App\Core\HttpStatusCode;
+use App\Core\Http\Response;
 
 class IndexController extends AbstractController
 {
     public function index()
     {
-        $this->response('Use Documentation for API!', HttpStatusCode::OK);
+        new Response('Use Documentation for API!');
     }
 }

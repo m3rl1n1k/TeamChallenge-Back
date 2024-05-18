@@ -3,6 +3,8 @@
 namespace App\Security\Authentication;
 
 use App\Core\Config;
+use App\Core\Http\HttpStatusCode;
+use App\Core\Http\Response;
 use App\Core\Interface\AuthenticateInterface;
 use App\Core\Security\Password;
 use App\Repository\User;
@@ -23,12 +25,12 @@ class Authentication implements AuthenticateInterface
     /**
      * @throws Exception
      */
-    public function handle(array $userData): string
+    public function handle(array $userData): string|Response
     {
         $this->userCredentials = $userData;
         $email = $userData['email'];
         $password = $userData['password'];
-        return $this->credentialsMatch($email, $password) ? $this->onSuccess() : $this->onFail();
+        return $this->credentialsMatch($email, $password);
     }
 
     protected function onSuccess(): string
@@ -36,23 +38,22 @@ class Authentication implements AuthenticateInterface
         $payload = $this->userCredentials;
         $key = Config::getValue('config.token');
         return $this->token::encode($payload, $key, 'HS512');
-
     }
 
-    protected function onFail(): string
+    protected function onFail(): Response
     {
-        return false;
+        return new Response("Invalid credentials!", HttpStatusCode::FORBIDDEN);
     }
 
     /**
      * @throws Exception
      */
-    protected function credentialsMatch(string $email, string $password): bool
+    protected function credentialsMatch(string $email, string $password): string|Response
     {
-        $user = $this->user->get($email);
-        if ($user['email'] === $email && $user['password'] == Password::decrypt($password, $user['password'])) {
-            return true;
+        $user = $this->user->getUser($email);
+        if ($user['email'] === $email && $user['password'] === Password::decrypt($password, $user['password'])) {
+            return $this->onSuccess();
         }
-        return false;
+        return $this->onFail();
     }
 }

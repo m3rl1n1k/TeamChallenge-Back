@@ -4,8 +4,9 @@ namespace App\API;
 
 use App\Core\Config;
 use App\Core\Controller\AbstractController;
+use App\Core\Exceptions\NotSendHeaders;
+use App\Core\Http\HttpStatusCode;
 use App\Core\Http\Response;
-use App\Core\HttpStatusCode;
 use Throwable;
 
 class ExceptionController extends AbstractController
@@ -15,6 +16,9 @@ class ExceptionController extends AbstractController
         @set_exception_handler(array($this, 'handler'));
     }
 
+    /**
+     * @throws NotSendHeaders
+     */
     public function handler(Throwable $e): Response
     {
         return new Response($this->mode($e), HttpStatusCode::BAD_REQUEST);

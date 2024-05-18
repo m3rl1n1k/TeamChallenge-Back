@@ -11,7 +11,7 @@ class MySQL implements ConnectionToDBInterface
 
     #[Override] public static function connect(): ?PDO
     {
-        return ConnectionDB::getInstance();
+        return PDO_DB::getInstance();
     }
 
 }

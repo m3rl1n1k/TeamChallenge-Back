@@ -22,7 +22,7 @@ class QueryBuilder implements QueryInterface
 
     private stdClass $query;
 
-    public function select(string $table, array $fields): QueryBuilder
+    public function select(string $table, array $fields = ['*']): QueryBuilder
     {
         $this->reset();
         $this->query->type = 'select';
@@ -83,7 +83,7 @@ class QueryBuilder implements QueryInterface
         if ($offset > 10 || $offset === null) {
             $offset = 10;
         }
-        if ($this->query->type != 'select') {
+        if ($this->query->type !== 'select') {
             throw new Exception("LIMIT can only be added to SELECT");
         }
         $this->query->limit = " LIMIT " . $start . ", " . $offset;

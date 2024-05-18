@@ -22,7 +22,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function findAll(): false|array|string
     {
-        $records = $this->qb->select($this->table, ['*'])->limit($this->limit, $this->page)->orderBy($this->orderBy[0], $this->orderBy[1])->all();
+        $records = $this->qb->select($this->table)->limit($this->limit, $this->page)->orderBy($this->orderBy[0], $this->orderBy[1])->all();
         foreach ($records as $key => $record) {
             $records[$key]['size'] = json_decode($record['size']);
         }
@@ -32,7 +32,7 @@ abstract class AbstractModel implements ModelInterface
 
     public function find($id)
     {
-        return $this->qb->select($this->table, ['*'])->where('article', $id)->get();
+        return $this->qb->select($this->table)->where('article', $id)->get();
     }
 
     public function setLimit(int $limit): static
@@ -77,9 +77,12 @@ abstract class AbstractModel implements ModelInterface
         return $this->qb->update($this->table, $data)->where('article', $id)->save();
     }
 
+    /**
+     * @throws Exception
+     */
     public function findBy(array $criteria)
     {
-        return "Method not realized";
+        return $this->qb->select($this->table)->where(array_key_first($criteria), array_values($criteria)[0])->get();
     }
 
     /**

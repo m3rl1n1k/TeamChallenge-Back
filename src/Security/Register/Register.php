@@ -27,7 +27,7 @@ class Register implements AuthenticateInterface
      */
     protected function onSuccess(array $userData): string
     {
-        if ($this->user->setUser($userData)) {
+        if ($this->user->insert($userData)) {
             return "Successfully registered";
         }
         return $this->onFail();

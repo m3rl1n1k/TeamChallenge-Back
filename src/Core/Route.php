@@ -4,6 +4,7 @@ namespace App\Core;
 
 use App\Core\Container\Container;
 use App\Core\Interface\RouteInterface;
+use App\Core\Security\Middleware;
 use BadMethodCallException;
 use DiggPHP\Psr11\NotFoundException;
 use Override;
@@ -12,7 +13,7 @@ class Route implements RouteInterface
 {
     private array $routes;
 
-    public function __construct(protected Request $request)
+    public function __construct(protected Request $request, protected Middleware $middleware)
     {
     }
 
@@ -82,6 +83,7 @@ class Route implements RouteInterface
             throw new NotFoundException("Controller $controller or route $uriIn not found!");
         }
         // Викликаємо метод контролера з переданими аргументами
+//        if ($this->middleware->handler())
         $this->callController($controller, $action, $args);
     }
 
@@ -90,6 +92,7 @@ class Route implements RouteInterface
      */
     private function callController(string $controller, string $action, array|string $args): void
     {
+
         if (!class_exists($controller)) {
             throw new NotFoundException("Controller $controller not found!");
         }
@@ -152,5 +155,11 @@ class Route implements RouteInterface
             return str_replace(["/", "{", "}"], '', $key[0]);
         }
         return "arg";
+    }
+
+    public function only(string $key): static
+    {
+        $this->routes[array_key_last($this->routes)]['middleware'] = $key;
+        return $this;
     }
 }

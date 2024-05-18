@@ -3,7 +3,7 @@
 namespace App\API;
 
 use App\Core\Controller\AbstractController;
-use App\Core\HttpStatusCode;
+use App\Core\Http\Response;
 use App\Security\Authentication\Authentication;
 use Exception;
 
@@ -27,6 +27,6 @@ class LoginController extends AbstractController
         } else {
             $msg['failed'] = 'Security is failed!';
         }
-        $this->response($msg, HttpStatusCode::OK);
+        return new Response($msg);
     }
 }
