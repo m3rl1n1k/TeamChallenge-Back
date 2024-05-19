@@ -1,9 +1,8 @@
 <?php
 
-namespace App\API;
+namespace App\Core\Controller;
 
 use App\Core\Config;
-use App\Core\Controller\AbstractController;
 use App\Core\Exceptions\NotSendHeaders;
 use App\Core\Http\HttpStatusCode;
 use App\Core\Http\Response;

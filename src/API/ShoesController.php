@@ -31,19 +31,18 @@ class ShoesController extends AbstractController
      */
     public function show($show): Response
     {
-        $record = $this->shoes->find($show);
+        $record = $this->shoes->findBy(['article' => $show]);
         $record['size'] = json_decode($record['size']);
         return $record ? new Response($record) : new Response('Fail', HttpStatusCode::NOT_FOUND);
     }
 
     /**
-     * @throws NotSendHeaders
      * @throws DuplicateRecordsException
      */
     public function new($request): Response
     {
         $record = $this->shoes->save($request);
-        return $record ? new Response($record) : new Response('Fail', HttpStatusCode::NOT_FOUND);
+        return $record ? new Response("Created!") : new Response('Fail', HttpStatusCode::NOT_FOUND);
     }
 
     /**

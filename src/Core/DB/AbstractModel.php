@@ -30,24 +30,19 @@ abstract class AbstractModel implements ModelInterface
 
     }
 
-    public function find($id)
+    public function setLimit(?int $limit): static
     {
-        return $this->qb->select($this->table)->where('article', $id)->get();
-    }
-
-    public function setLimit(int $limit): static
-    {
-        $this->limit = $limit;
+        $this->limit = $limit ?? 10;
         return $this;
     }
 
-    public function setPage(int $page): static
+    public function setPage(?int $page = 1): static
     {
         $this->page = $page;
         return $this;
     }
 
-    public function setSort(string $orderBy): static
+    public function setSort(string $orderBy = 'up'): static
     {
         $this->orderBy = $this->orderPrepare($orderBy);
         return $this;

@@ -63,27 +63,26 @@ class Route implements RouteInterface
         $controller = $action = $args = null;
         $uriIn = $this->request->getUrl();
         $methodIn = $this->request->getMethod();
+        foreach ($this->routes as $route => $param) {
 
-        foreach ($this->routes as $uri => $param) {
-
-            $args = $this->getArguments($uri, $uriIn);
+            $args = $this->getArguments($route, $uriIn);
             $args = empty(!$args) ? $args : [];
             // якщо урл має патерн {show} тоді заміняєм його на значення яке передане в урлі
-            $uri = $this->request->isPatternUri($uri) ? $this->getParams($uri, $uriIn, true) : $uri;
-
+            $route = $this->request->isPatternUri($route) ? $this->getParams($route, $uriIn, true) : $route;
             // Перевіряємо, чи співпадає URI та метод
-            if ($uriIn === $uri && strtoupper($methodIn) === $param['method']) {
+            if ($uriIn === $route && strtoupper($methodIn) === $param['method']) {
                 $controller = $param['controller'];
                 $action = $param['action'];
+                $this->middleware->middleware($param['middleware']);
                 break;
             }
+
         }
         //Перевірка наявності контролкера
         if (is_null($controller)) {
             throw new NotFoundException("Controller $controller or route $uriIn not found!");
         }
         // Викликаємо метод контролера з переданими аргументами
-//        if ($this->middleware->handler())
         $this->callController($controller, $action, $args);
     }
 

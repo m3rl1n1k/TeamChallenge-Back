@@ -24,8 +24,8 @@ class Shoes extends AbstractModel
     {
         $page = $params['page'] ?? 1;
         $limit = $params['limit'];
-        $begin = ($page * $limit) - $limit;
-
+        if ($page)
+            $begin = ($page * $limit) - $limit;
         $this->setLimit($limit);
         $this->setPage($begin);
         $this->setSort($params['sort']);
@@ -34,10 +34,11 @@ class Shoes extends AbstractModel
 
     /**
      * @throws DuplicateRecordsException
+     * @throws Exception
      */
     public function save(array $data): bool
     {
-        if ($this->find($data['article'])) {
+        if ($this->findBy(['article' => $data['article']])) {
             throw new DuplicateRecordsException("Can't duplicate article {$data['article']}");
         }
         return $this->insert($data);
@@ -45,14 +46,14 @@ class Shoes extends AbstractModel
 
     public function update($data, $id): bool
     {
-        $record = $this->find($id);
+        $record = $this->findBy(['article' => $id]);
         $this->recordNotFound($record);
         return $this->qb->update($this->table, $data)->where('article', $id)->save();
     }
 
     public function delete($id)
     {
-        $record = $this->find($id);
+        $record = $this->findBy(['article' => $id]);
         $this->recordNotFound($record);
         return $this->qb->delete($this->table)->where('article', $id)->get();
     }

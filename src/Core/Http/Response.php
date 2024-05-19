@@ -6,6 +6,7 @@ use App\Core\Config;
 use App\Core\Container\Container;
 use App\Core\Exceptions\NotSendHeaders;
 use App\Core\Interface\ResponseInterface;
+use JetBrains\PhpStorm\NoReturn;
 use Override;
 
 class Response implements ResponseInterface
@@ -20,15 +21,15 @@ class Response implements ResponseInterface
     /**
      * @throws NotSendHeaders
      */
-    public function __construct(mixed $data, int $responseCode = HttpStatusCode::OK, array $headers = [], bool $jsonResponse = true)
+    #[NoReturn] public function __construct(mixed $data, int $responseCode = HttpStatusCode::OK, array $headers = [])
     {
         $this->data = $data;
         $this->responseCode = $responseCode;
         $this->headers = $headers;
-        if ($jsonResponse) {
-            $this->jsonResponse = Config::getValue('headers.jsonResponse');
-        }
+        $this->jsonResponse = Config::getValue('headers.jsonResponse');
         echo $this->response();
+        exit();
+
     }
 
     /**

@@ -18,12 +18,12 @@ $route->post('/api/v1/registration', RegistrationController::class, 'register');
 //shoes
 $route->get('/api/v1/product/shoes', ShoesController::class, 'index');
 $route->get('/api/v1/product/shoes/show/{show}', ShoesController::class, 'show');
-$route->post('/api/v1/product/shoes/new', ShoesController::class, 'new')->only('auth');
-$route->put('/api/v1/product/shoes/update/{article}', ShoesController::class, 'update')->only('auth');
-$route->delete('/api/v1/product/shoes/delete/{article}', ShoesController::class, 'delete')->only('auth');
+$route->post('/api/v1/product/shoes/new', ShoesController::class, 'new')->only('admin');
+$route->put('/api/v1/product/shoes/update/{article}', ShoesController::class, 'update')->only('admin');
+$route->delete('/api/v1/product/shoes/delete/{article}', ShoesController::class, 'delete')->only('admin');
 
 //Accessories
-$route->get('/api/v1/product/accessories', ShoesController::class, 'index');
+$route->get('/api/v1/product/accessories', ShoesController::class, 'index')->only('auth');
 
 
 $route->route();

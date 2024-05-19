@@ -3,6 +3,7 @@
 namespace App\Security\Authentication;
 
 use App\Core\Config;
+use App\Core\Exceptions\BadParameter;
 use App\Core\Http\HttpStatusCode;
 use App\Core\Http\Response;
 use App\Core\Interface\AuthenticateInterface;
@@ -37,23 +38,23 @@ class Authentication implements AuthenticateInterface
     {
         $payload = $this->userCredentials;
         $key = Config::getValue('config.token');
-        return $this->token::encode($payload, $key, 'HS512');
+        return $this->token::encode($payload, $key, 'HS256');
     }
 
-    protected function onFail(): Response
+    protected function onFail(): void
     {
-        return new Response("Invalid credentials!", HttpStatusCode::FORBIDDEN);
+        throw new BadParameter("Invalid credentials!");
     }
 
     /**
      * @throws Exception
      */
-    protected function credentialsMatch(string $email, string $password): string|Response
+    protected function credentialsMatch(string $email, string $password)
     {
-        $user = $this->user->getUser($email);
-        if ($user['email'] === $email && $user['password'] === Password::decrypt($password, $user['password'])) {
+        $user = $this->user->findBy(['email' => $email]);
+        if ($user['email'] === $email && Password::decrypt($password, $user['password'])) {
             return $this->onSuccess();
         }
-        return $this->onFail();
+        $this->onFail();
     }
 }

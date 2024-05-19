@@ -2,9 +2,13 @@
 
 namespace App\Security\Register;
 
+use App\Core\Http\HttpStatusCode;
+use App\Core\Http\Response;
 use App\Core\Interface\AuthenticateInterface;
+use App\Core\Security\Password;
 use App\Repository\User;
 use Exception;
+use LogicException;
 
 class Register implements AuthenticateInterface
 {
@@ -19,18 +23,21 @@ class Register implements AuthenticateInterface
      */
     public function handle(array $userData): void
     {
-            $this->onSuccess($userData) ?? $this->onFail();
+        if ($userData['password'] !== $userData['re-password']) {
+            throw new LogicException("Passwords not matches!");
+        }
+        $userData['password'] = Password::encrypt($userData['password']);
+        unset($userData['re-password']);
+        $result = $this->user->newUser($userData);
+        $result ? $this->onSuccess() : $this->onFail();
     }
 
     /**
      * @throws Exception
      */
-    protected function onSuccess(array $userData): string
+    protected function onSuccess(): void
     {
-        if ($this->user->insert($userData)) {
-            return "Successfully registered";
-        }
-        return $this->onFail();
+        new Response("Register successfully!", HttpStatusCode::CREATED);
     }
 
     /**
@@ -38,7 +45,7 @@ class Register implements AuthenticateInterface
      */
     protected function onFail()
     {
-        throw new Exception('Register is failed!');
+        throw new Exception('Register is failed!', HttpStatusCode::BAD_REQUEST);
     }
 
 

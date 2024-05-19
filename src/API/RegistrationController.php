@@ -2,10 +2,10 @@
 
 namespace App\API;
 
-use App\Auth\Register\Register;
+
 use App\Core\Controller\AbstractController;
+use App\Security\Register\Register;
 use Exception;
-use Symfony\Component\HttpFoundation\Response;
 
 class RegistrationController extends AbstractController
 {
