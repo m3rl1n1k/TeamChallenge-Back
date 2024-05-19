@@ -19,7 +19,7 @@ class Shoes extends AbstractModel
      */
     public function getAll(array $params = []): false|array|string
     {
-        $page = $params['page'] ?? 1;
+        $page = $params['page'];
         $limit = $params['limit'];
         if ($page)
             $begin = ($page * $limit) - $limit;

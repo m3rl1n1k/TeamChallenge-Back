@@ -36,7 +36,7 @@ abstract class AbstractModel implements ModelInterface
         return $this;
     }
 
-    public function setPage(?int $page = 1): static
+    public function setPage(?int $page): static
     {
         $this->page = $page;
         return $this;
@@ -91,7 +91,7 @@ abstract class AbstractModel implements ModelInterface
     public function recordNotFound($record): void
     {
         if (!$record) {
-            throw new NotFoundException('Record Not found!');
+            throw new NotFoundException('Record not found!');
         }
     }
 }

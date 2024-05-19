@@ -4,7 +4,6 @@ namespace App\API;
 
 use App\Core\Controller\AbstractController;
 use App\Core\Exceptions\DuplicateRecordsException;
-use App\Core\Exceptions\NotSendHeaders;
 use App\Core\Http\HttpStatusCode;
 use App\Core\Http\Response;
 use App\Repository\Shoes;
@@ -23,7 +22,7 @@ class ShoesController extends AbstractController
     public function index($params): Response
     {
         $products = $this->shoes->getAll($params);
-        return $products ? new Response($products) : new Response('Fail', HttpStatusCode::NOT_FOUND);
+        return $products ? new Response($products) : new Response('Not have more records!', HttpStatusCode::NOT_FOUND);
     }
 
     /**
