@@ -9,7 +9,7 @@ use App\Core\JWToken;
 use App\Repository\User;
 
 
-class Auth implements MiddlewareInterface
+class AuthMiddleware implements MiddlewareInterface
 {
     public function __construct(protected JWToken $JWToken, protected User $user)
     {

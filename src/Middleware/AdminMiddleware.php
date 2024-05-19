@@ -8,7 +8,7 @@ use App\Core\Interface\MiddlewareInterface;
 use App\Core\JWToken;
 use App\Repository\User;
 
-class Admin implements MiddlewareInterface
+class AdminMiddleware implements MiddlewareInterface
 {
 
     public function __construct(protected JWToken $JWToken, protected User $user)

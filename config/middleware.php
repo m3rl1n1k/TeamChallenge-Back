@@ -1,11 +1,12 @@
 <?php
 
-use App\Middleware\Admin;
-use App\Middleware\Auth;
-use App\Middleware\Guest;
+use App\Middleware\AdminMiddleware;
+use App\Middleware\AuthMiddleware;
+use App\Middleware\GuestMiddleware;
 
+//create class in src\Middleware\YourMiddleware
 return [
-    'admin' => Admin::class,
-    'auth' => Auth::class,
-    'guest' => Guest::class
+    'admin' => AdminMiddleware::class,
+    'auth' => AuthMiddleware::class,
+    'guest' => GuestMiddleware::class
 ];
