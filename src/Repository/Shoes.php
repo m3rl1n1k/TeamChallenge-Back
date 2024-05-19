@@ -4,10 +4,7 @@ namespace App\Repository;
 
 use App\Core\Builder\QueryBuilder;
 use App\Core\DB\AbstractModel;
-use App\Core\Exceptions\BadParameter;
 use App\Core\Exceptions\DuplicateRecordsException;
-use App\Core\Request;
-use DiggPHP\Psr11\NotFoundException;
 use Exception;
 
 class Shoes extends AbstractModel

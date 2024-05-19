@@ -13,7 +13,7 @@ class Middleware
     public function middleware($middleware)
     {
         $middleware = $middleware ?? 'guest';
-        $class = Config::getValue("middleware.$middleware");
+        $class = Config::getValue("middleware.middleware.$middleware");
         /** @var MiddlewareInterface|string $class */
         if ($class)
             $response = Container::call($class)->handler();

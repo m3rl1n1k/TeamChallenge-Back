@@ -13,6 +13,7 @@ $route = Container::call(Route::class);
 $route->get('/', IndexController::class, 'index');
 //Security
 $route->post('/api/v1/login', LoginController::class, 'auth');
+$route->get('/api/v1/logout', LoginController::class, 'logout');
 $route->post('/api/v1/registration', RegistrationController::class, 'register');
 
 //shoes

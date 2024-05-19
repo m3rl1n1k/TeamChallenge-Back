@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Core;
+namespace App\Core\Http;
 
 
-use App\Core\Http\HttpStatusCode;
-use App\Core\Http\Response;
 use App\Core\Interface\RequestInterface;
 
 class Request implements RequestInterface

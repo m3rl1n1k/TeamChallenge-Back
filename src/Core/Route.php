@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use App\Core\Container\Container;
+use App\Core\Http\Request;
 use App\Core\Interface\RouteInterface;
 use App\Core\Security\Middleware;
 use BadMethodCallException;

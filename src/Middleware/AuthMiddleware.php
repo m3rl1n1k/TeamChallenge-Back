@@ -5,7 +5,7 @@ namespace App\Middleware;
 use App\Core\Exceptions\NotSendHeaders;
 use App\Core\Http\Response;
 use App\Core\Interface\MiddlewareInterface;
-use App\Core\JWToken;
+use App\Core\Security\JWToken;
 use App\Repository\User;
 
 
