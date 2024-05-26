@@ -84,7 +84,7 @@ class Authentication implements AuthenticateInterface
             "user" => $this->userCredentials
         ];
         $key = Config::getValue('middleware.token');
-        return $this->jwt::encode($payload, $key, 'HS256');
+        return "Bearer " . $this->jwt::encode($payload, $key, 'HS256');
     }
 
     public function logout(): void

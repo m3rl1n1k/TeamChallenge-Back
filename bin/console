@@ -1,0 +1,31 @@
+#! /usr/bin/env php
+<?php
+
+
+use App\Core\Config;
+use App\Core\Container\Container;
+use App\Core\Controller\ExceptionController;
+
+require_once load_file("../vendor/autoload.php");
+Config::instance(
+    [
+        'database' => require_once load_file("../config/database.php")
+    ]
+);
+
+Container::call(ExceptionController::class)->CLI_handler();
+
+global $argv;
+
+match ($argv[1]) {
+    "table:create" => Container::call("App\Tables\\" . ucfirst($argv[2]) . "_table")->run()
+};
+
+function load_file(string $path): string|array
+{
+    if (!is_file($path))
+        return str_replace('../', '', $path);
+    else {
+        return $path;
+    }
+}

@@ -5,20 +5,20 @@ use App\Core\Container\Container;
 use App\Core\Controller\ExceptionController;
 use App\Core\Session;
 
-require_once ROOT . "vendor/autoload.php";
+require_once "../vendor/autoload.php";
 
-Session::sessionStart();
+//Session::sessionStart();
 
-/** @var \App\Core\Controller\ExceptionController $eHandler */
+/** @var ExceptionController $eHandler */
 Container::call(ExceptionController::class);
 // map configs
 Config::instance(
     array_merge(
         [
-            'database' => require_once ROOT . "config/database.php",
-            'config' => require ROOT . "/config/config.php",
-            'headers' => require ROOT . "/config/headers.php",
-            'middleware' => require ROOT . "/config/middleware.php",
+            'database' => require_once "../config/database.php",
+            'config' => require "../config/config.php",
+            'headers' => require "../config/headers.php",
+            'middleware' => require "../config/middleware.php",
         ]
     )
 );

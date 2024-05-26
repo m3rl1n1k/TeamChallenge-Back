@@ -24,6 +24,7 @@ class PDO_DB
 
     public static function getInstance(): ?PDO
     {
+
         // Check if database is null
         if (self::$dbInstance === null) {
             // Create a new PDO connection

@@ -4,6 +4,7 @@ namespace App\Core\Controller;
 
 use App\Core\Config;
 use App\Core\Exceptions\NotSendHeaders;
+use App\Core\Helper\Printer;
 use App\Core\Http\HttpStatusCode;
 use App\Core\Http\Response;
 use Throwable;
@@ -29,5 +30,16 @@ class ExceptionController extends AbstractController
             'dev' => $e->getMessage() . " " . $e->getLine() . " " . $e->getFile(),
             'prod' => $e->getMessage(),
         };
+    }
+
+    public function CLI_handler(): void
+    {
+        @set_exception_handler(array($this, 'cli_exception'));
+    }
+
+    public function cli_exception(Throwable $e): void
+    {
+        $msg = $e->getMessage() . " " . $e->getFile() . " " . $e->getFile();
+        Printer::printString($msg, Printer::ANSI_RED);
     }
 }
