@@ -31,7 +31,7 @@ $params['sort'] = "price.up";
         $this->setLimit($limit);
         $this->setPage($begin);
         $this->setSort($params['sort']);
-        return $this->findAll();
+        return $this->getChunked();
     }
 
     /**
