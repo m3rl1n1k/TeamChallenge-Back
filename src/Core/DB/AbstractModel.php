@@ -20,7 +20,7 @@ abstract class AbstractModel implements ModelInterface
     /**
      * @throws Exception
      */
-    public function findAll(): false|array|string
+    public function getChunked(): false|array|string
     {
         $records = $this->qb->select($this->table)->limit($this->limit, $this->page)->orderBy($this->orderBy[0], $this->orderBy[1])->all();
         foreach ($records as $key => $record) {
