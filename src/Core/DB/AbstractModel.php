@@ -94,4 +94,10 @@ abstract class AbstractModel implements ModelInterface
             throw new NotFoundException('Record not found!');
         }
     }
+public function setDefaultParams()
+{
+return [
+
+]
+}
 }
