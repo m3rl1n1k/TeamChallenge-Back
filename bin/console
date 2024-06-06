@@ -5,27 +5,42 @@
 use App\Core\Config;
 use App\Core\Container\Container;
 use App\Core\Controller\ExceptionController;
+use App\Core\Helper\Printer;
 
 require_once load_file("../vendor/autoload.php");
 Config::instance(
-    [
-        'database' => require_once load_file("../config/database.php")
-    ]
+	[
+		'database' => require_once load_file("../config/database.php")
+	]
 );
 
 Container::call(ExceptionController::class)->CLI_handler();
 
 global $argv;
 
+function callCreateTable($argv): void
+{
+	if (empty($argv[2])) {
+		Printer::printString('Not fount table', Printer::ANSI_RED);
+		exit();
+	}
+	Container::call("App\Tables\\" . ucfirst($argv[2]) . "_table")->run();
+}
+
 match ($argv[1]) {
-    "table:create" => Container::call("App\Tables\\" . ucfirst($argv[2]) . "_table")->run()
+	"help" => Printer::printArray([
+		'table:create' => "table:create user. Call code from folder 'Tables' in file 'user_tables.php'",
+	]),
+	"table:create" => callCreateTable($argv),
+	default => Printer::printString("Not found command. Type 'help' for more info")
 };
 
 function load_file(string $path): string|array
 {
-    if (!is_file($path))
-        return str_replace('../', '', $path);
-    else {
-        return $path;
-    }
+	if (!is_file($path))
+		return str_replace('../', '', $path);
+	else {
+		return $path;
+	}
 }
+

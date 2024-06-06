@@ -2,22 +2,26 @@
 
 namespace App\Tables;
 
-use App\Core\StupidAR\AbstractTable;
+
+use App\Core\StupidAR\Table;
 use App\Core\StupidAR\TableTrait;
 
-class user_table extends AbstractTable
+class user_table extends Table
 {
-    protected string $table = "user";
-    protected array $fields = [
-        'id' => 'INT AUTO_INCREMENT PRIMARY KEY',
-        'first name' => 'VARCHAR(255)',
-        'last name' => 'VARCHAR(255)',
-        'address' => 'VARCHAR(255)',
-        'city' => 'VARCHAR(255)',
-        'state' => 'VARCHAR(255)',
-        'zip code' => 'VARCHAR(10)',
-        'phone' => 'VARCHAR(20)'
-    ];
-    
-    use TableTrait;
+	protected string $table = "user";
+	protected array $fields = [
+		'id' => 'INT AUTO_INCREMENT PRIMARY KEY',
+		'email' => 'VARCHAR(255) NOT NULL',
+		'password' => 'VARCHAR(255) NOT NULL',
+		'first name' => 'VARCHAR(255)',
+		'last name' => 'VARCHAR(255)',
+		'address' => 'VARCHAR(255)',
+		'city' => 'VARCHAR(255)',
+		'state' => 'VARCHAR(255)',
+		'zip code' => 'VARCHAR(10)',
+		'phone' => 'VARCHAR(20)',
+		'role' => 'JSON'
+	];
+
+	use TableTrait;
 }

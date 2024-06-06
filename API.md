@@ -89,7 +89,7 @@ GET<i/> [http://localhost:8080/api/v1/product/{type}?limit=10&sort=price.up](htt
 <b>Params: </b>
 <table>
 <tr>
-<td>page</td>
+<td>page*</td>
 <td>Show page number 1</td>
 <td>page=1</td>
 </tr>

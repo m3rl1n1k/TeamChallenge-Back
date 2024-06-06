@@ -28,9 +28,9 @@ class ShoesController extends AbstractController
     /**
      * @throws Exception
      */
-    public function show($show): Response
+    public function show($article): Response
     {
-        $record = $this->shoes->findBy(['article' => $show]);
+        $record = $this->shoes->findBy(['article' => $article]);
         $record['size'] = json_decode($record['size']);
         return $record ? new Response($record) : new Response('Fail', HttpStatusCode::NOT_FOUND);
     }
