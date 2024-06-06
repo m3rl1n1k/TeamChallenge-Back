@@ -19,10 +19,15 @@ class Shoes extends AbstractModel
      */
     public function getAll(array $params = []): false|array|string
     {
+if(empty(params){
+ $params['page'] = 1;
+        $params['limit'] = 10;
+$params['sort'] = "price.up";
+
+})
         $page = $params['page'];
         $limit = $params['limit'];
-        if ($page)
-            $begin = ($page * $limit) - $limit;
+        $begin = ($page * $limit) - $limit;
         $this->setLimit($limit);
         $this->setPage($begin);
         $this->setSort($params['sort']);
