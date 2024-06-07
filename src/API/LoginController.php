@@ -4,7 +4,7 @@ namespace App\API;
 
 use App\Core\Controller\AbstractController;
 use App\Core\Http\Response;
-use App\Security\Authentication\Authentication;
+use App\Security\Authentication;
 use Exception;
 
 
@@ -30,7 +30,7 @@ class LoginController extends AbstractController
 		return new Response($msg);
 	}
 
-	public function logout()
+	public function logout(): void
 	{
 		$this->authentication->logout();
 	}

@@ -26,7 +26,6 @@ class JWToken
 		if (empty($token)) {
 			new Response("Forbidden!", HttpStatusCode::FORBIDDEN);
 		}
-		$token = substr($token, 7);
 		try {
 			$key = Config::getValue('middleware.token');
 			$headers = new stdClass();

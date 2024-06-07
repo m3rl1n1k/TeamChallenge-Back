@@ -11,8 +11,15 @@ class Table
 
 	public function run(): void
 	{
-		/** @var RunSQLScript $script */
-		$script = Container::call(RunSQLScript::class);
+		/** @var RunTableMigration $script */
+		$script = Container::call(RunTableMigration::class);
+		$script->runSQL($this);
+	}
+
+	public function drop(): void
+	{
+		/** @var DropTableMigration $script */
+		$script = Container::call(DropTableMigration::class);
 		$script->runSQL($this);
 	}
 

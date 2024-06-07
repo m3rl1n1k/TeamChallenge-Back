@@ -19,8 +19,8 @@ class shoes_table extends Table
 		'price' => 'DECIMAL(10, 2) NOT NULL',
 		'genre' => 'VARCHAR(50) NOT NULL',
 		'description' => 'TEXT NOT NULL',
-		'created_at' => 'DATETIME',
-		'updated_at' => 'DATETIME'
+		'created_at' => 'DATETIME DEFAULT NOW()',
+		'updated_at' => 'DATETIME DEFAULT'
 	];
 
 	use TableTrait;

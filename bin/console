@@ -27,11 +27,22 @@ function callCreateTable($argv): void
 	Container::call("App\Tables\\" . ucfirst($argv[2]) . "_table")->run();
 }
 
+function dropTable(array $argv): void
+{
+	if (empty($argv[2])) {
+		Printer::printString('Not fount table', Printer::ANSI_RED);
+		exit();
+	}
+	Container::call("App\Tables\\" . ucfirst($argv[2]) . "_table")->drop();
+}
+
 match ($argv[1]) {
 	"help" => Printer::printArray([
 		'table:create' => "table:create user. Call code from folder 'Tables' in file 'user_tables.php'",
+		'table:drop' => "table:drop user. Drop set table",
 	]),
 	"table:create" => callCreateTable($argv),
+	"table:drop" => dropTable($argv),
 	default => Printer::printString("Not found command. Type 'help' for more info")
 };
 

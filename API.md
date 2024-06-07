@@ -14,7 +14,7 @@
 
 [//]: # ()
 
-[//]: # (<b>Body&#40;only json&#41;: </b> <pre>{}</pre>)
+[//]: # (<b>Body&#40;json&#41;: </b> <pre>{}</pre>)
 
 [//]: # ()
 
@@ -35,7 +35,7 @@
 
 <b>Headers: </b> <i>Empty<i/>
 
-<b>Body(only json): </b> <i>Empty<i/>
+<b>Body(json): </b> <i>Empty<i/>
 
 <b>Params: </b><i>Empty</i>
 
@@ -48,7 +48,7 @@
 
 <b>Headers: </b> <i>Content-Type: application/json<i/>
 
-<b>Body(only json): </b>
+<b>Body(json): </b>
 <pre>{ 
 "email": "m3rl1n1k@gmail.com", 
 "password": "1111" 
@@ -65,7 +65,7 @@ POST<i/> [http://localhost:8080/api/v1/registration](http://localhost:8080/api/v
 
 <b>Headers: </b> <i>Content-Type: application/json<i/>
 
-<b>Body(only json): </b>
+<b>Body(json): </b>
 <pre>{
 "email": "m3rl1n1k@gmail.com", 
 "password": "1111", 
@@ -77,14 +77,16 @@ POST<i/> [http://localhost:8080/api/v1/registration](http://localhost:8080/api/v
 
 <b>Return: </b><i>Msg of result</i>
 <hr>
-<b> Name: Get All products</b>
+<h2>Shoes</h2>
+<hr>
+<b> Name: Get collections records</b>
 
 <b>Request method: </b> <i>
-GET<i/> [http://localhost:8080/api/v1/product/{type}?limit=10&sort=price.up](http://localhost:8080/api/v1/product/shoes?limit=10&sort=price.up)
+GET<i/> [http://localhost:8080/api/v1/product/shoes?page=1&limit=10&sort=price.up](http://localhost:8080/api/v1/product/shoes?page=1&limit=10&sort=price.up)
 
 <b>Headers: </b> <i>Content-Type: application/json<i/>
 
-<b>Body(only json): </b> <i>Empty<i/>
+<b>Body(json): </b> <i>Empty<i/>
 
 <b>Params: </b>
 <table>
@@ -105,16 +107,33 @@ GET<i/> [http://localhost:8080/api/v1/product/{type}?limit=10&sort=price.up](htt
 </tr>
 </table>
 
-<b>Return: </b><i>JSON string</i>
+<b>Return: </b>
+<table>
+<tr>
+<td></td>
+<td>Status code</td>
+<td>Response</td>
+</tr>
+<tr>
+<td>Success</td>
+<td>200</td>
+<td>Json string with records</td>
+</tr>
+<tr>
+<td>Fail</td>
+<td>400</td>
+<td>Json string with fail message</td>
+</tr>
+</table>
 <hr>
-<b> Name: Create new product</b>
+<b> Name: Create new record</b>
 
 <b>Request method: </b> <i>
-POST <i/> [http://localhost:8080/api/v1/product/new/{type}](http://localhost:8080/api/v1/product/new/shoes)
+POST </i> [http://localhost:8080/api/v1/product/shoes](http://localhost:8080/api/v1/product/shoes)
 
 <b>Headers: </b> <i>Content-Type: application/json<i/>
 
-<b>Body(only json): </b>
+<b>Body(json): </b>
 <pre>{
   "name": "Training Shoes",
   "size": {
@@ -132,27 +151,36 @@ POST <i/> [http://localhost:8080/api/v1/product/new/{type}](http://localhost:808
   "image": "path/to/image5.jpg"
 }</pre>
 
-<b>Params: </b>
+<b>Params: </b> Empty
 
+<b>Return: </b>
 <table>
 <tr>
-<td>type</td>
-<td>Name of table where save record</td>
-<td>.../new/shoes</td>
+<td></td>
+<td>Status code</td>
+<td>Response</td>
+</tr>
+<tr>
+<td>Success</td>
+<td>201</td>
+<td>Json string with success message</td>
+</tr>
+<tr>
+<td>Fail</td>
+<td>400</td>
+<td>Json string with fail message</td>
 </tr>
 </table>
-
-<b>Return: </b><i>ID of created record</i>
 <hr>
 
-<b> Name: Show product</b>
+<b> Name: Show record</b>
 
 <b>Request method: </b> <i>
-POST <i/> [http://localhost:8080/api/v1/product/shoes/show/{show}](http://localhost:8080//api/v1/product/shoes/show/9474480)
+GET <i/> [http://localhost:8080/api/v1/product/shoes/{show}](http://localhost:8080//api/v1/product/shoes/9474480)
 
 <b>Headers: </b> <i>Content-Type: application/json<i/>
 
-<b>Body(only json): </b> <i>Empty</i>
+<b>Body(json): </b> <i>Empty</i>
 
 <b>Params: </b>
 
@@ -163,4 +191,59 @@ POST <i/> [http://localhost:8080/api/v1/product/shoes/show/{show}](http://localh
 </tr>
 </table>
 
-<b>Return: </b><i>JSON string</i>
+<b>Return: </b>
+<table>
+<tr>
+<td></td>
+<td>Status code</td>
+<td>Response</td>
+</tr>
+<tr>
+<td>Success</td>
+<td>200</td>
+<td>Json string with record</td>
+</tr>
+<tr>
+<td>Fail</td>
+<td>400</td>
+<td>Json string with fail message</td>
+</tr>
+</table>
+<hr>
+
+<b> Name: Delete record</b>
+
+<b>Request method: </b> <i>
+DELETE <i/> [http://localhost:8080/api/v1/product/shoes/{article}](http://localhost:8080/api/v1/shoes/9474480)
+
+<b>Headers: </b> Empty
+
+<b>Body(json): </b> <i>Empty</i>
+
+<b>Params: </b>
+
+<table>
+<tr>
+<td>article</td>
+<td>article of record</td>
+</tr>
+</table>
+
+<b>Return: </b>
+<table>
+<tr>
+<td></td>
+<td>Status code</td>
+<td>Response</td>
+</tr>
+<tr>
+<td>Success</td>
+<td>200</td>
+<td>Empty</td>
+</tr>
+<tr>
+<td>Fail</td>
+<td>400</td>
+<td>Json string with fail message</td>
+</tr>
+</table>

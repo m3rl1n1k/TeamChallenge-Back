@@ -2,6 +2,7 @@
 
 namespace App\Core\Route;
 
+use App\Core\Config;
 use App\Core\Container\Container;
 use App\Core\Http\Request;
 use App\Core\Security\Middleware;
@@ -37,14 +38,19 @@ class RouteService
 				break;
 			}
 		}
-		//Перевірка наявності контролера
 		if (is_null($controller)) {
 			throw new NotFoundException("Controller $controller or route $inputUrl not found!");
 		}
+		//Перевірка наявності контролера
 		// Викликаємо метод контролера з переданими аргументами
 		$this->callController($controller, $action, $arguments);
 	}
 
+	/**
+	 * @param string $uri
+	 * @param string $inputUrl
+	 * @return bool
+	 */
 	protected function matchUrls(string $uri, string $inputUrl): bool
 	{
 		/* if in $uri replacement part in the curl brackets changed to last part of input
@@ -62,21 +68,37 @@ class RouteService
 		return false;
 	}
 
+	/**
+	 * @param $url
+	 * @return int|string
+	 */
 	protected function getReplacementID($url): int|string
 	{
 		return (int)$this->request->isPatternUri($url, '/\d+$/')[0];//return array
 	}
 
+	/**
+	 * @param int|string $uri
+	 * @return string
+	 */
 	protected function prepareUri(int|string $uri): string
 	{
 		return explode('.', $uri)[1];
 	}
 
+	/**
+	 * @param string $inputMETHOD
+	 * @param mixed $route
+	 * @return bool
+	 */
 	protected function matchMethods(string $inputMETHOD, mixed $route): bool
 	{
 		return strtoupper($inputMETHOD) === $route['method'];
 	}
 
+	/**
+	 * @return false|array|string
+	 */
 	protected function getArguments(): false|array|string
 	{
 		return array_merge(
@@ -86,11 +108,19 @@ class RouteService
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function getParams(): array
 	{
-		return $this->request->withName()->getParams();
+		$params = $this->request->getParams();
+		$param['params'] = empty($params) ? Config::getValue('config.default_request_data') : $params;
+		return $param;
 	}
 
+	/**
+	 * @return array|int[]|string[]|null
+	 */
 	protected function getArgumentsUrl(): ?array
 	{
 		if (empty($this->replacementPartURI)) {

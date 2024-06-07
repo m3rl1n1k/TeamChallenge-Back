@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Security\Authentication;
+namespace App\Security;
 
 use App\Core\Config;
 use App\Core\Exceptions\BadParameter;
@@ -78,7 +78,7 @@ class Authentication implements AuthenticateInterface
 			"user" => $this->userCredentials
 		];
 		$key = Config::getValue('middleware.token');
-		return "Bearer " . $this->jwt::encode($payload, $key, 'HS256');
+		return $this->jwt::encode($payload, $key, 'HS256');
 	}
 
 	protected function onFail(): void
