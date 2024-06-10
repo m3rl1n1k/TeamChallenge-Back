@@ -1,12 +1,11 @@
 <?php
 
-use App\Core\Config;
-use App\Core\Container\Container;
-use App\Core\Controller\ExceptionController;
+use Core\Config;
+use Core\Container\Container;
+use Core\Controller\ExceptionController;
 
 require_once "../vendor/autoload.php";
 
-//Session::sessionStart();
 
 /** @var ExceptionController $eHandler */
 Container::call(ExceptionController::class);

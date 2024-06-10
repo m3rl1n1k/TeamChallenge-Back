@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
-use App\Core\DB\Model\AbstractModel;
-use App\Core\DB\QueryBuilder\QueryBuilder;
-use App\Core\Exceptions\DuplicateRecordsException;
+use Core\DB\Model\AbstractModel;
+use Core\DB\QueryBuilder\QueryBuilder;
+use Core\Exceptions\DuplicateRecordsException;
+use Exception;
 
 class User extends AbstractModel
 {
@@ -13,6 +14,9 @@ class User extends AbstractModel
 		$this->table = 'user';
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function getUser(string $email)
 	{
 		$user = $this->findBy(['email' => $email]);

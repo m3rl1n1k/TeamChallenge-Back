@@ -3,8 +3,8 @@
 namespace App\API;
 
 
-use App\Core\Controller\AbstractController;
 use App\Security\Register;
+use Core\Controller\AbstractController;
 use Exception;
 
 class RegistrationController extends AbstractController

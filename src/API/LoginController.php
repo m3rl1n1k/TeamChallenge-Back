@@ -2,9 +2,9 @@
 
 namespace App\API;
 
-use App\Core\Controller\AbstractController;
-use App\Core\Http\Response;
 use App\Security\Authentication;
+use Core\Controller\AbstractController;
+use Core\Http\Response;
 use Exception;
 
 

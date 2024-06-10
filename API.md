@@ -136,9 +136,10 @@ GET<i/> [http://localhost:8080/api/v1/product/shoes?page=1&limit=10&sort=price.u
 <b>Request method: </b> <i>
 POST </i> [http://localhost:8080/api/v1/product/shoes](http://localhost:8080/api/v1/product/shoes)
 
-<b>Headers: </b> <br> 
+<b>Headers: </b> <br>
 <i>Content-Type: application/json<i/> <br>
 <i>Authorization: auth-token*<i/>
+
 * auth token - you get this token after successfully authorization
 
 <b>Body(json): </b>
@@ -189,6 +190,7 @@ PUT </i> [http://localhost:8080/api/v1/product/shoes/{article}](http://localhost
 <i>Content-Type: application/json<i/>
 <br>
 <i>Authorization: auth-token*<i/>
+
 * auth token - you get this token after successfully authorization
 
 <b>Body(json): </b>
@@ -280,7 +282,8 @@ DELETE <i/> [http://localhost:8080/api/v1/product/shoes/{article}](http://localh
 <b>Headers: </b> <br>
 <i>Content-Type: application/json<i/>
 <br>
-<i>Authorization: auth-token*<i/>
+<i>Authorization: auth-token * <i/>
+
 * auth token - you get this token after successfully authorization
 
 <b>Body(json): </b> <i>Empty</i>

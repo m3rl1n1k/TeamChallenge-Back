@@ -2,10 +2,10 @@
 <?php
 
 
-use App\Core\Config;
-use App\Core\Container\Container;
-use App\Core\Controller\ExceptionController;
-use App\Core\Helper\Printer;
+use Core\Config;
+use Core\Container\Container;
+use Core\Controller\ExceptionController;
+use Core\Helper\Printer;
 
 require_once load_file("../vendor/autoload.php");
 Config::instance(
@@ -15,25 +15,35 @@ Config::instance(
 );
 
 Container::call(ExceptionController::class)->CLI_handler();
-
-global $argv;
-
-function callCreateTable($argv): void
+function getTable(): string
 {
-	if (empty($argv[2])) {
-		Printer::printString('Not fount table', Printer::ANSI_RED);
-		exit();
-	}
-	Container::call("App\Tables\\" . ucfirst($argv[2]) . "_table")->run();
+	global $argv;
+	return ucfirst($argv[2]);
 }
 
-function dropTable(array $argv): void
+function catch_output($e = null): void
 {
-	if (empty($argv[2])) {
-		Printer::printString('Not fount table', Printer::ANSI_RED);
-		exit();
+	Printer::printString($e ? $e->getMessage() : 'Not fount file for table ' . getTable(), Printer::ANSI_RED);
+	exit();
+}
+
+function callCreateTable(): void
+{
+	try {
+		Container::call("App\Tables\\" . getTable() . "_table")->run();
+	} catch (Exception $e) {
+		catch_output($e);
 	}
-	Container::call("App\Tables\\" . ucfirst($argv[2]) . "_table")->drop();
+}
+
+function dropTable(): void
+{
+	try {
+		Container::call("App\Tables\\" . getTable() . "_table")->drop();
+	} catch (Exception $e) {
+		catch_output($e);
+	}
+
 }
 
 match ($argv[1]) {

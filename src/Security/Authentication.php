@@ -2,13 +2,14 @@
 
 namespace App\Security;
 
-use App\Core\Config;
-use App\Core\Exceptions\BadParameter;
-use App\Core\Http\Response;
-use App\Core\Http\Session;
-use App\Core\Interface\AuthenticateInterface;
-use App\Core\Security\Password;
 use App\Repository\User;
+use Core\Config;
+use Core\Exceptions\BadParameter;
+use Core\Http\Request;
+use Core\Http\Response;
+use Core\Interface\AuthenticateInterface;
+use Core\Security\JWToken;
+use Core\Security\Password;
 use DateTime;
 use Exception;
 use Firebase\JWT\JWT;
@@ -19,8 +20,10 @@ class Authentication implements AuthenticateInterface
 	protected array $userCredentials;
 
 	public function __construct(
-		protected JWT  $jwt,
-		protected User $user,
+		protected JWT     $jwt,
+		protected JWToken $token,
+		protected User    $user,
+		protected Request $request
 	)
 	{
 	}
@@ -28,11 +31,11 @@ class Authentication implements AuthenticateInterface
 	/**
 	 * @throws Exception
 	 */
-	public function handle(array $userData): string|Response
+	public function handle($request): string|Response
 	{
-		$this->userCredentials = $userData;
-		$email = $userData['email'];
-		$password = $userData['password'];
+		$this->userCredentials = $this->user->getUser($request['email']);
+		$email = $request['email'];
+		$password = $request['password'];
 		return $this->credentialsMatch($email, $password);
 	}
 
@@ -42,16 +45,19 @@ class Authentication implements AuthenticateInterface
 	protected function credentialsMatch(string $email, string $password)
 	{
 		$user = $this->user->findBy(['email' => $email]);
-		$token = Session::get('token');
-		$userInSession = Session::get('user');
-		if ($token && $userInSession === $this->userCredentials['email']) {
-			Session::remove(['token', 'user']);
-			throw new LogicException("You already logged! Your token: $token");
-		}
+		$token = $this->isHasToken();
 		if ($user['email'] === $email && Password::decrypt($password, $user['password'])) {
+			if ($token) {
+				throw new LogicException("You already logged! Your token: $token");
+			}
 			return $this->onSuccess();
 		}
 		$this->onFail();
+	}
+
+	protected function isHasToken(): string
+	{
+		return $this->request->getHeader('Authorization');
 	}
 
 	/**
@@ -59,12 +65,7 @@ class Authentication implements AuthenticateInterface
 	 */
 	protected function onSuccess(): string
 	{
-		$token = $this->makeToken();
-		Session::add([
-			'token' => $token,
-			'user' => $this->userCredentials['email']
-		]);
-		return $token;
+		return $this->makeToken();
 	}
 
 	/**
@@ -81,13 +82,11 @@ class Authentication implements AuthenticateInterface
 		return $this->jwt::encode($payload, $key, 'HS256');
 	}
 
+	/**
+	 * @throws BadParameter
+	 */
 	protected function onFail(): void
 	{
 		throw new BadParameter("Invalid credentials!");
-	}
-
-	public function logout(): void
-	{
-		Session::stop();
 	}
 }
