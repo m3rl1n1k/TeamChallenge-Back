@@ -56,18 +56,8 @@ class Response implements ResponseInterface
 		foreach ($this->headers as $header => $value) {
 			$this->header->setHeader($header, $value);
 		}
-		$this->setData($this->data); // todo review
 		$this->setStatusCode($this->responseCode);
 		$this->header->send();
-	}
-
-	#[Override] public function setData($data, $key = null): static
-	{
-		if ($key !== null)
-			$this->data[$key] = $data;
-		else
-			$this->data = $data;
-		return $this;
 	}
 
 	#[Override] public function setStatusCode(int $code): void
