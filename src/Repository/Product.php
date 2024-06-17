@@ -25,15 +25,35 @@ class Product extends AbstractModel
 		$this->setLimit($limit);
 		$this->setPage($begin);
 		$this->setSort($params['sort']);
-//		$this->setFilter($params['filter']);
+		$this->setFilter($params['filter']);
 		return $this->getChunked();
 	}
 
-	public function update($data, $id): bool
+	public function updateProduct()
 	{
-		$record = $this->findBy(['article' => $id]);
+		//	-> set buy product size quantity to -1
+		$size = $orderProduct[$key]['size'];
+		if (!is_int($size)) {
+			throw new LogicException("Product size not found");
+		}
+		$orderSizeQuantity = $orderProduct[$key]['quantity'];
+		$productSizeQuantity = $product['size'][$size];
+		if ($orderSizeQuantity > $productSizeQuantity) {
+			throw new LogicException("Quantity not enough for product with article {$product['article']} for this size, available {$productSizeQuantity}");
+		}
+		$product['size'][$size] = $productSizeQuantity - $orderSizeQuantity;
+		//	-> set quantity product to -1
+		$product['quantity'] = $product['quantity'] - $orderSizeQuantity;
+
+
+		$this->product->update($product, $product['article']);
+	}
+
+	public function update($data, $article): bool
+	{
+		$record = $this->findBy(['article' => $article]);
 		$this->recordNotFound($record);
-		return $this->qb->update($this->table, $data)->where('article', $id)->save();
+		return $this->qb->update($this->table, $data)->where('article', $article)->save();
 	}
 
 	/**

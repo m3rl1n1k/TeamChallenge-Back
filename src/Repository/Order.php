@@ -12,8 +12,16 @@ class Order extends AbstractModel
 		$this->table = "order";
 	}
 
-	public function saveOrder($orderData)
+	public function save($orderData): void
 	{
-		$this->insert($orderData);
+		d($orderData);
+		$preparedData = [
+			'user_id' => $orderData['user_id'],
+			'product_article' => $orderData['article'],
+			'quantity' => $orderData['quantity'],
+			'total_price' => $orderData['total_price'],
+			'status' => $orderData['status'],
+		];
+		$this->insert($preparedData);
 	}
 }

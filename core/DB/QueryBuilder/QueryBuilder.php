@@ -6,19 +6,18 @@ use Core\DB\Database_Driver\MySQL;
 use Core\Interface\QueryInterface;
 use Exception;
 use LogicException;
-use Override;
 use PDO;
 use PDOStatement;
 use stdClass;
 
 class QueryBuilder implements QueryInterface
 {
-	protected ?PDO $DB;
+	protected ?PDO $DB_PDO;
 	private stdClass $query;
 
 	public function __construct(protected MySQL $PDO)
 	{
-		$this->DB = $this->PDO::connect();
+		$this->DB_PDO = $this->PDO::connect();
 	}
 
 	public function select(string $table, array $fields = ['*']): QueryBuilder
@@ -84,14 +83,13 @@ class QueryBuilder implements QueryInterface
 
 	public function limit(?int $offset, int $start = 0): QueryBuilder
 	{
-		if ($offset > 10 || $offset === null) {
-			$offset = 10;
+		if ($offset > 100 || $offset === null) {
+			$offset = 100;
 		}
 		if ($this->query->type !== 'select') {
 			throw new Exception("LIMIT can only be added to SELECT");
 		}
 		$this->query->limit = " LIMIT " . $start . ", " . $offset;
-
 		return $this;
 	}
 
@@ -107,14 +105,20 @@ class QueryBuilder implements QueryInterface
 
 	public function all(): false|array|string
 	{
-		$res = $this->queryToDB();
-		return !empty($res) ? $res->fetchAll(PDO::FETCH_ASSOC) : "Not found any product!";
+		$res = $this->queryToDB()->fetchAll(PDO::FETCH_ASSOC);
+		foreach ($res as $key => $record) {
+			$res[$key]['size'] = json_decode($record['size']);
+		}
+		return !empty($res) ? $res : "Not found any product!";
 	}
 
 	protected function queryToDB(bool $prepare = false): bool|PDOStatement
 	{
 		$query = $this->query;
 		$sql = $query->base;
+		if (!empty($query->filter)) {
+			$sql .= $this->query->filter;
+		}
 		if (!empty($query->where)) {
 			$sql .= " WHERE " . implode(' AND ', $query->where);
 		}
@@ -125,7 +129,7 @@ class QueryBuilder implements QueryInterface
 			$sql .= $query->limit;
 		}
 		if ($prepare) {
-			$sql = $this->DB->prepare($sql);
+			$sql = $this->DB_PDO->prepare($sql);
 			foreach ($query->data as $key => $value) {
 				if (is_array($value)) {
 					$value = json_encode($value);
@@ -134,15 +138,14 @@ class QueryBuilder implements QueryInterface
 			}
 			$result = $sql->execute();
 		} else {
-			$result = $this->DB->query($sql);
+			$result = $this->DB_PDO->query($sql);
 		}
 		return $result;
 	}
 
 	public function get()
 	{
-		$res = $this->queryToDB();
-		return !empty($res) ? $res->fetch(PDO::FETCH_ASSOC) : "Not found any product!";
+		return $this->queryToDB()->fetch(PDO::FETCH_ASSOC);
 	}
 
 	public function save(): bool
@@ -150,13 +153,19 @@ class QueryBuilder implements QueryInterface
 		return $this->queryToDB(true);
 	}
 
-	#[Override] public function getQuery(): string
+	public function getQuery(): stdClass
 	{
-		return $this->query->base . $this->query->where . $this->query->limit;
+		return $this->query;
 	}
 
-	public function makeQuery()
+	public function filter(array $filter): static
 	{
-		return $this->queryToDB();
+		$this->query->filter = " WHERE type='" . implode("' OR type='", $filter) . "'";
+		return $this;
+	}
+
+	public function qb(): PDO
+	{
+		return $this->DB_PDO;
 	}
 }

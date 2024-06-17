@@ -6,6 +6,7 @@ use Core\DB\QueryBuilder\QueryBuilder;
 use Core\Interface\ModelInterface;
 use DiggPHP\Psr11\NotFoundException;
 use Exception;
+use PDO;
 
 abstract class AbstractModel implements ModelInterface
 {
@@ -14,23 +15,23 @@ abstract class AbstractModel implements ModelInterface
 	protected ?int $limit;
 	protected QueryBuilder $qb;
 	protected ?int $page;
+	/**
+	 * @var string[]
+	 */
+	protected array $filter;
 
 	public function findAll(): false|array|string
 	{
-		$records = $this->qb->select($this->table)->all();
-		foreach ($records as $key => $record) {
-			$records[$key]['size'] = json_decode($record['size']);
-		}
-		return $records;
-
+		return $this->qb->select($this->table)->all();
 	}
+
 
 	/**
 	 * @throws Exception
 	 */
-	public function update($data, $id): bool
+	public function update($data, $article): bool
 	{
-		return $this->qb->update($this->table, $data)->where('article', $id)->save();
+		return $this->qb->update($this->table, $data)->where('article', $article)->save();
 	}
 
 	/**
@@ -54,11 +55,7 @@ abstract class AbstractModel implements ModelInterface
 	 */
 	public function getChunked(): false|array|string
 	{
-		$records = $this->qb->select($this->table)->limit($this->limit, $this->page)->orderBy($this->orderBy[0], $this->orderBy[1])->all();
-		foreach ($records as $key => $record) {
-			$records[$key]['size'] = json_decode($record['size']);
-		}
-		return $records;
+		return $this->qb->select($this->table)->filter($this->filter)->limit($this->limit, $this->page)->orderBy($this->orderBy[0], $this->orderBy[1])->all();
 
 	}
 
@@ -109,8 +106,14 @@ abstract class AbstractModel implements ModelInterface
 		return $this;
 	}
 
-	protected function setFilter()
+	public function query(): PDO
 	{
+		return $this->qb->qb();
+	}
 
+	protected function setFilter(string $filter): void
+	{
+		$filter = explode('|', $filter);
+		$this->filter = $filter;
 	}
 }

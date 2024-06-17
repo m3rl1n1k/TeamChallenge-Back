@@ -3,7 +3,6 @@
 namespace App\API;
 
 use App\Repository\Product;
-use App\Repository\Shoes;
 use Core\Controller\AbstractController;
 use Core\Exceptions\DuplicateRecordsException;
 use Core\Http\HttpStatusCode;

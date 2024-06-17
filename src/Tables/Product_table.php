@@ -11,6 +11,7 @@ class Product_table extends Table
 	protected string $table = "product";
 	protected array $fields = [
 		'article' => 'BIGINT AUTO_INCREMENT PRIMARY KEY',
+		'quantity' => 'INT',
 		'type' => 'VARCHAR(100) NOT NULL',
 		'name' => 'VARCHAR(255) NOT NULL',
 		'size' => 'JSON NOT NULL',
