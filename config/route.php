@@ -24,7 +24,7 @@ $route->put('/api/v1/product/{article}', ProductController::class, 'update')->on
 $route->delete('/api/v1/product/{article}', ProductController::class, 'delete')->only('admin');
 
 //Order
-$route->post('/api/v1/order/create', OrderController::class, 'createOrder');
+$route->post('/api/v1/order/create', OrderController::class, 'createOrder')->only('auth');
 
 
 $route->route();

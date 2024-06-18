@@ -6,6 +6,7 @@ use Core\DB\Model\AbstractModel;
 use Core\DB\QueryBuilder\QueryBuilder;
 use Core\Exceptions\DuplicateRecordsException;
 use Exception;
+use LogicException;
 
 class Product extends AbstractModel
 {
@@ -29,14 +30,17 @@ class Product extends AbstractModel
 		return $this->getChunked();
 	}
 
-	public function updateProduct()
+	/**
+	 * @throws Exception
+	 */
+	public function updateProduct($key, array $order, $product): void
 	{
 		//	-> set buy product size quantity to -1
-		$size = $orderProduct[$key]['size'];
+		$size = $order[$key]['size'];
 		if (!is_int($size)) {
 			throw new LogicException("Product size not found");
 		}
-		$orderSizeQuantity = $orderProduct[$key]['quantity'];
+		$orderSizeQuantity = $order[$key]['quantity'];
 		$productSizeQuantity = $product['size'][$size];
 		if ($orderSizeQuantity > $productSizeQuantity) {
 			throw new LogicException("Quantity not enough for product with article {$product['article']} for this size, available {$productSizeQuantity}");
@@ -46,7 +50,7 @@ class Product extends AbstractModel
 		$product['quantity'] = $product['quantity'] - $orderSizeQuantity;
 
 
-		$this->product->update($product, $product['article']);
+		$this->update($product, $product['article']);
 	}
 
 	public function update($data, $article): bool
