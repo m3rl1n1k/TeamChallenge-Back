@@ -4,7 +4,7 @@ namespace Core\StupidAR;
 
 use Core\Container\Container;
 
-class Table
+class Table implements TableInterface
 {
 	protected string $table;
 	protected array $fields;

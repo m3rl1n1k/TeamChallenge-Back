@@ -2,7 +2,7 @@
 
 namespace App\Security;
 
-use App\Repository\User;
+use App\Repository\UserRepository;
 use Core\Http\HttpStatusCode;
 use Core\Http\Response;
 use Core\Interface\AuthenticateInterface;
@@ -13,7 +13,7 @@ use LogicException;
 class Register implements AuthenticateInterface
 {
 	public function __construct(
-		protected User $user
+		protected UserRepository $user
 	)
 	{
 	}

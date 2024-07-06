@@ -2,7 +2,7 @@
 
 namespace App\Security;
 
-use App\Repository\User;
+use App\Repository\UserRepository;
 use Core\Config;
 use Core\Exceptions\BadParameter;
 use Core\Http\Request;
@@ -17,13 +17,13 @@ use LogicException;
 
 class Authentication implements AuthenticateInterface
 {
-	protected array $userCredentials;
+	protected object $userCredentials;
 
 	public function __construct(
-		protected JWT     $jwt,
-		protected JWToken $token,
-		protected User    $user,
-		protected Request $request
+		protected JWT            $jwt,
+		protected JWToken        $token,
+		protected UserRepository $user,
+		protected Request        $request
 	)
 	{
 	}
@@ -46,7 +46,7 @@ class Authentication implements AuthenticateInterface
 	{
 		$user = $this->user->findBy(['email' => $email]);
 		$token = $this->isHasToken();
-		if ($user['email'] === $email && Password::decrypt($password, $user['password'])) {
+		if ($user->email === $email && Password::decrypt($password, $user->password)) {
 			if ($token) {
 				throw new LogicException("You already logged! Your token: $token");
 			}

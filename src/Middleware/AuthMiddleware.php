@@ -2,7 +2,8 @@
 
 namespace App\Middleware;
 
-use App\Repository\User;
+
+use App\Repository\UserRepository;
 use Core\Exceptions\NotSendHeaders;
 use Core\Http\HttpStatusCode;
 use Core\Http\Response;
@@ -15,7 +16,7 @@ class AuthMiddleware implements MiddlewareInterface
 {
 	protected mixed $user;
 
-	public function __construct(protected JWToken $JWToken, protected User $userRepository)
+	public function __construct(protected JWToken $JWToken, protected UserRepository $userRepository)
 	{
 	}
 
@@ -27,7 +28,7 @@ class AuthMiddleware implements MiddlewareInterface
 	{
 		$token = $this->JWToken->decode();//decode token
 		$this->user = $this->userRepository->getUser($token->user->email);//check user in DB
-		$this->user['role'] = json_decode($this->user['role']);// decode roles to array
+		$this->user->role = json_decode($this->user->role);// decode roles to array
 
 		if (!$this->hasRole('USER_ROLE')) // check that user have role
 			new Response("You don't have access to this page!", HttpStatusCode::FORBIDDEN);
@@ -36,6 +37,6 @@ class AuthMiddleware implements MiddlewareInterface
 
 	protected function hasRole(string $role): bool
 	{
-		return in_array($role, $this->user['role']);
+		return in_array($role, $this->user->role);
 	}
 }

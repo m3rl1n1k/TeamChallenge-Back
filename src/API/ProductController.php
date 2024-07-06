@@ -2,7 +2,7 @@
 
 namespace App\API;
 
-use App\Repository\Product;
+use App\Repository\ProductRepository;
 use Core\Controller\AbstractController;
 use Core\Exceptions\DuplicateRecordsException;
 use Core\Http\HttpStatusCode;
@@ -12,7 +12,7 @@ use Exception;
 class ProductController extends AbstractController
 {
 
-	public function __construct(protected Product $product)
+	public function __construct(protected ProductRepository $product)
 	{
 	}
 
@@ -31,8 +31,7 @@ class ProductController extends AbstractController
 	public function show($article): Response
 	{
 		$record = $this->product->findBy(['article' => $article]);
-		$record['size'] = json_decode($record['size']);
-		return $record ? new Response($record) : new Response('Fail', HttpStatusCode::NOT_FOUND);
+		return $record ? new Response($record) : new Response('Record not found!', HttpStatusCode::NOT_FOUND);
 	}
 
 	/**

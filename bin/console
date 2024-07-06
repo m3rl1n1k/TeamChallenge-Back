@@ -1,29 +1,33 @@
 #! /usr/bin/env php
 <?php
 
-
 use Core\Config;
 use Core\Container\Container;
 use Core\Controller\ExceptionController;
 use Core\Helper\Printer;
+use JetBrains\PhpStorm\NoReturn;
 
 require_once load_file("../vendor/autoload.php");
+const ROOT = __DIR__ . "/../";
 Config::instance(
 	[
 		'database' => require_once load_file("../config/database.php")
 	]
 );
 
+
 Container::call(ExceptionController::class)->CLI_handler();
+
 function getTable(): string
 {
 	global $argv;
 	return ucfirst($argv[2]);
 }
 
+#[NoReturn]
 function catch_output($e = null): void
 {
-	Printer::printString($e ? $e->getMessage() : 'Not fount file for table ' . getTable(), Printer::ANSI_RED);
+	Printer::printString($e ? $e->getMessage() : 'Not found file for table ' . getTable(), Printer::ANSI_RED);
 	exit();
 }
 
@@ -43,16 +47,78 @@ function dropTable(): void
 	} catch (Exception $e) {
 		catch_output($e);
 	}
+}
 
+/**
+ * @throws Exception
+ */
+function createEntity(): void
+{
+	$entity = getTable();
+	$tableName = lcfirst($entity);
+	//Template for Entity
+	$entityTemplate = <<<EOT
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity()]
+#[ORM\Table('$tableName')]
+class {$entity}
+{
+
+	#[ORM\Id]
+	#[ORM\GeneratedValue(strategy: 'AUTO')]
+	#[ORM\Column(type: 'integer')]
+	private int \$id;
+    /**
+	 * @return int
+	 */
+	public function getId(): int
+	{
+		return \$this->id;
+	}
+    // Add your properties and methods here
+}
+EOT;
+	//End template
+
+	$entityDir = Config::getValue('database.data_mapper.entity_path');
+	$entityFile = $entityDir[0] . '/' . $entity . '.php';
+
+	if (file_exists($entityFile)) {
+		throw new Exception("Entity file already exists: " . $entityFile);
+	}
+
+	file_put_contents($entityFile, $entityTemplate);
+	Printer::printString("Entity created at: " . $entityFile, Printer::ANSI_GREEN);
+}
+
+function makeEntity(): void
+{
+	try {
+		// Ваш код для створення bundle
+		// Наприклад:
+		Printer::printString("Creating entity...", Printer::ANSI_GREEN);
+		createEntity();
+		// Додайте логіку для створення bundle тут
+		Printer::printString("Entity created successfully.", Printer::ANSI_GREEN);
+	} catch (Exception $e) {
+		catch_output($e);
+	}
 }
 
 match ($argv[1]) {
 	"help" => Printer::printArray([
 		'table:create' => "table:create user. Call code from folder 'Tables' in file 'user_tables.php'",
 		'table:drop' => "table:drop user. Drop set table",
+		'make:entity' => "make:entity. Creates a new entity",
 	]),
-	"table:create" => callCreateTable($argv),
-	"table:drop" => dropTable($argv),
+	"table:create" => callCreateTable(),
+	"table:drop" => dropTable(),
+	"make:entity" => makeEntity(),
 	default => Printer::printString("Not found command. Type 'help' for more info")
 };
 
@@ -64,4 +130,3 @@ function load_file(string $path): string|array
 		return $path;
 	}
 }
-

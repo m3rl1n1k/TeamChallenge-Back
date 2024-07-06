@@ -33,15 +33,34 @@ class QueryBuilder implements QueryInterface
 		$this->query = new stdClass();
 	}
 
-	/**
-	 * @throws Exception
-	 */
-	public function where(string $field, string $value, string $operator = '='): QueryBuilder
+	public function filter(array $filters): static
+	{
+		foreach ($filters as $field => $value) {
+			if (is_array($value)) {
+				$this->where($field, $value);
+			} else {
+				$this->where($field, $value);
+			}
+		}
+		return $this;
+	}
+
+	public function where(string $field, string|int|array $value, string $operator = '='): QueryBuilder
 	{
 		if (!in_array($this->query->type, ['select', 'update', 'delete'])) {
 			throw new LogicException("WHERE can only be added to SELECT, UPDATE OR DELETE");
 		}
-		$this->query->where[] = "$field $operator '$value'";// price = '10'
+
+		if (is_array($value)) {
+			if ($operator != '=') {
+				throw new LogicException("Operator must be '=' when value is an array");
+			}
+			$value = "'" . implode("', '", $value) . "'";
+			$this->query->where[] = "$field IN ($value)"; // field IN ('val1', 'val2')
+		} else {
+			$value = is_string($value) ? "'$value'" : "$value";
+			$this->query->where[] = "$field $operator $value"; // field = 'value'
+		}
 
 		return $this;
 	}
@@ -99,35 +118,39 @@ class QueryBuilder implements QueryInterface
 			throw new Exception("ORDER can only be added to SELECT");
 		}
 		$this->query->order = " ORDER BY " . $field . " " . $sort;
-
 		return $this;
 	}
 
 	public function all(): false|array|string
 	{
-		$res = $this->queryToDB()->fetchAll(PDO::FETCH_ASSOC);
-		foreach ($res as $key => $record) {
-			$res[$key]['size'] = json_decode($record['size']);
+		$res = $this->queryToDB()->fetchAll(PDO::FETCH_OBJ);
+//		d($res);
+		foreach ($res as $record) {
+			$record->size = json_decode($record->size, true);
 		}
-		return !empty($res) ? $res : "Not found any product!";
+		return $res;
 	}
 
-	protected function queryToDB(bool $prepare = false): bool|PDOStatement
+	protected function queryToDB(bool $prepare = false): PDOStatement
 	{
 		$query = $this->query;
 		$sql = $query->base;
-		if (!empty($query->filter)) {
-			$sql .= $this->query->filter;
-		}
+
+		// Додавання умов WHERE
 		if (!empty($query->where)) {
 			$sql .= " WHERE " . implode(' AND ', $query->where);
 		}
+
+		// Додавання ORDER BY
 		if (isset($query->order)) {
 			$sql .= $query->order;
 		}
+
+		// Додавання LIMIT
 		if (isset($query->limit)) {
 			$sql .= $query->limit;
 		}
+
 		if ($prepare) {
 			$sql = $this->DB_PDO->prepare($sql);
 			foreach ($query->data as $key => $value) {
@@ -143,12 +166,18 @@ class QueryBuilder implements QueryInterface
 		return $result;
 	}
 
+
 	public function get()
 	{
-		return $this->queryToDB()->fetch(PDO::FETCH_ASSOC);
+		$result = $this->queryToDB()->fetch(PDO::FETCH_OBJ);
+		// todo make validation and decode from json
+//		if (in_array('size', array_keys($result))) {
+//			$result->size = json_decode($result->size, true);
+//		}
+		return $result;
 	}
 
-	public function save(): bool
+	public function save()
 	{
 		return $this->queryToDB(true);
 	}
@@ -156,16 +185,5 @@ class QueryBuilder implements QueryInterface
 	public function getQuery(): stdClass
 	{
 		return $this->query;
-	}
-
-	public function filter(array $filter): static
-	{
-		$this->query->filter = " WHERE type='" . implode("' OR type='", $filter) . "'";
-		return $this;
-	}
-
-	public function qb(): PDO
-	{
-		return $this->DB_PDO;
 	}
 }

@@ -2,13 +2,14 @@
 
 namespace App\Service;
 
-use App\Repository\User;
+
+use App\Repository\UserRepository;
 use Core\Security\JWToken;
 use Exception;
 
 class UserService
 {
-	public function __construct(protected User $userRepository, protected JWToken $JWToken)
+	public function __construct(protected UserRepository $userRepository, protected JWToken $JWToken)
 	{
 	}
 
