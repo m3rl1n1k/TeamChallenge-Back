@@ -2,23 +2,18 @@
 
 namespace App\API;
 
-use App\Service\OrderService;
-use Exception;
+use Core\Http\Request;
 
 class OrderController
 {
-	public function __construct(protected OrderService $orderService)
+	public function __construct(protected Request $request)
 	{
 	}
 
-	/**
-	 * @throws Exception
-	 */
 	public function createOrder($request)
 	{
-		$this->orderService->createOrder($request);// ? new Response("Order created", HttpStatusCode::CREATED) : new Response("Failed to create order", HttpStatusCode::BAD_REQUEST);
 
-		// save order to db
+		dd($request);
 
 	}
 }

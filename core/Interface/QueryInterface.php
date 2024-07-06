@@ -4,7 +4,7 @@ namespace Core\Interface;
 
 interface QueryInterface
 {
-	public function getQuery();
+	public function getQuery(): string;
 
 	public function get();
 

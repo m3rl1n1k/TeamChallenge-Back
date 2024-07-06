@@ -82,12 +82,12 @@ POST<i/> [http://localhost:8080/api/v1/registration](http://localhost:8080/api/v
 </details>
 <hr>
 <details>
-<summary>Product</summary>
+<summary>Shoes</summary>
 <br>
-<b> Name: Get collections of products</b>
+<b> Name: Get collections records</b>
 
 <b>Request method: </b> <i>
-GET<i/> [http://localhost:8080/api/v1/product?type=shoes&page=1&limit=10&sort=price.up](http://localhost:8080/api/v1/product?type=shoes&)
+GET<i/> [http://localhost:8080/api/v1/product/shoes?page=1&limit=10&sort=price.up](http://localhost:8080/api/v1/product/shoes?page=1&limit=10&sort=price.up)
 
 <b>Headers: </b> <i>Content-Type: application/json<i/>
 
@@ -95,13 +95,6 @@ GET<i/> [http://localhost:8080/api/v1/product?type=shoes&page=1&limit=10&sort=pr
 
 <b>Params: </b>
 <table>
-<tr>
-<td>type*</td>
-<td>Filter product by type</td>
-<td>filter=shoes
-<br>if you need more use' | 'example: shoes|pants
-</td>
-</tr>
 <tr>
 <td>page*</td>
 <td>Show page number 1</td>

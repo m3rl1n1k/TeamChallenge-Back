@@ -19,7 +19,7 @@ class JWToken
 	{
 	}
 
-	public function decode(): false|stdClass
+	public function decode()
 	{
 		$token = $this->request->getHeader('Authorization');
 		if (empty($token)) {
@@ -32,7 +32,6 @@ class JWToken
 			return $this->timeExpiredVerify($data);
 		} catch (Exception $e) {
 			new Response("Try to login attempt! {$e->getMessage()}", HttpStatusCode::FORBIDDEN);
-			return false;
 		}
 	}
 

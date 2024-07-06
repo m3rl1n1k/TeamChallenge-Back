@@ -2,46 +2,35 @@
 
 namespace Core\DB\Model;
 
-use Core\Container\Container;
 use Core\DB\QueryBuilder\QueryBuilder;
 use Core\Interface\ModelInterface;
 use DiggPHP\Psr11\NotFoundException;
 use Exception;
-use PDO;
 
 abstract class AbstractModel implements ModelInterface
 {
 	protected string $table;
 	protected ?array $orderBy;
 	protected ?int $limit;
+	protected QueryBuilder $qb;
 	protected ?int $page;
-
-	protected ?array $filter;
-	private QueryBuilder $qb;
-
-	public function __construct()
-	{
-		$this->qb = $this->getQB();
-	}
-
-	private function getQB()
-	{
-		return Container::call(QueryBuilder::class);
-	}
 
 	public function findAll(): false|array|string
 	{
-		return $this->qb->select($this->table)->all();
+		$records = $this->qb->select($this->table)->all();
+		foreach ($records as $key => $record) {
+			$records[$key]['size'] = json_decode($record['size']);
+		}
+		return $records;
+
 	}
 
 	/**
 	 * @throws Exception
 	 */
-	public function update($data, $article, string $field = "article"): bool
+	public function update($data, $id): bool
 	{
-		$record = $this->findBy([$field => $article]);
-		$this->recordNotFound($record);
-		return $this->qb->update($this->table, $data)->where($field, $article)->save();
+		return $this->qb->update($this->table, $data)->where('article', $id)->save();
 	}
 
 	/**
@@ -52,21 +41,12 @@ abstract class AbstractModel implements ModelInterface
 		return $this->qb->select($this->table)->where(array_key_first($criteria), array_values($criteria)[0])->get();
 	}
 
-	public function recordNotFound($record): void
-	{
-		if (!$record) {
-			throw new NotFoundException('Record not found!');
-		}
-	}
-
 	/**
 	 * @throws Exception
 	 */
-	public function delete($id, $field = "article"): bool
+	public function delete($id)
 	{
-		$record = $this->findBy([$field => $id]);
-		$this->recordNotFound($record);
-		return $this->qb->delete($this->table)->where($field, $id)->get();
+		return $this->qb->delete($this->table)->where('article', $id)->get();
 	}
 
 	/**
@@ -74,17 +54,24 @@ abstract class AbstractModel implements ModelInterface
 	 */
 	public function getChunked(): false|array|string
 	{
-		$select = $this->qb->select($this->table)->where('quantity', 0, '>');
-		if ($this->filter) {
-			$select = $select->where('type', $this->filter);
+		$records = $this->qb->select($this->table)->limit($this->limit, $this->page)->orderBy($this->orderBy[0], $this->orderBy[1])->all();
+		foreach ($records as $key => $record) {
+			$records[$key]['size'] = json_decode($record['size']);
 		}
-//		dd($select->limit($this->limit, $this->page)->orderBy($this->orderBy[0], $this->orderBy[1]));
-		return $select->limit($this->limit, $this->page)->orderBy($this->orderBy[0], $this->orderBy[1])->all();
+		return $records;
+
 	}
 
 	public function insert(array $data): bool
 	{
 		return $this->qb->insert($this->table, $data)->save();
+	}
+
+	public function recordNotFound($record): void
+	{
+		if (!$record) {
+			throw new NotFoundException('Record not found!');
+		}
 	}
 
 	public function setLimit(?int $limit): static
@@ -122,15 +109,8 @@ abstract class AbstractModel implements ModelInterface
 		return $this;
 	}
 
-	public function query(): PDO
+	protected function setFilter()
 	{
-		return $this->qb->qb();
-	}
 
-	protected function setFilter(?string $filter): void
-	{
-		if ($filter !== null)
-			$filter = explode('|', $filter);
-		$this->filter = $filter ?? null;
 	}
 }

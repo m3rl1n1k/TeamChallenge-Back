@@ -29,4 +29,9 @@ class LoginController extends AbstractController
 		}
 		return new Response($msg);
 	}
+
+	public function logout(): void
+	{
+		$this->authentication->logout();
+	}
 }
