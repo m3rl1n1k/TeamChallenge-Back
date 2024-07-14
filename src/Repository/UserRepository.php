@@ -2,55 +2,32 @@
 
 namespace App\Repository;
 
-use App\Entity\User;
-use Core\StupidAR\TableTrait;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadata;
+use Core\DB\Model\AbstractModel;
+use Core\DB\QueryBuilder\QueryBuilder;
 use Exception;
 
-class UserRepository extends EntityRepository
+class UserRepository extends AbstractModel
 {
-	protected mixed $user;
+    protected mixed $user;
 
-	use TableTrait;
+    public function __construct(protected QueryBuilder $qb)
+    {
+        $this->table = 'users';
+    }
 
-	public function __construct(protected EntityManager $em, ClassMetadata $class)
-	{
-		parent::__construct($em, $class);
-	}
+    /**
+     * @throws Exception
+     */
+    public function getUser(string $email): array
+    {
+        return $this->findBy(['email' => $email]);
+    }
 
-	/**
-	 * @throws Exception
-	 */
-	public function getUser(string $email): array
-	{
-		return $this->findBy(['email' => $email]);
-	}
-
-	public function newUser(array $userData): void
-	{
-		$user = new User();
-		$user->setEmail($userData['email'])
-			->setPassword($userData['password'])
-			->setRole($userData['role'])
-			->setFirstName($userData['firstName'])
-			->setLastName($userData['lastName'])
-			->setCity($userData['city'])
-			->setAddress($userData['street'])
-			->setState($userData['state'])
-			->setZipCode($userData['zipCode'])
-			->setPhone($userData['phone']);
-		$this->save($user);
-	}
-
-	/**
-	 * @throws Exception
-	 */
-	public function getUserId(mixed $email): int
-	{
-		/** @var User $user */
-		$user = $this->findBy(['email' => $email]);
-		return $user->getId();
-	}
+    /**
+     * @throws Exception
+     */
+    function getUserId(string $email): int
+    {
+        return $this->findBy(['email' => $email])['id'] ?? throw new Exception('User not found');
+    }
 }

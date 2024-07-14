@@ -6,6 +6,7 @@ use Core\Controller\ExceptionController;
 
 require_once "../vendor/autoload.php";
 
+
 /** @var ExceptionController $eHandler */
 Container::call(ExceptionController::class);
 // map configs

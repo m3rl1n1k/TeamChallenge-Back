@@ -4,9 +4,13 @@ namespace Core\StupidAR;
 
 trait TableTrait
 {
-	protected function save($data): void
+	public function getFields(): array
 	{
-		$this->getEntityManager()->persist($data);
-		$this->getEntityManager()->flush();
+		return $this->fields;
+	}
+
+	public function getTable(): string
+	{
+		return $this->table;
 	}
 }

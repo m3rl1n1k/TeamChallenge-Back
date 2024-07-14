@@ -2,24 +2,28 @@
 
 namespace App\Repository;
 
-use App\Service\UserService;
 use Core\DB\Model\AbstractModel;
+use Core\DB\QueryBuilder\QueryBuilder;
 use Exception;
 
 class OrderRepository extends AbstractModel
 {
 
-	public function __construct(protected UserService $user)
-	{
-		parent::__construct();
-		$this->table = 'orders';
-	}
+    public function __construct(protected QueryBuilder $qb)
+    {
+        $this->table = 'orders';
+    }
 
-	/**
-	 * @throws Exception
-	 */
-	public function save($product): bool
-	{
-		return false;
-	}
+    /**
+     * @throws Exception
+     */
+    public function save($product): void
+    {
+        $this->insert($product);
+    }
+
+    public function getLastInsertId(): int
+    {
+        return $this->qb()->pdo()->lastInsertId();
+    }
 }

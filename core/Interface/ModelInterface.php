@@ -8,7 +8,7 @@ interface ModelInterface
 
 	public function findAll();
 
-	public function update($data, $id);
+	public function update($data, $article);
 
 	public function delete(int $id);
 

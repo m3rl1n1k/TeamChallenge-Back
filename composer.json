@@ -10,20 +10,12 @@
     "diggphp/psr11": "^1.0",
     "larapack/dd": "^1.1",
     "ext-pdo": "*",
-    "league/climate": "^3.8",
-    "firebase/php-jwt": "^6.10",
-    "doctrine/orm": "^3.2",
-    "symfony/cache": "^7.1",
-    "psr/simple-cache": "^3.0",
-    "psr/cache": "^3.0"
+    "firebase/php-jwt": "^6.10"
   },
   "autoload": {
     "psr-4": {
       "Core\\": "core/",
       "App\\": "src/"
     }
-  },
-  "require-dev": {
-    "symfony/maker-bundle": "^1.60"
   }
 }

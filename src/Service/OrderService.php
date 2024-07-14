@@ -2,79 +2,110 @@
 
 namespace App\Service;
 
+use App\Repository\OrderItemRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
+use DiggPHP\Psr11\NotFoundException;
 use Exception;
 use LogicException;
 
 class OrderService
 {
-	public function __construct(
-		protected OrderRepository   $order,
-		protected ProductRepository $product,
-		protected UserRepository    $user)
-	{
-	}
+    public function __construct(
+        protected OrderRepository     $orderRepository,
+        protected ProductRepository   $productRepository,
+        protected OrderItemRepository $orderItemRepository,
+        protected UserRepository      $user)
+    {
+    }
 
-	/**
-	 * @throws Exception
-	 */
-	public function createOrder(array $orderData): void
-	{
-		// create order_item record for each product with (order_id, quantity, price,  etc.)
-		// check payment data
+    /**
+     * @throws Exception
+     */
+    public function createOrder(array $orderData): bool
+    {
+        // prepare order data
+        $order = $orderData['order'];
+        $totalPrice = $order['total_price'];
+        $products = $order['products'];
+        // update each product
+        $this->updateProduct($products);
+        // create order in table with data (total_price, user_id, status, order_date)
+        $id = $this->user->getUserId($orderData['recipient']['email']);
+        //
+        $preparedOrderData = [
+            'user_id' => $id,
+            'total_price' => $totalPrice,
+            'status' => 0,
+            'payment_method' => $this->paymentMethod($orderData['payment_data']['payment_method'])
+        ];
+        // save order
+        $this->orderRepository->save($preparedOrderData);
+        // get order ID
+        $orderId = $this->orderRepository->getLastInsertId();
+        // create order_item record for each product with (order_id, quantity, price,  etc.)
 
-		// prepare order data
-		$orderData['user'] = $this->user->getUserId($orderData['recipient']['email']);
-		$orderData[] = $orderData['order'];
-		$totalPrice = $orderData['total_price'];
-		$products = $orderData['order_products'];
-		//
-		d($orderData);
-		foreach ($products as $product) {
-			$preparedProduct = $this->product->findBy(['article' => $product['article']]);
-			// get all  data about product for prepare their before update
-			$preparedProduct = array_merge($preparedProduct, [
-				'order_quantity' => $product['quantity'],
-				'order_size' => $product['size'],
-				'total_price' => $totalPrice,
-			]);
-			// minus quantity in product
-			$product = $this->updateProduct($preparedProduct);
-			$this->product->update($product, $product['article']);
-		}
-		// create order in table with data (total_price, user_id, status, order_date)
-		$this->order->insert($orderData);
-	}
+        return $this->orderItemRepository->save($orderId, $products);
+    }
 
-	private function updateProduct(array $product): array
-	{
-		//	-> set buy product size quantity to -1
-		$size = $product['order_size'];
+    /**
+     * @throws Exception
+     */
+    protected function updateProduct(mixed $products): void
+    {
+        foreach ($products as $product) {
+            $preparedProduct = $this->productRepository->findBy(['article' => $product['article']]);
+            // get all  data about product for prepare their before update
+            $preparedProduct = array_merge($preparedProduct, [
+                'order_quantity' => $product['quantity'],
+                'order_size' => $product['size'],
+            ]);
+            // minus quantity in product
+            $product = $this->calculate($preparedProduct);
+            $this->productRepository->update($product, $product['article']);
+        }
+    }
 
-		if (!is_int($size)) {
-			throw new LogicException("Product size not found");
-		}
-		$orderSizeQuantity = $product['order_quantity'];
-		$productSizeQuantity = $product['size'];
+    private function calculate(array $product): array
+    {
 
-		if ($product['quantity'] == 0) {
-			throw new LogicException("Quantity not enough for this product, article: {$product['article']}");
-		}
-		if ($orderSizeQuantity > $productSizeQuantity[$size]) {
-			throw new LogicException("Quantity not enough for product with article {$product['article']} for this size, available {$productSizeQuantity}");
-		}
+        $size = $product['order_size'];
+        $quantity = $product['order_quantity'];
+        $sizeQuantity = json_decode($product['size'])->$size;
 
-		$productSizeQuantity[$size] = $productSizeQuantity[$size] - $orderSizeQuantity;
-		//	-> set quantity product to -1
-		$product['quantity'] = $product['quantity'] - $orderSizeQuantity;
-		unset(
-			$product['order_size'],
-			$product['order_quantity'],
-			$product['total_price']
-		);
-		return $product;
 
-	}
+        if ($product['quantity'] == 0) {
+            throw new LogicException("Quantity not enough for product with article: {$product['article']}");
+        }
+        if ($quantity > $sizeQuantity) {
+            throw new LogicException("Quantity not enough for product with article {$product['article']} for size '$size'.");
+        }
+
+        //	-> set quantity product to -1
+        $product['quantity'] = $product['quantity'] - 1;
+        $product['size'] = json_encode([
+            $size => json_decode($product['size'])->$size - 1
+        ]);
+        unset(
+            $product['order_size'],
+            $product['order_quantity'],
+        );
+        return $product;
+
+    }
+
+    /**
+     * @throws NotFoundException
+     */
+    private function paymentMethod(mixed $payment_method): int
+    {
+        return match ($payment_method) {
+            'card' => 1,
+            'google_pay' => 2,
+            'apple_pay' => 3,
+            'cash' => 4,
+            default => throw new NotFoundException('Method not found')
+        };
+    }
 }
