@@ -75,7 +75,7 @@ GET<i/> /api/v1/product?filter=shoes&page=1&limit=10&sort=price.up
 <b> Name: Show record</b>
 
 <b>Request method: </b> <i>
-GET <i/> /api/v1/product/shoes/{article}
+GET <i/> /api/v1/product/{article}
 
 <b>Headers: </b> <i>Content-Type: application/json<i/>
 
