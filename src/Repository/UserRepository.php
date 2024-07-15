@@ -30,4 +30,10 @@ class UserRepository extends AbstractModel
     {
         return $this->findBy(['email' => $email])['id'] ?? throw new Exception('User not found');
     }
+
+    public function save($user): int
+    {
+        $this->insert($user);
+        return $this->qb()->pdo()->lastInsertId();
+    }
 }

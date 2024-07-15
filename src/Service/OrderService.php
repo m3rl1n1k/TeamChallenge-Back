@@ -32,7 +32,7 @@ class OrderService
         // update each product
         $this->updateProduct($products);
         // create order in table with data (total_price, user_id, status, order_date)
-        $id = $this->user->getUserId($orderData['recipient']['email']);
+        $id = $this->user->save($orderData['recipient']);
         //
         $preparedOrderData = [
             'user_id' => $id,

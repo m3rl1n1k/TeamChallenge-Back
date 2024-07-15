@@ -15,6 +15,7 @@ class User_table extends Table
         'password' => 'VARCHAR(255) NOT NULL',
         'first name' => 'VARCHAR(255)',
         'last name' => 'VARCHAR(255)',
+        'country' => 'VARCHAR(255)',
         'address' => 'VARCHAR(255)',
         'city' => 'VARCHAR(255)',
         'state' => 'VARCHAR(255)',
