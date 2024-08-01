@@ -1,8 +1,7 @@
-version: '3'
 services:
   nginx:
     image: nginx:latest
-    container_name: php_pro_nginx
+    container_name: nginx
     build:
       dockerfile: ./docker/configs/nginx/Dockerfile
     restart: always
@@ -19,7 +18,7 @@ services:
     build:
       context: ./
       dockerfile: ./docker/configs/php/Dockerfile
-    container_name: php_pro_php
+    container_name: php
     restart: always
     volumes:
       - ./:/srv/src/
