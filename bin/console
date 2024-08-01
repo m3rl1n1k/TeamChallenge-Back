@@ -6,6 +6,7 @@ use Core\Config;
 use Core\Container\Container;
 use Core\Controller\ExceptionController;
 use Core\Helper\Printer;
+use JetBrains\PhpStorm\NoReturn;
 
 require_once load_file("../vendor/autoload.php");
 Config::instance(
@@ -21,7 +22,7 @@ function getTable(): string
 	return ucfirst($argv[2]);
 }
 
-function catch_output($e = null): void
+#[NoReturn] function catch_output($e = null): void
 {
 	Printer::printString($e ? $e->getMessage() : 'Not fount file for table ' . getTable(), Printer::ANSI_RED);
 	exit();
@@ -51,8 +52,8 @@ match ($argv[1]) {
 		'table:create' => "table:create user. Call code from folder 'Tables' in file 'user_tables.php'",
 		'table:drop' => "table:drop user. Drop set table",
 	]),
-	"table:create" => callCreateTable($argv),
-	"table:drop" => dropTable($argv),
+	"table:create" => callCreateTable(),
+	"table:drop" => dropTable(),
 	default => Printer::printString("Not found command. Type 'help' for more info")
 };
 
